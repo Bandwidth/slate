@@ -102,7 +102,7 @@
       <img src="images/logo.png" />
         <div class="lang-selector">
               <a href="#" data-language-name="shell">curl</a>
-              <a href="#" data-language-name="javascript">javascript</a>
+              <a href="#" data-language-name="javascript">NodeJS</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -2117,11 +2117,910 @@ Location: /v1/users/{userId}/calls/{bridgeId}
 
 <h3 id="supported-parameters">Supported Parameters</h3>
 
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">bridgeId</td>
+<td style="text-align: left">The id of the bridge for querying a list of calls history (pagination do not apply).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">conferenceId</td>
+<td style="text-align: left">The id of the conference for querying a list of calls history (pagination do not apply).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">from</td>
+<td style="text-align: left">The number to filter calls that came from (must be either an E.164 formatted number, like +19195551212, or a valid SIP URI, like sip:someone@somewhere.com).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">to</td>
+<td style="text-align: left">The number to filter calls that was called to (must be either an E.164 formatted number, like +19195551212, or a valid SIP URI, like sip:someone@somewhere.com).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">page</td>
+<td style="text-align: left">Used for pagination to indicate the page requested for querying a list of calls. If no value is specified the default is 0.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">size</td>
+<td style="text-align: left">Used for pagination to indicate the size of each page requested for querying a list of calls. If no value is specified the default value is 25 (maximum value 1000).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">sortOrder</td>
+<td style="text-align: left">How to sort the calls. Values are <code class="prettyprint">asc</code> or <code class="prettyprint">desc</code> If no value is specified the default value is <code class="prettyprint">desc</code></td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-list-your-calls">Example: List your calls</h3>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/calls/ <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">list</span><span class="p">()</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+    {
+        "id": "{callId1}",
+        "direction": "out",
+        "from": "{fromNumber}",
+        "to": "{number}",
+        "recordingEnabled": false,
+        "callbackUrl": "",
+        "state": "completed",
+        "startTime": "2013-02-08T13:15:47.587Z",
+        "activeTime": "2013-02-08T13:15:52.347Z",
+        "endTime": "2013-02-08T13:15:55.887Z",
+        "chargeableDuration": 60,
+        "events": "https://.../calls/{callId1}/events",
+        "sipHeaders" : {
+                "X-Header-1" : "value-1",
+                "X-Header-2" : "value2"
+        }
+    },
+    {
+        "id": "{callId2}",
+        "direction": "out",
+        "from": "{number}",
+        "to": "{toNumber}",
+        "recordingEnabled": false,
+        "callbackUrl": "",
+        "state": "active",
+        "startTime": "2013-02-08T13:15:47.587Z",
+        "activeTime": "2013-02-08T13:15:52.347Z",
+        "events": "https://.../calls/{callId2}/events"
+    }
+]
+</code></pre>
+
+<h3 id="example-list-your-calls-by-from-number-fromnumber">Example: List your calls by from number {fromNumber}</h3>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/calls?from<span class="o">=</span>%2b19195551212 <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">list</span><span class="p">({</span>
+    <span class="na">from</span><span class="p">:</span> <span class="s2">"+19195551212"</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+    {
+        "id": "{callId1}",
+        "direction": "out",
+        "from": "{fromNumber}",
+        "to": "{toNumber1}",
+        "recordingEnabled": false,
+        "callbackUrl": "",
+        "state": "completed",
+        "startTime": "2013-02-08T13:15:47.587Z",
+        "activeTime": "2013-02-08T13:15:52.347Z",
+        "endTime": "2013-02-08T13:15:55.887Z",
+        "chargeableDuration": 60,
+        "events": "https://.../calls/{callId1}/events"
+    },
+    {
+        "id": "{callId2}",
+        "direction": "out",
+        "from": "{fromNumber}",
+        "to": "{toNumber2}",
+        "recordingEnabled": false,
+        "callbackUrl": "",
+        "state": "active",
+        "startTime": "2013-02-08T13:15:47.587Z",
+        "activeTime": "2013-02-08T13:15:52.347Z",
+        "events": "https://.../calls/{callId2}/events"
+    }
+]
+</code></pre>
+
+<h2 id="post-calls">POST calls</h2>
+
+<p>Creates a new outbound phone call.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">from</td>
+<td style="text-align: left">A Bandwidth phone number on your account the call should come from (must be in E.164 format, like <code class="prettyprint">+19195551212</code>).</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left">to</td>
+<td style="text-align: left">The number to call (must be either an E.164 formatted number, like <code class="prettyprint">+19195551212</code>, or a valid SIP URI, like <code class="prettyprint">sip:someone@somewhere.com</code>).</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left">callTimeout</td>
+<td style="text-align: left">Determine how long should the platform wait for call answer before timing out in seconds.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackUrl</td>
+<td style="text-align: left">The full server URL where the call events related to the Call will be sent to.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackTimeout</td>
+<td style="text-align: left">Determine how long should the platform wait for callbackUrl’s response before timing out in milliseconds.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackHttpMethod</td>
+<td style="text-align: left">Determine if the callback event should be sent via <code class="prettyprint">HTTP GET</code> or <code class="prettyprint">HTTP POST</code>. Values are <code class="prettyprint">GET</code> or <code class="prettyprint">POST</code> (if not set the default is <code class="prettyprint">POST</code>).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">fallbackUrl</td>
+<td style="text-align: left">The full server URL used to send the callback event if the request to callbackUrl fails.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">bridgeId</td>
+<td style="text-align: left">The id of the bridge where the call will be added.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">conferenceId</td>
+<td style="text-align: left">Id of the conference where the call will be added. This property is required if you want to add this call to a conference.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">recordingEnabled</td>
+<td style="text-align: left">Indicates if the call should be recorded after being created. Set to <code class="prettyprint">true</code> to enable. Default is <code class="prettyprint">false</code>.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">recordingMaxDuration</td>
+<td style="text-align: left">Indicates the maximum duration of call recording in seconds. Default value is 1 hour.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">transcriptionEnabled</td>
+<td style="text-align: left">Whether all the recordings for this call is going to be automatically transcribed.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">tag</td>
+<td style="text-align: left">A string that will be included in the callback events of the call.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">sipHeaders</td>
+<td style="text-align: left">Map of Sip headers prefixed by <code class="prettyprint">X-</code>. Up to 5 headers can be sent per call.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-create-an-outbound-phone-call">Example: Create an outbound phone call</h3>
+
+<aside class="notice">
+The call resource returned in the &ldquo;Location&rdquo; header can be modified to change the call (for example, play audio files, transfer to a different number, or hang up).
+</aside>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/calls <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "from": "{fromNumber}",
+        "to": "{toNumber}"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+    <span class="na">from</span><span class="p">:</span> <span class="s2">"{fromNumber}"</span><span class="p">,</span>
+    <span class="na">to</span><span class="p">:</span> <span class="s2">"{toNumber}"</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+<span class="p">})</span>
+</code></pre>
+
+<h3 id="example-create-call-and-start-recording-it">Example: Create call and start recording it</h3>
+
+<h3 id="example-create-a-call-in-a-bridge">Example: Create a call in a bridge</h3>
+
+<h3 id="example-create-an-outbound-call-with-callback-and-fallback-url">Example: Create an outbound call with callback and fallback URL</h3>
+
+<h3 id="example-create-an-outbound-call-with-tag-property">Example: Create an outbound call with tag property</h3>
+
+<h3 id="example-create-an-outbound-call-to-a-sip-uri">Example: Create an outbound call to a SIP URI</h3>
+
+<p>Make a call to a SIP URI:</p>
+
+<aside class="notice">
+* The support is based on SIP RFC 3261.
+* If the INVITE fails (receive a non-2xx final response), an event will be generated to the application indicating the call has hung up.
+* SIPS is not currently supported.
+</aside>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/calls <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "from": "{fromNumber}",
+        "to": "{sip:someone@somewhere.com:}",
+        "sipHeaders": {
+            "X-Header-1": "value1",
+            "X-Header-2": "value2"
+        }
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+    <span class="na">from</span><span class="p">:</span> <span class="s2">"{fromNumber}"</span><span class="p">,</span>
+    <span class="na">to</span><span class="p">:</span> <span class="s2">"{sip:someone@somewhere.com}"</span><span class="p">,</span>
+    <span class="na">sipHeaders</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"X-Header-1"</span><span class="p">:</span> <span class="s2">"value1"</span><span class="p">,</span>
+        <span class="s2">"X-Header-2"</span><span class="p">:</span> <span class="s2">"value2"</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+<span class="p">})</span>
+</code></pre>
+
+<h2 id="get-calls-callid">GET calls/{callId}</h2>
+
+<p>Gets information about an active or completed call. No query parameters are supported.</p>
+
+<h3 id="example-get-call-information">Example: Get Call Information</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/calls/<span class="o">{</span>callId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    <span class="sb">```</span>
+
+<span class="sb">```</span>js
+client.Call.get<span class="o">(</span><span class="s2">"{callId}"</span><span class="o">)</span>
+.then<span class="o">(</span><span class="k">function</span> <span class="o">(</span>response<span class="o">)</span> <span class="o">{</span>
+    console.log<span class="o">(</span>respone<span class="o">)</span>;
+<span class="o">})</span>;
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+        </span><span class="nt">"activeTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-12-19T19:13:20Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"callbackUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://example.com"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"chargeableDuration"</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"endTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-12-19T19:13:22Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../calls/{callId}/events"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"fallbackUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://example-fallback.com"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{fromNumber}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"recordingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"recordings"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../calls/{callId}/recordings"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-12-19T19:13:09Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{toNumber}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"transcriptionEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"transcriptions"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../calls/{callId}/transcriptions"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"sipHeaders"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"X-header"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"value"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="post-calls-callid">POST calls/{callId}</h2>
+
+<p>Update properties of an active phone call.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">The call state. Possible values: <br> <code class="prettyprint">rejected</code> to reject not answer<br> <code class="prettyprint">active</code> to answer the call<br><code class="prettyprint">completed</code> to hangup the call<br><code class="prettyprint">transferring</code> to start and connect call to a new outbound call.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">recordingEnabled</td>
+<td style="text-align: left">Indicates if the call should be recorded. Values <code class="prettyprint">true</code> or <code class="prettyprint">false</code>. You can turn recording on/off and have multiple recordings on a single call.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">transferTo</td>
+<td style="text-align: left">Phone number or SIP address that the call is going to be transferred to.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">transferCallerId</td>
+<td style="text-align: left">This is the caller id that will be used when the call is transferred. This parameter is only considered in transfer state.<br>- transferring an incoming call: allowed values are 1) <code class="prettyprint">private</code> 2) the incoming call <code class="prettyprint">from</code> number or 3) any Bandwidth number owned by user.<br>- transferring an outgoing call call: allowed values are 1) <code class="prettyprint">private</code> or 2) any Bandwidth phone number owned by user.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">whisperAudio</td>
+<td style="text-align: left">Audio to be played to the caller that the call will be transferred to. See /audio.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackUrl</td>
+<td style="text-align: left">The server URL where the call events for the new call will be sent upon transferring.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-answer-an-incoming-phone-call">Example: Answer an Incoming Phone Call</h3>
+
+<h3 id="example-reject-an-incoming-phone-call">Example: Reject an Incoming Phone Call</h3>
+
+<h3 id="example-hang-up-a-phone-call">Example: Hang Up a Phone Call</h3>
+
+<h3 id="example-turn-call-recording-on">Example: Turn call recording ON</h3>
+
+<h3 id="example-turn-call-recording-off">Example: Turn call recording OFF</h3>
+
+<h3 id="example-transfer-a-call">Example: Transfer a call</h3>
+
+<h3 id="example-transfer-a-call-using-the-caller-id-of-the-party-being-transferred">Example: Transfer a call using the caller Id of the party being transferred</h3>
+
+<h3 id="example-transfer-a-call-and-say-something-before-bridging-the-calls">Example: Transfer a call and say something before bridging the calls</h3>
+
+<h3 id="example-transfer-a-call-and-say-something-before-bridging-the-calls">Example: Transfer a call and say something before bridging the calls</h3>
+
+<h2 id="post-calls-callid-audio">POST calls/{callId}/audio</h2>
+
+<p>Plays an audio file or speak a sentence in a phone call.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">fileUrl</td>
+<td style="text-align: left">The location of an audio file to play (WAV and MP3 supported).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">sentence</td>
+<td style="text-align: left">The sentence to speak.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">gender</td>
+<td style="text-align: left">The gender of the voice used to synthesize the sentence. It will be considered only if sentence is not null. The female gender will be used by default.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">locale</td>
+<td style="text-align: left">The locale used to get the accent of the voice used to synthesize the sentence. Currently audio supports: <br> - en_US or en_UK (English) <br> - es or es_MX (Spanish) <br> - fr or fr_FR (French) <br> - de or de_DE (German) <br> - t or it_IT (Italian) It will be considered only if sentence is not null/empty. The en_US will be used by default.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">voice</td>
+<td style="text-align: left">The voice to speak the sentence. Audio currently supports the following voices: <br> - English US: Kate, Susan, Julie, Dave, Paul <br> - English UK: Bridget <br> - Spanish: Esperanza, Violeta, Jorge <br> - French: Jolie, Bernard <br> - German: Katrin, Stefan <br> - Italian: Paola, Luca It will be considered only if sentence is not null/empty. Susan’s voice will be used by default.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">loopEnabled</td>
+<td style="text-align: left">When value is <code class="prettyprint">true</code> , the audio will keep playing in a loop. Default: <code class="prettyprint">false</code>.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">tag</td>
+<td style="text-align: left">A string that will be included in the events delivered when the audio playback starts or finishes.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-speak-a-sentence">Example: Speak a Sentence</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/calls/<span class="o">{</span>callId<span class="o">}</span>/audio <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "gender": "female",
+        "sentence": "Hello, thank you for calling.",
+        "locale": "en_US",
+        "voice": "julie"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Speak sentence with options</span>
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">sentence</span> <span class="p">:</span> <span class="s2">"hola de Bandwidth"</span><span class="p">,</span>
+    <span class="na">gender</span>   <span class="p">:</span> <span class="s2">"male"</span><span class="p">,</span>
+    <span class="na">locale</span>   <span class="p">:</span> <span class="s2">"es"</span><span class="p">,</span>
+    <span class="na">voice</span>    <span class="p">:</span> <span class="s2">"Jorge"</span>
+<span class="p">}</span>
+<span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">playAudioAdvanced</span><span class="p">(</span><span class="s2">"callId"</span><span class="p">,</span> <span class="nx">options</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">playAudioAdvanced</span><span class="p">(</span><span class="s2">"callId"</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">//Speak sentence in a call</span>
+
+<span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">speakSentence</span><span class="p">(</span><span class="s2">"callId"</span><span class="p">,</span> <span class="s2">"Hello From Bandwidth"</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">speakSentence</span><span class="p">(</span><span class="s2">"callId"</span><span class="p">,</span> <span class="s2">"Hello From Bandwidth"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<h3 id="example-interrupt-stop-a-sentence-from-speaking">Example: Interrupt/stop a sentence from speaking.</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/calls/<span class="o">{</span>callId<span class="o">}</span>/audio <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="s1">'{"sentence": ""}'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// coming soon</span>
+<span class="c1">//Speak sentence in a call</span>
+
+<span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">speakSentence</span><span class="p">(</span><span class="s2">"callId"</span><span class="p">,</span> <span class="s2">""</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">speakSentence</span><span class="p">(</span><span class="s2">"callId"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<h3 id="example-speak-a-sentence-with-male-gender-voice">Example: Speak a Sentence with male gender voice</h3>
+
+<h3 id="example-speaking-a-sentence-with-a-given-locale-gender-and-voice">Example: Speaking a sentence with a given locale, gender and voice.</h3>
+
+<h3 id="example-speaking-a-sentence-with-a-break">Example: Speaking a sentence with a break</h3>
+
+<h3 id="example-play-an-audio-file">Example: Play an Audio File</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/calls/<span class="o">{</span>callId<span class="o">}</span>/audio <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="s1">'{"fileUrl": "http://example.com/audio.mp3"}'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Play Audio file on call</span>
+
+<span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">playAudioFile</span><span class="p">(</span><span class="s2">"callId"</span><span class="p">,</span> <span class="s2">"http://myurl.com/file.mp3"</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">playAudioFile</span><span class="p">(</span><span class="s2">"callId"</span><span class="p">,</span> <span class="s2">"http://myurl.com/file.wav"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<h3 id="example-stop-an-audio-file-playing">Example: Stop an Audio File Playing</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/calls/<span class="o">{</span>callId<span class="o">}</span>/audio <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="s1">'{"fileUrl": ""}'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// coming soon in the mean time:</span>
+<span class="c1">//Stop Audio file on bridge</span>
+
+<span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">playAudioFile</span><span class="p">(</span><span class="s2">"callId"</span><span class="p">,</span> <span class="s2">""</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">playAudioFile</span><span class="p">(</span><span class="s2">"callId"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<h2 id="post-calls-callid-dtmf">POST calls/{callId}/dtmf</h2>
+
+<p>Send DTMF (phone keypad digit presses).</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">dtmfOut</td>
+<td style="text-align: left">String containing the DTMF characters to be sent in a call.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-send-the-digits-quot-9193334444-quot">Example: Send the digits &ldquo;9193334444&rdquo;</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/calls/<span class="o">{</span>callId<span class="o">}</span>/dtmf <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="s1">'{"dtmfOut": "9193334444"}'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">sendDtmf</span><span class="p">(</span><span class="nx">callId</span><span class="p">,</span> <span class="s2">"9193334444"</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">sendDtmf</span><span class="p">(</span><span class="nx">callId</span><span class="p">,</span> <span class="s2">"9193334444"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<h2 id="get-calls-callid-events">GET calls/{callId}/events</h2>
+
+<p>Gets the events that occurred during the call. No query parameters are supported.</p>
+
+<h3 id="event-properties">Event Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">id</td>
+<td style="text-align: left">The call event id.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">The time the event occurred.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">name</td>
+<td style="text-align: left">The name of the event.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">data</td>
+<td style="text-align: left">Data about event.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-get-events-for-a-call">Example: Get events for a call.</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/calls/<span class="o">{</span>callId<span class="o">}</span>/events <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">getEvents</span><span class="p">(</span><span class="nx">callId</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">events</span><span class="p">)</span> <span class="p">{});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">getEvents</span><span class="p">(</span><span class="nx">callId</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">events</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+    {
+        "id": "{callEventId1}",
+        "time": "2012-09-19T13:55:41.343Z",
+        "name": "create"
+    },
+    {
+        "id": "{callEventId2}",
+        "time": "2012-09-19T13:55:45.583Z",
+        "name": "answer"
+    },
+    {
+        "id": "{callEventId3}",
+        "time": "2012-09-19T13:55:45.583Z",
+        "name": "CHANNEL_EXECUTE",
+        "data": "{"applicationName":"park"}"
+    },
+    {
+        "id": "{callEventId4}",
+        "time": "2012-09-19T13:55:51.283Z",
+        "name": "CHANNEL_EXECUTE",
+        "data": "{"applicationName":"playback","applicationData":"test.mp3"}"
+    },
+    {
+        "id": "{callEventId5}",
+        "time": "2012-09-19T13:55:45.583Z",
+        "name": "playback",
+        "data": "start"
+    },
+    {
+        "id": "{callEventId6}",
+        "time": "2012-09-19T13:55:45.583Z",
+        "name": "playback",
+        "data": "done"
+    },
+    {
+        "id": "{callEventId7}",
+        "time": "2012-09-19T13:55:55.503Z",
+        "name": "CHANNEL_EXECUTE_COMPLETE",
+        "data": "{"applicationName":"playback","applicationData":"test.mp3"}"
+    },
+    {
+        "id": "{callEventId8}",
+        "time": "2012-09-19T13:55:58.323Z",
+        "name": "hangup",
+        "data": "NORMAL_CLEARING"
+    },
+    {
+        "id": "{callEventId9}",
+        "time": "2012-09-19T13:55:58.343Z",
+        "name": "CHANNEL_EXECUTE_COMPLETE",
+        "data": "{"applicationName":"playback","applicationData":"test.mp3"}"
+    }
+]
+</code></pre>
+
+<h2 id="get-calls-callid-events-calleventid">GET calls/{callId}/events/{callEventId}</h2>
+
+<p>Gets information about one call event. No query parameters are supported.</p>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/calls/<span class="o">{</span>callId<span class="o">}</span>/events/<span class="o">{</span>eventId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">getEvent</span><span class="p">(</span><span class="nx">callId</span><span class="p">,</span> <span class="nx">eventId</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">callEvent</span><span class="p">)</span> <span class="p">{});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">getEvent</span><span class="p">(</span><span class="nx">callId</span><span class="p">,</span> <span class="nx">eventId</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">callEvent</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ce-qg4vz6anrfogri7hhduqlgq"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="mi">1419032854964</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hangup"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="get-calls-callid-recordings">GET calls/{callId}/recordings</h2>
+
+<p>Retrieve all recordings related to the call.</p>
+
+<h3 id="example-get-recordings-for-a-call-id">Example: Get recordings for a call Id.</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/calls/<span class="o">{</span>callId<span class="o">}</span>/recordigns <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">getRecordings</span><span class="p">(</span><span class="nx">callId</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">list</span><span class="p">)</span> <span class="p">{});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">getRecordings</span><span class="p">(</span><span class="nx">callId</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">list</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>GET /v1/{userId}/calls/{callId}/recordings
+HTTP/1.1 200 OK
+
+[
+    {
+        "endTime": "2013-02-08T12:06:55.007Z",
+        "id": "{recordingId1}",
+        "media": "https://.../v1/users/.../media/{callId}-1.wav",
+        "call": "https://.../v1/users/.../calls/{callId}",
+        "startTime": "2013-02-08T12:05:17.807Z",
+        "state": "complete"
+    },
+    {
+        "endTime": "2013-02-08T13:15:65.887Z",
+        "id": "{recordingId2}",
+        "media": "https://.../v1/users/.../media/{callId}-2.wav",
+        "call": "https://.../v1/users/.../calls/{callId}",
+        "startTime": "2013-02-08T13:15:55.887Z",
+        "state": "complete"
+    }
+]
+</code></pre>
+
+<h2 id="get-calls-callid-transcriptions">GET calls/{callId}/transcriptions</h2>
+
+<p>Retrieve all transcriptions related to the call.</p>
+
+<h3 id="example-retrieve-all-transcriptions-related-to-the-call">Example: Retrieve all transcriptions related to the call.</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/calls/<span class="o">{</span>callId<span class="o">}</span>/transcriptions <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">getTranscriptions</span><span class="p">(</span><span class="nx">callId</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">list</span><span class="p">)</span> <span class="p">{});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">getTranscriptions</span><span class="p">(</span><span class="nx">callId</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">list</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<h2 id="post-calls-callid-gather">POST calls/{callId}/gather</h2>
+
+<p>Collects a series of DTMF digits from a phone call with an optional prompt. This request returns immediately. When gather finishes, an event with the results will be posted to the callback URL.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">maxDigits</td>
+<td style="text-align: left">The maximum number of digits to collect, not including terminating digits (maximum 30).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">interDigitTimeout</td>
+<td style="text-align: left">Stop gathering if a DTMF digit is not detected in this many seconds (default 5.0; maximum 30.0).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">terminatingDigits</td>
+<td style="text-align: left">A string of DTMF digits that end the gather operation immediately if any one of them is detected (default “#”; an empty string means collect all DTMF until maxDigits or the timeout).<br>Example:<br><code class="prettyprint">#</code> : The gather ends if # is detected (this is the default behavior if the terminatingDigits property is not specified)<br><code class="prettyprint">0#*</code> : The gather ends if either 0, #, or * is detected<br>Don’t forget to encode keypad digits that have special meaning in a URL, like #.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">tag</td>
+<td style="text-align: left">A string you choose that will be included with the response and events for this gather operation.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">prompt.sentence</td>
+<td style="text-align: left">The text to speak for the prompt (uses the call audio resource defaults). NOTE: encode special characters in the sentence.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">prompt.gender</td>
+<td style="text-align: left">The gender to use for the voice reading the prompt sentence (uses the call audio resource defaults).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">prompt.locale</td>
+<td style="text-align: left">The language and region to use for the voice reading the prompt sentence (uses the call audio resource defaults).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">prompt.loopEnabled</td>
+<td style="text-align: left">When value is true, the audio will keep playing in a loop. Default: false</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">prompt.bargeable</td>
+<td style="text-align: left">Make the prompt (audio or sentence) bargeable (will be interrupted at first digit gathered). Default: true</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">prompt.fileUrl</td>
+<td style="text-align: left">The location of an audio file to play (WAV and MP3 supported).</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-play-a-prompt-sentence">Example: Play a prompt sentence</h3>
+
+<p>Play a prompt sentence, then wait until 5 digits are pressed. Stop gathering digits if * is pressed, or if 7 seconds pass with no digits pressed.</p>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/ <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+        -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "maxDigits":"5",
+        "terminatingDigits":"*",
+        "interDigitTimeout":"7",
+        "prompt": {
+            "sentence": "Please enter your 5 digit code"
+        }
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Create Gather</span>
+<span class="c1">//The gather ends if either 0, #, or * is detected</span>
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span>   <span class="p">{</span>
+    <span class="s2">"maxDigits"</span><span class="p">:</span><span class="s2">"5"</span><span class="p">,</span>
+    <span class="s2">"terminatingDigits"</span><span class="p">:</span><span class="s2">"*"</span><span class="p">,</span>
+    <span class="s2">"interDigitTimeout"</span><span class="p">:</span><span class="s2">"7"</span><span class="p">,</span>
+    <span class="s2">"prompt"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"sentence"</span><span class="p">:</span> <span class="s2">"Please enter your 5 digit code"</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">createGather</span><span class="p">(</span><span class="s2">"callId"</span><span class="p">,</span> <span class="nx">options</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">createGather</span><span class="p">(</span><span class="s2">"callId"</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<h2 id="get-calls-callid-gather-gatherid">GET calls/{callId}/gather/{gatherId}</h2>
+
+<p>Get the gather DTMF parameters and results.</p>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/calls/<span class="o">{</span>callId<span class="o">}</span>/gather/<span class="o">{</span>gatherId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">getGather</span><span class="p">(</span><span class="s2">"{callId}"</span><span class="p">,</span> <span class="s2">"{gatherId}"</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">res</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{gatherId}"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"max-digits"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"createdTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-02-12T19:33:56Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"completedTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-02-12T19:33:59Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"call"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/calls/{callId}"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"digits"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="post-calls-callid-gather-gatherid">POST calls/{callId}/gather/{gatherId}</h2>
+
+<p>Update the gather.
+<aside class="notice">
+The only update allowed is state:completed to stop the gather.
+<aside></p>
+
+<h3 id="example-stop-the-gather-dtmf">Example: Stop the gather DTMF</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/calls/<span class="o">{</span>callId<span class="o">}</span>/gather/<span class="o">{</span>gatherId<span class="o">}</span> <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "state": "completed"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">completeGather</span><span class="p">(</span><span class="s2">"{callId}"</span><span class="p">,</span> <span class="s2">"{gatherId}"</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{});</span>
+</code></pre>
+
       </div>
       <div class="dark-box">
           <div class="lang-selector">
                 <a href="#" data-language-name="shell">curl</a>
-                <a href="#" data-language-name="javascript">javascript</a>
+                <a href="#" data-language-name="javascript">NodeJS</a>
           </div>
       </div>
     </div>
