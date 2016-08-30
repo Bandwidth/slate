@@ -1468,6 +1468,306 @@ NOTE: Properties you don&rsquo;t send will remain unchanged.
 ]
 </code></pre>
 
+          <h1 id="bridges">Bridges</h1>
+
+<p>The Bridges resource allows you to bridge two calls together allowing for two way audio between them. A common example is bridging an incoming phone call together with a outgoing phone call.</p>
+
+<h2 id="properties">Properties</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">id</td>
+<td style="text-align: left">The unique ID of the bridge.</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">Bridge state. Possible state values are described here.</td>
+</tr>
+<tr>
+<td style="text-align: left">callIds</td>
+<td style="text-align: left">List of call Ids that will be in the bridge.</td>
+</tr>
+<tr>
+<td style="text-align: left">calls</td>
+<td style="text-align: left">The URL used to retrieve the calls in a specific bridge.</td>
+</tr>
+<tr>
+<td style="text-align: left">bridgeAudio</td>
+<td style="text-align: left">Enable/Disable two way audio path.</td>
+</tr>
+<tr>
+<td style="text-align: left">completedTime</td>
+<td style="text-align: left">The time when the bridge was completed.</td>
+</tr>
+<tr>
+<td style="text-align: left">createdTime</td>
+<td style="text-align: left">The time that bridge was created.</td>
+</tr>
+<tr>
+<td style="text-align: left">activatedTime</td>
+<td style="text-align: left">The time that the bridge got into active state.</td>
+</tr>
+</tbody></table>
+
+<h2 id="bridge-state">Bridge state</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">State</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">created</td>
+<td style="text-align: left">The bridge was created but the audio was never bridged.</td>
+</tr>
+<tr>
+<td style="text-align: left">active</td>
+<td style="text-align: left">The bridge has two active calls and the audio was already bridged before.</td>
+</tr>
+<tr>
+<td style="text-align: left">hold</td>
+<td style="text-align: left">The bridge calls are on hold (bridgeAudio was set to false).</td>
+</tr>
+<tr>
+<td style="text-align: left">completed</td>
+<td style="text-align: left">The bridge was completed. The bridge is completed when all calls hangup or when all calls are removed from bridge.</td>
+</tr>
+<tr>
+<td style="text-align: left">error</td>
+<td style="text-align: left">Some error was detected in bridge.</td>
+</tr>
+</tbody></table>
+
+<h2 id="get-bridges">GET bridges</h2>
+
+<p>Get list of bridges for a given user.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">page</td>
+<td style="text-align: left">Used for pagination to indicate the page requested for querying a list of bridges. If no value is specified the default is 0.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">size</td>
+<td style="text-align: left">Used for pagination to indicate the size of each page requested for querying a list of bridges. If no value is specified the default value is 25 (maximum value 1000).</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-list-of-a-user-39-s-bridges">Example: List of a user&rsquo;s bridges</h3>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/bridges/transations <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Bridge</span><span class="p">.</span><span class="nx">list</span><span class="p">()</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">bridges</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">hasNextPage</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">getNextPage</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span><span class="na">bridges</span><span class="p">:</span> <span class="p">[]};</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">bridges</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+  {
+    "id": "{bridgeId}",
+    "state": "completed",
+    "bridgeAudio": "true",
+    "calls":"https://.../v1/users/{userId}/bridges/{bridgeId}/calls",
+    "createdTime": "2013-04-22T13:55:30.279Z",
+    "activatedTime": "2013-04-22T13:55:30.280Z",
+    "completedTime": "2013-04-22T13:56:30.122Z"
+  },
+  {
+    "id": "{bridgeId}",
+    "state": "completed",
+    "bridgeAudio": "true",
+    "calls":"https://.../v1/users/{userId}/bridges/{bridgeId}/calls",
+    "createdTime": "2013-04-22T13:58:30.121Z",
+    "activatedTime": "2013-04-22T13:58:30.122Z",
+    "completedTime": "2013-04-22T13:59:30.122Z"
+  }
+]
+</code></pre>
+
+<h2 id="post-bridges">POST bridges</h2>
+
+<p>Create a new bridge.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">bridgeAudio</td>
+<td style="text-align: left">Enable/Disable two way audio path (default = true).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">callIds</td>
+<td style="text-align: left">The list of call ids in the bridge. If the list of call ids is not provided the bridge is logically created and it can be used to place calls later.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-create-a-bridge-with-two-calls-and-two-way-voice-path">Example: Create a bridge with two calls and two way voice path</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/bridges/ <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="s1">'{"bridgeAudio": "true", "callIds": ["{callId1}","{callId2}"] }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Bridge</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+    <span class="na">bridgeAudio</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="na">callIds</span><span class="p">:</span> <span class="p">[</span><span class="s1">'c-qbs5kwrsyx6wsdi'</span><span class="p">,</span> <span class="s1">'c-zan4g74pprsq'</span><span class="p">]</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Bridge</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+    <span class="na">bridgeAudio</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="na">callIds</span><span class="p">:</span> <span class="p">[</span><span class="s1">'c-qbsx6wsdi'</span><span class="p">,</span> <span class="s1">'c-zan4g7prsq'</span><span class="p">]</span>
+<span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns HTTP Status structured like this:
+<code class="prettyprint">
+HTTP/1.1 201 Created
+Location: /v1/users/{userId}/calls/{bridgeId}
+</code></p>
+</blockquote>
+
+<h3 id="example-create-a-bridge-without-calls">Example: Create a bridge without calls</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/bridges/ <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="s1">'{"bridgeAudio": "true" }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Bridge</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+    <span class="na">bridgeAudio</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="na">callIds</span><span class="p">:</span> <span class="p">[</span><span class="s1">'c-qbs5kwrsyx6wsdi'</span><span class="p">,</span> <span class="s1">'c-zan4g74pprsq'</span><span class="p">]</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Bridge</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+    <span class="na">bridgeAudio</span><span class="p">:</span> <span class="kc">true</span>
+<span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns HTTP Status structured like this:
+<code class="prettyprint">
+HTTP/1.1 201 Created
+Location: /v1/users/{userId}/calls/{bridgeId}
+</code></p>
+</blockquote>
+
+<h2 id="get-bridges-bridgeid">GET bridges/{bridgeId}</h2>
+
+<p>Gets information about a specific bridge. No query parameters are supported.</p>
+
+<h3 id="example-get-information-about-a-bridge">Example: Get information about a bridge</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/bridges/<span class="o">{</span>bridgeId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Bridge</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'brg-65dhjwrmbasiei'</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Bridge</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'brg-65dhmbasiei'</span><span class="p">,</span>
+    <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:
+<code class="prettyprint">
+{
+  &quot;id&quot;: &quot;{bridgeId}&quot;,
+  &quot;state&quot;: &quot;completed&quot;,
+  &quot;bridgeAudio&quot;: &quot;true&quot;,
+  &quot;calls&quot;:&quot;https://.../v1/users/{userId}/bridges/{bridgeId}/calls&quot;,
+  &quot;createdTime&quot;: &quot;2013-04-22T13:55:30.279Z&quot;,
+  &quot;activatedTime&quot;: &quot;2013-04-22T13:55:30.280Z&quot;,
+  &quot;completedTime&quot;: &quot;2013-04-22T13:59:30.122Z&quot;
+}
+</code></p>
+</blockquote>
+
+<h2 id="post-bridges-bridgeid">POST bridges/{bridgeId}</h2>
+
+<p>Change calls in a bridge and bridge/unbridge the audio.</p>
+
+<h3 id="example-add-call-callid1-and-call-callid2-in-a-bridge-bridgeid-with-two-way-voice-path">Example: Add call {callId1} and call {callId2} in a bridge {bridgeId} with two way voice path</h3>
+
+<h3 id="example-removing-call-callid2-from-the-bridge-created-in-the-example-above">Example: Removing call {callId2} from the bridge created in the example above</h3>
+
+<h3 id="example-adding-two-different-calls-callid3-and-callid4-in-the-bridge-above-and-put-them-on-hold">Example: Adding two different calls {callId3} and {callId4} in the bridge above and put them on hold</h3>
+
+<h3 id="example-bridging-the-audio-again">Example: Bridging the audio again</h3>
+
+<h3 id="example-removing-all-calls-from-bridge">Example: Removing all calls from bridge.</h3>
+
       </div>
       <div class="dark-box">
           <div class="lang-selector">
