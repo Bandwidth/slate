@@ -2415,14 +2415,12 @@ The call resource returned in the &ldquo;Location&rdquo; header can be modified 
 <h3 id="example-get-call-information">Example: Get Call Information</h3>
 <pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/calls/<span class="o">{</span>callId<span class="o">}</span> <span class="se">\</span>
     -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
-    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
-    <span class="sb">```</span>
-
-<span class="sb">```</span>js
-client.Call.get<span class="o">(</span><span class="s2">"{callId}"</span><span class="o">)</span>
-.then<span class="o">(</span><span class="k">function</span> <span class="o">(</span>response<span class="o">)</span> <span class="o">{</span>
-    console.log<span class="o">(</span>respone<span class="o">)</span>;
-<span class="o">})</span>;
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"{callId}"</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">respone</span><span class="p">);</span>
+<span class="p">});</span>
 </code></pre>
 
 <blockquote>
@@ -3000,7 +2998,7 @@ HTTP/1.1 200 OK
 <p>Update the gather.
 <aside class="notice">
 The only update allowed is state:completed to stop the gather.
-<aside></p>
+</aside></p>
 
 <h3 id="example-stop-the-gather-dtmf">Example: Stop the gather DTMF</h3>
 <pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/calls/<span class="o">{</span>callId<span class="o">}</span>/gather/<span class="o">{</span>gatherId<span class="o">}</span> <span class="se">\</span>
@@ -3014,6 +3012,825 @@ The only update allowed is state:completed to stop the gather.
 </code></pre>
 <pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Call</span><span class="p">.</span><span class="nx">completeGather</span><span class="p">(</span><span class="s2">"{callId}"</span><span class="p">,</span> <span class="s2">"{gatherId}"</span><span class="p">)</span>
 <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{});</span>
+</code></pre>
+
+          <h1 id="conferences">Conferences</h1>
+
+<p>The Conference resource allows you create conferences, add members to it, play audio, speak text, mute/unmute members, hold/unhold members and other things related to conferencing. Once a conference is created there is no timeout associated with it, i.e., the conference will stay in created state until it is explicitly terminated. After the last member of a conference is removed from it, the conference will be set automatically as completed.</p>
+
+<h2 id="conference-properties">Conference Properties</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">id</td>
+<td style="text-align: left">The unique id of a conference.</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">Conference state. Possible state values are described below.</td>
+</tr>
+<tr>
+<td style="text-align: left">from</td>
+<td style="text-align: left">The phone number that will host the conference.</td>
+</tr>
+<tr>
+<td style="text-align: left">createdTime</td>
+<td style="text-align: left">The time that the Conference was created (UTC).</td>
+</tr>
+<tr>
+<td style="text-align: left">completedTime</td>
+<td style="text-align: left">The time that the Conference was completed (UTC).</td>
+</tr>
+<tr>
+<td style="text-align: left">activeMembers</td>
+<td style="text-align: left">The number of active conference members.</td>
+</tr>
+<tr>
+<td style="text-align: left">hold</td>
+<td style="text-align: left">If <code class="prettyprint">true</code>, all member can’t hear or speak in the conference. If `false”, all members can hear and speak in the conference (unless set at the member level).</td>
+</tr>
+<tr>
+<td style="text-align: left">mute</td>
+<td style="text-align: left">If <code class="prettyprint">true</code>, all member can’t speak in the conference. If <code class="prettyprint">false</code>, all members can speak in the conference (unless set at the member level).</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackUrl</td>
+<td style="text-align: left">The complete URL where the events related to the Conference will be sent to.</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackHttpMethod</td>
+<td style="text-align: left">Determine if the callback event should be sent via <code class="prettyprint">HTTP GET</code> or <code class="prettyprint">HTTP POST</code>. Values are <code class="prettyprint">GET</code> or <code class="prettyprint">POST</code>, default: <code class="prettyprint">POST</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackTimeout</td>
+<td style="text-align: left">Determine how long should the platform wait for callbackUrl’s response before timing out in milliseconds.</td>
+</tr>
+<tr>
+<td style="text-align: left">fallbackUrl</td>
+<td style="text-align: left">The URL used to send the callback event if the request to callbackUrl fails.</td>
+</tr>
+<tr>
+<td style="text-align: left">tag</td>
+<td style="text-align: left">A string that will be included in the callback events of the conference.</td>
+</tr>
+</tbody></table>
+
+<h2 id="conference-states">Conference States</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">State</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">created</td>
+<td style="text-align: left">Conference was created and has no members.</td>
+</tr>
+<tr>
+<td style="text-align: left">active</td>
+<td style="text-align: left">Conference was created and has one or more ACTIVE members. As soon as the first member is added to a conference, the state is changed to active.</td>
+</tr>
+<tr>
+<td style="text-align: left">completed</td>
+<td style="text-align: left">The conference was completed. Once the conference is completed, It can not be used anymore.</td>
+</tr>
+</tbody></table>
+
+<h2 id="conference-member-properties">Conference Member Properties</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">id</td>
+<td style="text-align: left">The unique id of a member.</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">The state of the member in the conference, values are <code class="prettyprint">active</code> or <code class="prettyprint">completed</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">mute</td>
+<td style="text-align: left">If <code class="prettyprint">true</code>, the member can’t speak in the conference, but can hear audio. If “false”, the member can speak in the conference.</td>
+</tr>
+<tr>
+<td style="text-align: left">hold</td>
+<td style="text-align: left">If <code class="prettyprint">true</code>, member can’t hear the conference. If <code class="prettyprint">false</code>, the member can hear the conference.</td>
+</tr>
+<tr>
+<td style="text-align: left">joinTone</td>
+<td style="text-align: left">If <code class="prettyprint">true</code>, will play a tone when the member joins the conference. If <code class="prettyprint">false</code>, no tone is played when the member joins the conference.</td>
+</tr>
+<tr>
+<td style="text-align: left">leavingTone</td>
+<td style="text-align: left">If <code class="prettyprint">true</code>, will play a tone when the member leaves the conference. If <code class="prettyprint">false</code>, no tone is played when the member leaves the conference.</td>
+</tr>
+<tr>
+<td style="text-align: left">addedTime</td>
+<td style="text-align: left">Date and time when the member was added to the conference (UTC).</td>
+</tr>
+<tr>
+<td style="text-align: left">removedTime</td>
+<td style="text-align: left">Date and time when the member was removed to the conference (UTC).</td>
+</tr>
+<tr>
+<td style="text-align: left">call</td>
+<td style="text-align: left">The URL of the call resource for this member.</td>
+</tr>
+</tbody></table>
+
+<h2 id="post-conferences">POST conferences</h2>
+
+<p>Creates a conference with no members.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">from</td>
+<td style="text-align: left">The phone number that will host the conference.</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackUrl</td>
+<td style="text-align: left">The complete URL where the events related to the Conference will be sent to.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackHttpMethod</td>
+<td style="text-align: left">Determine if the callback event should be sent via <code class="prettyprint">HTTP GET</code> or <code class="prettyprint">HTTP POST</code>. Values are <code class="prettyprint">get</code> or <code class="prettyprint">post</code>, default: <code class="prettyprint">post</code>.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackTimeout</td>
+<td style="text-align: left">Determine how long should the platform wait for callbackUrl’s response before timing out in milliseconds.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">fallbackUrl</td>
+<td style="text-align: left">The URL used to send the callback event if the request to callbackUrl fails.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">tag</td>
+<td style="text-align: left">A string that will be included in the callback events of the conference.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-create-conference">Example: Create conference</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/conferences <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "from": "{number}"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span><span class="na">from</span><span class="p">:</span> <span class="s2">"+1234567890"</span><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">conference</span><span class="p">){});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span><span class="na">from</span><span class="p">:</span> <span class="s2">"+1234567890"</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">conference</span><span class="p">){});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns HTTP Header structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 201 CREATED
+Location: /v1/users/{userId}/conferences/{conferenceId}
+</code></pre>
+
+<h3 id="example-create-conference-with-callback-and-fallback-and-2-seconds-callback-39-s-timeout">Example: Create conference with callback and fallback and 2 seconds callback&rsquo;s timeout</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/ <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "from": "{number}",
+        "callbackUrl":"http://my.callback.url",
+        "callbackTimeout":"2000",
+        "fallbackUrl":"http://my.fallback.url"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"from"</span><span class="p">:</span> <span class="s2">"{number}"</span><span class="p">,</span>
+    <span class="s2">"callbackUrl"</span><span class="p">:</span><span class="s2">"http://my.callback.url"</span><span class="p">,</span>
+    <span class="s2">"callbackTimeout"</span><span class="p">:</span><span class="s2">"2000"</span><span class="p">,</span>
+    <span class="s2">"fallbackUrl"</span><span class="p">:</span><span class="s2">"http://my.fallback.url"</span>
+<span class="p">};</span>
+
+<span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">params</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">conference</span><span class="p">){});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">conference</span><span class="p">){});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns HTTP Header structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 201 CREATED
+Location: /v1/users/{userId}/conferences/{conferenceId}
+</code></pre>
+
+<h2 id="get-conferences-conferenceid">GET conferences/{conferenceId}</h2>
+
+<p>Retrieve current properties for a conference.</p>
+
+<h3 id="example-get-conference">Example: Get conference</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/conferences/<span class="o">{</span>conferenceId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"conferenceId"</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">conference</span><span class="p">){});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"conferenceId"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">conference</span><span class="p">){});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+        </span><span class="nt">"activeMembers"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"createdTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-07-12T15:22:47-02"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+19703255647"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{conferenceId}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"created"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="post-conferences-conferenceid">POST conferences/{conferenceId}</h2>
+
+<p>Change the conference properties and/or status.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">Conference state. Possible state values are: <code class="prettyprint">completed</code> to terminate the conference.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">hold</td>
+<td style="text-align: left">If <code class="prettyprint">true</code>, all member can’t hear or speak in the conference. If <code class="prettyprint">false</code>, all members can hear and speak in the conference (unless set at the member level).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">mute</td>
+<td style="text-align: left">If <code class="prettyprint">true</code>, all member can’t speak in the conference. If <code class="prettyprint">false</code>, all members can speak in the conference (unless set at the member level).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackUrl</td>
+<td style="text-align: left">The complete URL where the events related to the Conference will be sent to.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackHttpMethod</td>
+<td style="text-align: left">Determine if the callback event should be sent via HTTP GET or HTTP POST. Values are <code class="prettyprint">get</code> or <code class="prettyprint">post</code>, default: <code class="prettyprint">post</code>.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackTimeout</td>
+<td style="text-align: left">Determine how long should the platform wait for callbackUrl’s response before timing out in milliseconds.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">fallbackUrl</td>
+<td style="text-align: left">The URL used to send the callback event if the request to callbackUrl fails.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">tag</td>
+<td style="text-align: left">A string that will be included in the callback events of the conference.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-terminate-conference">Example: Terminate Conference</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/conferences/<span class="o">{</span>conferenceId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "state": "completed"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="p">{</span><span class="na">state</span><span class="p">:</span> <span class="s2">"completed"</span><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(){});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="p">{</span><span class="na">state</span><span class="p">:</span> <span class="s2">"completed"</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){});</span>
+</code></pre>
+
+<h3 id="example-prevent-all-members-from-speaking">Example: Prevent all members from speaking</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/conferences/<span class="o">{</span>conferenceId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "mute": "true"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="p">{</span><span class="na">mute</span><span class="p">:</span> <span class="s2">"true"</span><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(){});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="p">{</span><span class="na">mute</span><span class="p">:</span> <span class="s2">"true"</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){});</span>
+</code></pre>
+
+<h2 id="post-conferences-conferenceid-audio">POST conferences/{conferenceId}/audio</h2>
+
+<p>Speak a text or play audio in the conference</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">fileUrl</td>
+<td style="text-align: left">The location of an audio file to play (WAV and MP3 supported).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">sentence</td>
+<td style="text-align: left">The sentence to speak.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">gender</td>
+<td style="text-align: left">The gender of the voice used to synthesize the sentence. It will be considered only if sentence is not null. The female gender will be used by default.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">locale</td>
+<td style="text-align: left">The locale used to get the accent of the voice used to synthesize the sentence. Currently audio supports: <br> - en_US or en_UK (English) <br> - es or es_MX (Spanish) <br> - fr or fr_FR (French) <br> - de or de_DE (German) <br> - t or it_IT (Italian) It will be considered only if sentence is not null/empty. The en_US will be used by default.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">voice</td>
+<td style="text-align: left">The voice to speak the sentence. Audio currently supports the following voices: <br> - English US: Kate, Susan, Julie, Dave, Paul <br> - English UK: Bridget <br> - Spanish: Esperanza, Violeta, Jorge <br> - French: Jolie, Bernard <br> - German: Katrin, Stefan <br> - Italian: Paola, Luca It will be considered only if sentence is not null/empty. Susan’s voice will be used by default.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">loopEnabled</td>
+<td style="text-align: left">When value is <code class="prettyprint">true</code> , the audio will keep playing in a loop. Default: <code class="prettyprint">false</code>.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">tag</td>
+<td style="text-align: left">A string that will be included in the events delivered when the audio playback starts or finishes.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+* For playing text-to-speech, sentence is required, for playing an audio file, fileUrl is required.
+</aside>
+
+<h3 id="example-speak-text-in-conference">Example: Speak text in conference</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/conferences/<span class="o">{</span>conferenceId<span class="o">}</span>/audio <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "sentence": "Hello everyone on the conference today",
+        "gender": "female",
+        "locale": "en_US",
+        "voice": "kate"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Speak sentence in a conference</span>
+<span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">speakSentence</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="s2">"Hello From Bandwidth"</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">speakSentence</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="s2">"Hello From Bandwidth"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">//Speak sentence with options</span>
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">sentence</span> <span class="p">:</span> <span class="s2">"hola de Bandwidth"</span><span class="p">,</span>
+    <span class="na">gender</span>   <span class="p">:</span> <span class="s2">"male"</span><span class="p">,</span>
+    <span class="na">locale</span>   <span class="p">:</span> <span class="s2">"es"</span><span class="p">,</span>
+    <span class="na">voice</span>    <span class="p">:</span> <span class="s2">"Jorge"</span>
+<span class="p">}</span>
+<span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">playAudioAdvanced</span><span class="p">(</span><span class="s2">"conferenceId"</span><span class="p">,</span> <span class="nx">options</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">playAudioAdvanced</span><span class="p">(</span><span class="s2">"conferenceId"</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<h3 id="example-play-audio-in-conference">Example: Play audio in conference</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/conferences/<span class="o">{</span>conferenceId<span class="o">}</span>/audio <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "fileUrl": "https://catapult.inetwork.com/.../media/{mediaName1}"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Play Audio file on conference</span>
+<span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">playAudioFile</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="s2">"http://myurl.com/file.mp3"</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">playAudioFile</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="s2">"http://myurl.com/file.wav"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">//Play Audio File on loop</span>
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">fileUrl</span>     <span class="p">:</span> <span class="s2">"http://myurl.com/file.mp3"</span><span class="p">,</span>
+    <span class="na">loopEnabled</span> <span class="p">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+<span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">playAudioAdvanced</span><span class="p">(</span><span class="s2">"conferenceId"</span><span class="p">,</span> <span class="nx">options</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">playAudioAdvanced</span><span class="p">(</span><span class="s2">"conferenceId"</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<h2 id="post-conferences-conferenceid-members">POST conferences/{conferenceId}/members</h2>
+
+<p>Add members to a conference.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">callId</td>
+<td style="text-align: left"><strong>Important:</strong> The callId must refer to an active call that was created using this conferenceId.</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left">joinTone</td>
+<td style="text-align: left">If <code class="prettyprint">true</code>, will play a tone when the member joins the conference. If <code class="prettyprint">false</code>, no tone is played when the member joins the conference.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">leavingTone</td>
+<td style="text-align: left">If <code class="prettyprint">true</code>, will play a tone when the member leaves the conference. If <code class="prettyprint">false</code>, no tone is played when the member leaves the conference.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">mute</td>
+<td style="text-align: left">If <code class="prettyprint">true</code>, member can’t speak in the conference. If <code class="prettyprint">false</code>, this members can speak in the conference (unless set at the conference level).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">hold</td>
+<td style="text-align: left">If <code class="prettyprint">true</code>, member can’t hear or speak in the conference. If <code class="prettyprint">false</code>, member can hear and speak in the conference (unless set at the conference level).</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-add-member-to-a-conference">Example: Add member to a conference</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/conferences/<span class="o">{</span>conferenceId<span class="o">}</span>/members <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "callId": "{callId}",
+        "joinTone": "false",
+        "leavingTone": "false"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">createMember</span><span class="p">(</span><span class="s2">"conferenceId"</span><span class="p">,</span> <span class="p">{</span><span class="na">callId</span><span class="p">:</span> <span class="s2">"callID"</span><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">member</span><span class="p">){});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">createMember</span><span class="p">(</span><span class="s2">"conferenceId"</span><span class="p">,</span> <span class="p">{</span><span class="na">callId</span><span class="p">:</span> <span class="s2">"callID"</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">member</span><span class="p">){});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns HTTP Header structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 201 CREATED
+Location: /v1/users/{userId}/conferences/{confId}/members/{memberId}
+</code></pre>
+
+<h2 id="get-conferences-conferenceid-members">GET conferences/{conferenceId}/members</h2>
+
+<p>List all members from a conference. If a member had already hung up or removed from conference it will be displayed as completed.</p>
+
+<h3 id="example-listing-members-from-a-conference">Example: Listing members from a conference</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/conferences/<span class="o">{</span>conferenceId<span class="o">}</span>/members <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">getMembers</span><span class="p">(</span><span class="s2">"conferenceId"</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">members</span><span class="p">){});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">getMembers</span><span class="p">(</span><span class="s2">"conferenceId"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">members</span><span class="p">){});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+    {
+            "addedTime": "2013-07-12T15:54:47-02",
+            "hold": false,
+            "id": "{memberId1}",
+            "mute": false,
+            "state": "active",
+            "joinTone": false,
+            "leavingTone": false,
+            "call": "https://localhost:8444/v1/users/{userId}/calls/{callId1}"
+    },
+    {
+            "addedTime": "2013-07-12T15:55:12-02",
+            "hold": false,
+            "id": "{memberId2}",
+            "mute": false,
+            "state": "active",
+            "joinTone": false,
+            "leavingTone": false,
+            "call": "https://localhost:8444/v1/users/{userId}/calls/{callId2}"
+    },
+    {
+            "addedTime": "2013-07-12T15:56:12-02",
+            "hold": false,
+            "id": "{memberId3}",
+            "mute": false,
+            "removedTime": "2013-07-12T15:56:59-02",
+            "state": "completed",
+            "joinTone": false,
+            "leavingTone": false,
+            "call": "https://localhost:8444/v1/users/{userId}/calls/{callId3}"
+    }
+]
+</code></pre>
+
+<h2 id="post-conferences-conferenceid-members-memberid">POST conferences/{conferenceId}/members/{memberId}</h2>
+
+<p>Update a member status/properties.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">joinTone</td>
+<td style="text-align: left">If <code class="prettyprint">true</code>, will play a tone when the member joins the conference. If <code class="prettyprint">false</code>, no tone is played when the member joins the conference.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">leavingTone</td>
+<td style="text-align: left">If <code class="prettyprint">true</code>, will play a tone when the member leaves the conference. If <code class="prettyprint">false</code>, no tone is played when the member leaves the conference.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">mute</td>
+<td style="text-align: left">If <code class="prettyprint">true</code>, member can’t speak in the conference. If <code class="prettyprint">false</code>, this members can speak in the conference (unless set at the conference level).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">hold</td>
+<td style="text-align: left">If <code class="prettyprint">true</code>, member can’t hear or speak in the conference. If <code class="prettyprint">false</code>, member can hear and speak in the conference (unless set at the conference level).</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-remove-member-from-conference">Example: Remove member from conference</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/conferences/<span class="o">{</span>conferenceId<span class="o">}</span>/members/<span class="o">{</span>memberId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "state": "completed"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">updateMember</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="s2">"memberId"</span><span class="p">,</span> <span class="p">{</span><span class="na">state</span><span class="p">:</span> <span class="s2">"completed"</span><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(){});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">updateMember</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="s2">"memberId"</span><span class="p">,</span> <span class="p">{</span><span class="na">state</span><span class="p">:</span> <span class="s2">"completed"</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){});</span>
+</code></pre>
+
+<h3 id="example-keep-member-from-speaking-in-the-conference">Example: Keep member from speaking in the conference</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/conferences/<span class="o">{</span>conferenceId<span class="o">}</span>/members/<span class="o">{</span>memberId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "mute": "true"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">updateMember</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="s2">"memberId"</span><span class="p">,</span> <span class="p">{</span><span class="na">mute</span><span class="p">:</span> <span class="s2">"true"</span><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(){});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">updateMember</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="s2">"memberId"</span><span class="p">,</span> <span class="p">{</span><span class="na">mute</span><span class="p">:</span> <span class="s2">"true"</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){});</span>
+</code></pre>
+
+<h3 id="example-keep-member-from-hearing-the-conference-audio">Example: Keep member from hearing the conference audio</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/conferences/<span class="o">{</span>conferenceId<span class="o">}</span>/members/<span class="o">{</span>memberId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "hold": "true"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">updateMember</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="s2">"memberId"</span><span class="p">,</span> <span class="p">{</span><span class="na">hold</span><span class="p">:</span> <span class="s2">"true"</span><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(){});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">updateMember</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="s2">"memberId"</span><span class="p">,</span> <span class="p">{</span><span class="na">hold</span><span class="p">:</span> <span class="s2">"true"</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){});</span>
+</code></pre>
+
+<h2 id="get-conferences-conferenceid-members-memberid">GET conferences/{conferenceId}/members/{memberId}</h2>
+
+<p>Retrieve a conference member properties.</p>
+
+<h3 id="example-get-conference-member-information">Example: Get conference member information</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/conferences/<span class="o">{</span>conferenceId<span class="o">}</span>/members/<span class="o">{</span>memberId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">getMember</span><span class="p">(</span><span class="s2">"conferenceId"</span><span class="p">,</span> <span class="s2">"memberId"</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">member</span><span class="p">){});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">getMember</span><span class="p">(</span><span class="s2">"conferenceId"</span><span class="p">,</span> <span class="s2">"memberId"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">member</span><span class="p">){});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+        </span><span class="nt">"addedTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-07-12T15:47:04-03"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"hold"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{memberId}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"mute"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"removedTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-07-12T15:49:11-02"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"joinTone"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"leavingTone"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"call"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/{userId}/calls/{callId}"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="post-conferences-conferenceid-members-memberid-audio">POST conferences/{conferenceId}/members/{memberId}/audio</h2>
+
+<p>Speak text or play audio to <strong>ONLY</strong> a single conference member.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">fileUrl</td>
+<td style="text-align: left">The location of an audio file to play (WAV and MP3 supported).</td>
+<td style="text-align: left">*</td>
+</tr>
+<tr>
+<td style="text-align: left">sentence</td>
+<td style="text-align: left">The sentence to speak.</td>
+<td style="text-align: left">*</td>
+</tr>
+<tr>
+<td style="text-align: left">gender</td>
+<td style="text-align: left">The gender of the voice used to synthesize the sentence. It will be considered only if sentence is not null. The female gender will be used by default.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">locale</td>
+<td style="text-align: left">The locale used to get the accent of the voice used to synthesize the sentence. Currently audio supports: <br> - en_US or en_UK (English) <br> - es or es_MX (Spanish) <br> - fr or fr_FR (French) <br> - de or de_DE (German) <br> - t or it_IT (Italian) It will be considered only if sentence is not null/empty. The en_US will be used by default.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">voice</td>
+<td style="text-align: left">The voice to speak the sentence. Audio currently supports the following voices: <br> - English US: Kate, Susan, Julie, Dave, Paul <br> - English UK: Bridget <br> - Spanish: Esperanza, Violeta, Jorge <br> - French: Jolie, Bernard <br> - German: Katrin, Stefan <br> - Italian: Paola, Luca It will be considered only if sentence is not null/empty. Susan’s voice will be used by default.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">loopEnabled</td>
+<td style="text-align: left">When value is <code class="prettyprint">true</code> , the audio will keep playing in a loop. Default: <code class="prettyprint">false</code>.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">tag</td>
+<td style="text-align: left">A string that will be included in the events delivered when the audio playback starts or finishes.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+* For playing text-to-speech, sentence is required, for playing an audio file, fileUrl is required.
+</aside>
+
+<h3 id="example-speak-text-to-a-conference-member">Example: Speak text to a conference member</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/conferences/<span class="o">{</span>conferenceId<span class="o">}</span>/members/<span class="o">{</span>memberId<span class="o">}</span>/audio <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "sentence": "Hi there member, I have a message only for you",
+        "gender": "female",
+        "locale": "en_US",
+        "voice": "kate"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Speak sentence</span>
+<span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">speakSentenceToMember</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="s2">"memberID"</span><span class="p">,</span> <span class="s2">"Hello From Bandwidth"</span><span class="p">)</span>
+ <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">speakSentenceToMember</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="s2">"memberID"</span><span class="p">,</span> <span class="s2">"Hello From Bandwidth"</span><span class="p">,</span>
+    <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+  <span class="c1">//Speak sentence with options</span>
+  <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">sentence</span> <span class="p">:</span> <span class="s2">"hola de Bandwidth"</span><span class="p">,</span>
+    <span class="na">gender</span>   <span class="p">:</span> <span class="s2">"male"</span><span class="p">,</span>
+    <span class="na">locale</span>   <span class="p">:</span> <span class="s2">"es"</span><span class="p">,</span>
+    <span class="na">voice</span>    <span class="p">:</span> <span class="s2">"Jorge"</span>
+  <span class="p">}</span>
+  <span class="c1">//Promise</span>
+  <span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">playAudioAdvancedToMember</span><span class="p">(</span><span class="s2">"conferenceId"</span><span class="p">,</span> <span class="s2">"memberId"</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+  <span class="c1">//Callback</span>
+  <span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">playAudioAdvanced</span><span class="p">(</span><span class="s2">"conferenceId"</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<h3 id="example-play-audio-to-a-conference-member">Example: Play audio to a conference member</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/conferences/<span class="o">{</span>conferenceId<span class="o">}</span>/members/<span class="o">{</span>memberId<span class="o">}</span>/audio <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "fileUrl": "https://catapult.inetwork.com/.../media/{mediaName1}"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Play Audio file</span>
+
+<span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">playAudioFileToMember</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="s2">"memberId"</span><span class="p">,</span> <span class="s2">"http://myurl.com/file.mp3"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">playAudioFileToMember</span><span class="p">(</span><span class="s2">"conferenceID"</span><span class="p">,</span> <span class="s2">"memberId"</span><span class="p">,</span> <span class="s2">"http://myurl.com/file.wav"</span><span class="p">,</span>
+   <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">//Play Audio File on loop</span>
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">fileUrl</span>     <span class="p">:</span> <span class="s2">"http://myurl.com/file.mp3"</span><span class="p">,</span>
+    <span class="na">loopEnabled</span> <span class="p">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+<span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">playAudioAdvancedToMember</span><span class="p">(</span><span class="s2">"conferenceId"</span><span class="p">,</span> <span class="s2">"memberId"</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span>
+ <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Conference</span><span class="p">.</span><span class="nx">playAudioAdvancedToMember</span><span class="p">(</span><span class="s2">"conferenceId"</span><span class="p">,</span> <span class="s2">"memberId"</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span>
+  <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
 </code></pre>
 
       </div>
