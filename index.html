@@ -4,10 +4,8 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>API Reference</title>
+    <title>Bandwidth API Docs</title>
 
-    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
     <style>
       .highlight table td { padding: 5px; }
 .highlight table pre { margin: 0; }
@@ -88,10 +86,12 @@
   color: #90a959;
 }
     </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
       <script src="javascripts/all.js"></script>
   </head>
 
-  <body class="index" data-languages="[&quot;shell&quot;,&quot;ruby&quot;,&quot;python&quot;]">
+  <body class="index" data-languages="[&quot;shell&quot;,&quot;javascript&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -101,9 +101,8 @@
     <div class="tocify-wrapper">
       <img src="images/logo.png" />
         <div class="lang-selector">
-              <a href="#" data-language-name="shell">shell</a>
-              <a href="#" data-language-name="ruby">ruby</a>
-              <a href="#" data-language-name="python">python</a>
+              <a href="#" data-language-name="shell">curl</a>
+              <a href="#" data-language-name="javascript">javascript</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -112,235 +111,1368 @@
       <div id="toc">
       </div>
         <ul class="toc-footer">
-            <li><a href='#'>Sign Up for a Developer Key</a></li>
-            <li><a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a></li>
+            <li><a href='http://bandwidth.com/products/application-platform/?utm_medium=social&utm_source=docs&utm_campaign=dtolb&utm_content=_'>Create an API Key</a></li>
+            <li><a href='http://github.com/tripit/slate'>Documentation by Slate</a></li>
         </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id="introduction">Introduction</h1>
+        
+          <h1 id="get-started">Get Started</h1>
 
-<p>Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.</p>
+<p>Before you can send your first SMS message, you will need to</p>
 
-<p>We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+<p><a href="http://bandwidth.com/products/application-platform/?utm_medium=social&amp;utm_source=docs&amp;utm_campaign=dtolb&amp;utm_content=_">Sign up</a> for a free Bandwidth API account.
+Get a number under the “My Numbers” tab (more specific instructions here)</p>
 
-<p>This example API documentation page was created with <a href="https://github.com/tripit/slate">Slate</a>. Feel free to edit it and use it as a base for your own API&rsquo;s documentation.</p>
+<h1 id="send-your-first-sms-message">Send your first SMS Message</h1>
 
-<h1 id="authentication">Authentication</h1>
+<p>To send your first SMS message we have included instructions for using Postman, a helpful program for testing APIs <a href="https://www.getpostman.com/">download</a>, and also code that can be found further down this page.</p>
 
-<blockquote>
-<p>To authorize, use this code:</p>
-</blockquote>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
+          <h1 id="intelligence-services">Intelligence Services</h1>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre>
-<pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
+<p>Use number intelligence to block traffic from spammers and fraudsters. This feature is in beta. Early access will begin in Q3. Email signup@bandwidth.com to obtain early access.</p>
 
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre>
-<pre class="highlight shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
-curl <span class="s2">"api_endpoint_here"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre>
+<h2 id="number-intelligence-properties">Number Intelligence Properties</h2>
 
-<blockquote>
-<p>Make sure to replace <code class="prettyprint">meowmeowmeow</code> with your API key.</p>
-</blockquote>
+<table><thead>
+<tr>
+<th style="text-align: left">PROPERTY</th>
+<th style="text-align: left">DESCRIPTION</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">number</td>
+<td style="text-align: left">The telephone number in E.164 format. <code class="prettyprint">+13334445555</code></td>
+</tr>
+<tr>
+<td style="text-align: left">nationalNumber</td>
+<td style="text-align: left">The telephone number in a friendly national format, e.g. (555) 555-5555</td>
+</tr>
+<tr>
+<td style="text-align: left">carrier</td>
+<td style="text-align: left">The company who provides the service for this number.</td>
+</tr>
+<tr>
+<td style="text-align: left">lineType</td>
+<td style="text-align: left">The type of service provided on this number. Options include: <code class="prettyprint">landline</code>, <code class="prettyprint">fixed_voip</code>, <code class="prettyprint">non_fixed_voip</code>, <code class="prettyprint">mobile</code>,<code class="prettyprint">voicemail</code>, <code class="prettyprint">tollfree</code>, <code class="prettyprint">premium</code>, <code class="prettyprint">other</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">reputationScore</td>
+<td style="text-align: left">Measures the risk of the number being associated with spam / fraudulent behavior. Valid values between 1 - 4.</td>
+</tr>
+<tr>
+<td style="text-align: left">riskType</td>
+<td style="text-align: left">Type of risk this number is associated with. Types include <code class="prettyprint">spam</code>, <code class="prettyprint">risk</code>, <code class="prettyprint">not_applicable</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">riskCategory</td>
+<td style="text-align: left">Category of risk associated with the number. Categories include: <code class="prettyprint">not_spam</code>, <code class="prettyprint">debt_collector</code> ,<code class="prettyprint">telemarketer</code>, <code class="prettyprint">political_call</code>, <code class="prettyprint">phone_survey</code>, <code class="prettyprint">phishing,extortion</code>, <code class="prettyprint">irs_scam</code>, <code class="prettyprint">tax_scam</code>, <code class="prettyprint">tech_support_scam</code>, <code class="prettyprint">vacation_scam</code>, <code class="prettyprint">lucky_winner_scam</code>, <code class="prettyprint">scam</code>, <code class="prettyprint">tollfree_pumping</code>, <code class="prettyprint">other_spam.</code></td>
+</tr>
+</tbody></table>
 
-<p>Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our <a href="http://example.com/developers">developer portal</a>.</p>
+<h2 id="get-intelligenceservices">GET intelligenceServices</h2>
 
-<p>Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
+<p>This resource will provide number intelligence data for the number provided.</p>
 
-<p><code class="prettyprint">Authorization: meowmeowmeow</code></p>
+<table><thead>
+<tr>
+<th><code class="prettyprint">GET</code></th>
+<th>/v1/users/{user-id}/intelligenceServices/number/{number}</th>
+</tr>
+</thead><tbody>
+</tbody></table>
 
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
+<h3 id="supported-parameters">Supported Parameters</h3>
 
-<h1 id="kittens">Kittens</h1>
-
-<h2 id="get-all-kittens">Get All Kittens</h2>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span>
-</code></pre>
-<pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-</code></pre>
-<pre class="highlight shell"><code>curl <span class="s2">"http://example.com/api/kittens"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
+<table><thead>
+<tr>
+<th style="text-align: left">PARAMETER</th>
+<th style="text-align: left">DESCRIPTION</th>
+<th style="text-align: left">MANDATORY</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">reputation</td>
+<td style="text-align: left">Includes number reputation information.</td>
+<td style="text-align: left">no</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/intelligenceServices/number/15554446666?reputation<span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
 </code></pre>
 
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight json"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
-</span></code></pre>
+<pre class="highlight plaintext"><code>[
+    {
+        "number":"5554446666",
+        "nationalNumber":"+15554446666",
+        "carrier": "AT&amp;T Wireless",
+        "lineType": "Mobile",
+        "reputationScore": "4",
+        "riskType": "Spam",
+        "riskCategory": "Phishing"
+    }
+]
+</code></pre>
 
-<p>This endpoint retrieves all kittens.</p>
+          <h1 id="account">Account</h1>
 
-<h3 id="http-request">HTTP Request</h3>
-
-<p><code class="prettyprint">GET http://example.com/api/kittens</code></p>
-
-<h3 id="query-parameters">Query Parameters</h3>
+<p>The Account API allows you to retrieve your current balance, transaction list, account type and all elements related to your platform account.</p>
 
 <table><thead>
 <tr>
-<th>Parameter</th>
-<th>Default</th>
-<th>Description</th>
+<th style="text-align: left"><code class="prettyprint">GET</code></th>
+<th style="text-align: left">/v1/users/{userId}/account</th>
+<th style="text-align: left">Get information about your account</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>include_cats</td>
-<td>false</td>
-<td>If set to true, the result will also include cats.</td>
-</tr>
-<tr>
-<td>available</td>
-<td>true</td>
-<td>If set to false, the result will include kittens that have already been adopted.</td>
+<td style="text-align: left"><code class="prettyprint">GET</code></td>
+<td style="text-align: left">/v1/users/{userId}/account/transactions</td>
+<td style="text-align: left">Get a list of the transactions made to your account</td>
 </tr>
 </tbody></table>
 
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
+<h2 id="account-properties">Account Properties</h2>
 
-<h2 id="get-a-specific-kitten">Get a Specific Kitten</h2>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
+<table><thead>
+<tr>
+<th style="text-align: left">PROPERTY</th>
+<th style="text-align: left">DESCRIPTION</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">balance</td>
+<td style="text-align: left">Your account balance in dollars, as a string; the currency symbol is not included.</td>
+</tr>
+<tr>
+<td style="text-align: left">accountType</td>
+<td style="text-align: left">The type of account configured for your user:   <strong>pre-pay</strong>: the type of account where you increase your available balance with credit card payments.</td>
+</tr>
+</tbody></table>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<h2 id="transaction-properties">Transaction Properties</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">PROPERTY</th>
+<th style="text-align: left">DESCRIPTION</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">id</td>
+<td style="text-align: left">The unique identifier for the transaction.</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">The time the transaction was processed.</td>
+</tr>
+<tr>
+<td style="text-align: left">amount</td>
+<td style="text-align: left">The transaction amount in dollars, as a string; the currency symbol is not included.</td>
+</tr>
+<tr>
+<td style="text-align: left">type</td>
+<td style="text-align: left">The type of transaction.</td>
+</tr>
+<tr>
+<td style="text-align: left">units</td>
+<td style="text-align: left">The number of product units the transaction charged or credited.</td>
+</tr>
+<tr>
+<td style="text-align: left">productType</td>
+<td style="text-align: left">The product the transaction was related to (not all transactions are related to a product).</td>
+</tr>
+<tr>
+<td style="text-align: left">number</td>
+<td style="text-align: left">The phone number the transaction was related to (not all transactions are related to a phone number).</td>
+</tr>
+<tr>
+<td style="text-align: left">page</td>
+<td style="text-align: left">Used for pagination to indicate the page requested for querying a list of transactions. If no value is specified the default is 0.</td>
+</tr>
+<tr>
+<td style="text-align: left">size</td>
+<td style="text-align: left">Used for pagination to indicate the size of each page requested for querying a list of transactions. If no value is specified the default value is 25 (maximum value 1000).</td>
+</tr>
+</tbody></table>
+
+<h2 id="transaction-types">Transaction Types</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">TYPE</th>
+<th style="text-align: left">DESCRIPTION</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">charge</td>
+<td style="text-align: left">A charge for the use of a service or resource (for example, phone calls, SMS messages, phone numbers).</td>
+</tr>
+<tr>
+<td style="text-align: left">payment</td>
+<td style="text-align: left">A payment you made to increase your account balance.</td>
+</tr>
+<tr>
+<td style="text-align: left">credit</td>
+<td style="text-align: left">An increase to your account balance that you did not pay for (for example, an initial account credit or promotion).</td>
+</tr>
+<tr>
+<td style="text-align: left">auto-recharge</td>
+<td style="text-align: left">An automated payment made to keep your account balance above the minimum balance you configured.</td>
+</tr>
+</tbody></table>
+
+<h2 id="product-types">Product Types</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Type</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">local-number-per-month</td>
+<td style="text-align: left">The monthly charge for a local phone number.</td>
+</tr>
+<tr>
+<td style="text-align: left">toll-free-number-per-month</td>
+<td style="text-align: left">The monthly charge for a toll-free phone number.</td>
+</tr>
+<tr>
+<td style="text-align: left">sms-in</td>
+<td style="text-align: left">A SMS message that came in to one of your numbers.</td>
+</tr>
+<tr>
+<td style="text-align: left">sms-out</td>
+<td style="text-align: left">A SMS message that was sent outbound one of your numbers.</td>
+</tr>
+<tr>
+<td style="text-align: left">mms-in</td>
+<td style="text-align: left">A MMS message that was sent to one of your numbers.</td>
+</tr>
+<tr>
+<td style="text-align: left">mms-out</td>
+<td style="text-align: left">A MMS message that was sent outbound one of your numbers.</td>
+</tr>
+<tr>
+<td style="text-align: left">call-in</td>
+<td style="text-align: left">An inbound phone call to one of your numbers.</td>
+</tr>
+<tr>
+<td style="text-align: left">call-out</td>
+<td style="text-align: left">An outbound phone call that was created by your app.</td>
+</tr>
+<tr>
+<td style="text-align: left">sip-call-in</td>
+<td style="text-align: left">A phone call that came inbound via SIP to one of your registered endpoints.</td>
+</tr>
+<tr>
+<td style="text-align: left">sip-call-out</td>
+<td style="text-align: left">A phone call made outbound to a SIP address.</td>
+</tr>
+<tr>
+<td style="text-align: left">transcription</td>
+<td style="text-align: left">A transcription of a recorded call.</td>
+</tr>
+<tr>
+<td style="text-align: left">cnam-search</td>
+<td style="text-align: left">A CNAM lookup request for a phone number.</td>
+</tr>
+</tbody></table>
+
+<h2 id="get-account">GET account</h2>
+
+<p>Get an Account object. No query parameters are supported.</p>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/account <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
 </code></pre>
-<pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">){});</span>
 
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre>
-<pre class="highlight shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">info</span><span class="p">){});</span>
 </code></pre>
 
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+    </span><span class="nt">"balance"</span><span class="p">:</span><span class="w"> </span><span class="s2">"538.37250"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"accountType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pre-pay"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
-<p>This endpoint retrieves a specific kitten.</p>
-
-<aside class="warning">Inside HTML code blocks like this one, you can&rsquo;t use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-
-<h3 id="http-request">HTTP Request</h3>
-
-<p><code class="prettyprint">GET http://example.com/kittens/&lt;ID&gt;</code></p>
-
-<h3 id="url-parameters">URL Parameters</h3>
+<h2 id="get-account-transactions">GET account/transactions</h2>
 
 <table><thead>
 <tr>
-<th>Parameter</th>
-<th>Description</th>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>ID</td>
-<td>The ID of the kitten to retrieve</td>
+<td style="text-align: left">maxItems</td>
+<td style="text-align: left">Limit the number of transactions that will be returned.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">toDate</td>
+<td style="text-align: left">Return only transactions that are newer than the parameter. Format: &ldquo;yyyy-MM-dd&rsquo;T&#39;HH:mm:ssZ&rdquo;</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">fromDate</td>
+<td style="text-align: left">Return only transactions that are older than the parameter. Format: &ldquo;yyyy-MM-dd&rsquo;T&#39;HH:mm:ssZ&rdquo;</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">type</td>
+<td style="text-align: left">Return only transactions that are this type.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">page</td>
+<td style="text-align: left">Used for pagination to indicate the page requested for querying a list of transactions. If no value is specified the default is 0.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">size</td>
+<td style="text-align: left">Used for pagination to indicate the size of each page requested for querying a list of transactions. If no value is specified the default value is 25 (maximum value 1000).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">number</td>
+<td style="text-align: left">Return only transactions that are from the specified number. (coming soon)</td>
+<td style="text-align: left">No</td>
 </tr>
 </tbody></table>
 
-          <h1 id="errors">Errors</h1>
+<h2 id="example-get-transactions">Example: Get transactions</h2>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/account/transations <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">getTransactions</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">transactions</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">hasNextPage</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">getNextPage</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">{</span><span class="na">transactions</span><span class="p">:</span> <span class="p">[]};</span>
+        <span class="p">}</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">transactions</span><span class="p">);</span>
+    <span class="p">});</span>
+</code></pre>
 
-<aside class="notice">This error section is stored in a separate file in `includes/_errors.md`. Slate allows you to optionally separate out your docs into many files&hellip;just save them to the `includes` folder and add them to the top of your `index.md`&rsquo;s frontmatter. Files are included in the order listed.</aside>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+  {
+    "id": "{transactionId1}",
+    "time": "2013-02-21T13:39:09.122Z",
+    "amount": "0.00750",
+    "type": "charge",
+    "units": "1",
+    "productType": "sms-out",
+    "number": "{number}"
+  },
+  {
+    "id": "{transactionId2}",
+    "time": "2013-02-21T13:37:42.079Z",
+    "amount": "0.00750",
+    "type": "charge",
+    "units": "1",
+    "productType": "sms-out",
+    "number": "{number}"
+  }
+]
+</code></pre>
 
-<p>The Kittn API uses the following error codes:</p>
+<h2 id="example-get-transactions-by-date">Example: Get transactions by date</h2>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/account/transations?fromDate<span class="o">=</span>2013-02-21T13:38:00 <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Get transactions filtering by date</span>
+<span class="c1">//Promise</span>
+<span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">fromDate</span><span class="p">:</span> <span class="s2">"2013-02-21T13:38:00"</span>
+<span class="p">};</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">getTransactions</span><span class="p">(</span><span class="nx">params</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">transactions</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">hasNextPage</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">getNextPage</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">{</span><span class="na">transactions</span><span class="p">:</span> <span class="p">[]};</span>
+        <span class="p">}</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">transactions</span><span class="p">);</span>
+    <span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+  {
+    "id": "{transactionId}",
+    "time": "2013-02-21T13:39:09.122Z",
+    "amount": "0.00750",
+    "type": "charge",
+    "units": "1",
+    "productType": "sms-out",
+    "number": "{number}"
+  }
+]
+</code></pre>
+
+<h2 id="example-get-transactions-filtering-by-date">Example: Get transactions filtering by date</h2>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/account/transations?toDate<span class="o">=</span>2013-02-21T13:40:00&amp;fromDate<span class="o">=</span>2013-02-21T13:38:00 <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Get transactions filtering by date</span>
+<span class="c1">//Promise</span>
+<span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">fromDate</span><span class="p">:</span> <span class="s2">"2013-02-21T13:38:00"</span><span class="p">,</span>
+    <span class="na">toDate</span><span class="p">:</span>   <span class="s2">"2013-02-21T13:40:00"</span>
+<span class="p">};</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">getTransactions</span><span class="p">(</span><span class="nx">params</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">transactions</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">hasNextPage</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">getNextPage</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">{</span><span class="na">transactions</span><span class="p">:</span> <span class="p">[]};</span>
+        <span class="p">}</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">transactions</span><span class="p">);</span>
+    <span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+  {
+    "id": "{transactionId}",
+    "time": "2013-02-21T13:39:09.122Z",
+    "amount": "0.00750",
+    "type": "charge",
+    "units": "1",
+    "productType": "sms-out",
+    "number": "{number}"
+  }
+]
+</code></pre>
+
+<h2 id="example-get-transactions-limiting-result">Example: Get transactions limiting result</h2>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/account/transations?maxItems<span class="o">=</span>1 <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Get transactions limiting result</span>
+<span class="c1">//Promise</span>
+<span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">maxItems</span><span class="p">:</span> <span class="mi">1</span>
+<span class="p">};</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">getTransactions</span><span class="p">(</span><span class="nx">params</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">transactions</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">hasNextPage</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">getNextPage</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">{</span><span class="na">transactions</span><span class="p">:</span> <span class="p">[]};</span>
+        <span class="p">}</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">transactions</span><span class="p">);</span>
+    <span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+  {
+    "id": "{transactionId}",
+    "time": "2013-02-21T13:39:09.122Z",
+    "amount": "0.00750",
+    "type": "charge",
+    "units": "1",
+    "productType": "sms-out",
+    "number": "{number}"
+  }
+]
+</code></pre>
+
+<h2 id="example-get-transactions-of-payment-type">Example: Get transactions of payment type</h2>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/account/transations?type<span class="o">=</span>Payment <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Get transactions of `payment` type</span>
+<span class="c1">//Promise</span>
+<span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">type</span><span class="p">:</span> <span class="s2">"Payment"</span>
+<span class="p">};</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">getTransactions</span><span class="p">(</span><span class="nx">params</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">transactions</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">hasNextPage</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">getNextPage</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">{</span><span class="na">transactions</span><span class="p">:</span> <span class="p">[]};</span>
+        <span class="p">}</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">transactions</span><span class="p">);</span>
+    <span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+  {
+    "id": "{transactionId1}",
+    "time": "2013-02-15T18:43:50.602Z",
+    "amount": "1000.00000",
+    "type": "payment",
+    "units": "0"
+  },
+  {
+    "id": "{transactionId2}",
+    "time": "2013-02-05T14:56:51.279Z",
+    "amount": "5000.00000",
+    "type": "payment",
+    "units": "0"
+  }
+]
+</code></pre>
+
+          <h1 id="applications">Applications</h1>
+
+<p>The Applications resource lets you define call and message handling applications. You write an application on your own servers and have Bandwidth API send events to it by configuring a callback URL.</p>
 
 <table><thead>
 <tr>
-<th>Error Code</th>
-<th>Meaning</th>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>400</td>
-<td>Bad Request &ndash; Your request sucks</td>
+<td style="text-align: left">id</td>
+<td style="text-align: left">The unique identifier for the application.</td>
 </tr>
 <tr>
-<td>401</td>
-<td>Unauthorized &ndash; Your API key is wrong</td>
+<td style="text-align: left">name</td>
+<td style="text-align: left">A name you choose for this application.</td>
 </tr>
 <tr>
-<td>403</td>
-<td>Forbidden &ndash; The kitten requested is hidden for administrators only</td>
+<td style="text-align: left">incomingCallUrl</td>
+<td style="text-align: left">A URL where call events will be sent for an inbound call. This is the endpoint where the Application Platform will send all call events. Either incomingCallUrl or incomingMessageUrl is required.</td>
 </tr>
 <tr>
-<td>404</td>
-<td>Not Found &ndash; The specified kitten could not be found</td>
+<td style="text-align: left">incomingCallUrlCallbackTimeout</td>
+<td style="text-align: left">Determine how long should the platform wait for incomingCallUrl&rsquo;s response before timing out in milliseconds.</td>
 </tr>
 <tr>
-<td>405</td>
-<td>Method Not Allowed &ndash; You tried to access a kitten with an invalid method</td>
+<td style="text-align: left">incomingCallFallbackUrl</td>
+<td style="text-align: left">The URL used to send the callback event if the request to incomingCallUrl fails.</td>
 </tr>
 <tr>
-<td>406</td>
-<td>Not Acceptable &ndash; You requested a format that isn&rsquo;t json</td>
+<td style="text-align: left">callbackHttpMethod</td>
+<td style="text-align: left">Determine if the callback event should be sent via HTTP GET or HTTP POST. Values are &ldquo;get&rdquo; or &ldquo;post&rdquo;, default: &ldquo;post&rdquo;.</td>
 </tr>
 <tr>
-<td>410</td>
-<td>Gone &ndash; The kitten requested has been removed from our servers</td>
+<td style="text-align: left">autoAnswer</td>
+<td style="text-align: left">Determines whether or not an incoming call should be automatically answered. Default value is &lsquo;true&rsquo;.</td>
 </tr>
 <tr>
-<td>418</td>
-<td>I&rsquo;m a teapot</td>
+<td style="text-align: left">incomingMessageUrl</td>
+<td style="text-align: left">A URL where message events will be sent for an inbound message. This is the endpoint where the Application Platform will send all message events. Either incomingMessageUrl or incomingCallUrl is required.</td>
 </tr>
 <tr>
-<td>429</td>
-<td>Too Many Requests &ndash; You&rsquo;re requesting too many kittens! Slow down!</td>
+<td style="text-align: left">incomingMessageUrlCallbackTimeout</td>
+<td style="text-align: left">Determine how long should the platform wait for incomingMessageUrl&rsquo;s response before timing out in milliseconds.</td>
 </tr>
 <tr>
-<td>500</td>
-<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
-</tr>
-<tr>
-<td>503</td>
-<td>Service Unavailable &ndash; We&rsquo;re temporarially offline for maintanance. Please try again later.</td>
+<td style="text-align: left">incomingMessageFallbackUrl</td>
+<td style="text-align: left">The URL used to send the callback event if the request to incomingMessageUrl fails.</td>
 </tr>
 </tbody></table>
+
+<h2 id="get-applications">GET applications</h2>
+
+<p>Get a list of your applications</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">page</td>
+<td style="text-align: left">Used for pagination to indicate the page requested for querying a list of applications. If no value is specified the default is 0.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">size</td>
+<td style="text-align: left">Used for pagination to indicate the size of each page requested for querying a list of applications. If no value is specified the default value is 25. (Maximum value 1000)</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-list-your-applications">Example: List your applications.</h3>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/account/applications <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Application</span><span class="p">.</span><span class="nx">list</span><span class="p">()</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">applications</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">hasNextPage</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">getNextPage</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span><span class="na">applications</span><span class="p">:</span> <span class="p">[]};</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">applications</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+  {
+    "id": "{applicationId}",
+    "name": "MyFirstApp",
+    "incomingCallUrl": "http://example.com/calls.php",
+    "incomingMessageUrl": "http://example.com/messages.php",
+    "autoAnswer": true
+  },
+  {
+    "id": "{applicationId}",
+    "name": "MySecondApp",
+    "incomingCallUrl": "http://example.com/app2/calls.php",
+    "incomingMessageUrl": "http://example.com/app2/messages.php",
+    "autoAnswer": false
+  }
+]
+</code></pre>
+
+<h2 id="post-applications">POST applications</h2>
+
+<p>Creates an application that can handle calls and messages for one of your phone number. Many phone numbers can share an application.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">name</td>
+<td style="text-align: left">A name you choose for this application.</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left">incomingCallUrl</td>
+<td style="text-align: left">A URL where call events will be sent for an inbound call.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">incomingCallUrlCallbackTimeout</td>
+<td style="text-align: left">Determine how long should the platform wait for incomingCallUrl&rsquo;s response before timing out in milliseconds.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">incomingCallFallbackUrl</td>
+<td style="text-align: left">The URL used to send the callback event if the request to incomingCallUrl fails.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">incomingMessageUrl</td>
+<td style="text-align: left">A URL where message events will be sent for an inbound SMS message</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">incomingMessageUrlCallbackTimeout</td>
+<td style="text-align: left">Determine how long should the platform wait for incomingMessageUrl&rsquo;s response before timing out in milliseconds.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">incomingMessageFallbackUrl</td>
+<td style="text-align: left">The URL used to send the callback event if the request to incomingMessageUrl fails.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackHttpMethod</td>
+<td style="text-align: left">Determine if the callback event should be sent via HTTP GET or HTTP POST. (If not set the default is HTTP POST)</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">autoAnswer</td>
+<td style="text-align: left">Determines whether or not an incoming call should be automatically answered. Default value is &#39;true&rsquo;.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-create-an-application-named-39-myfirstapp-39">Example: Create an application named: &#39;MyFirstApp&rsquo;</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/applications <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="s1">'{"name": "MyFirstApp", "incomingCallUrl": "http://example.com/calls.php", "incomingMessageUrl": "http://example.com/messages.php", "callbackHttpMethod": "GET", "autoAnswer": true}'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Application</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+    <span class="na">name</span><span class="p">:</span> <span class="s1">'MyFirstApp'</span><span class="p">,</span>
+    <span class="na">incomingCallUrl</span><span class="p">:</span> <span class="s1">'http://your-server.com/CallCallback'</span><span class="p">,</span>
+    <span class="na">incomingMessageUrl</span><span class="p">:</span> <span class="s1">'http://your-server.com/MsgCallback'</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Application</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+    <span class="na">name</span><span class="p">:</span> <span class="s1">'SampleApp2'</span><span class="p">,</span>
+    <span class="na">incomingCallUrl</span><span class="p">:</span> <span class="s1">'http://your-server.com/CallCallback'</span><span class="p">,</span>
+    <span class="na">incomingMessageUrl</span><span class="p">:</span> <span class="s1">'http://your-server.com/MsgCallback'</span>
+<span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+
+<h2 id="get-applications-applicationid">GET applications/{applicationId}</h2>
+
+<p>Gets information about one of your applications. No query parameters are supported.</p>
+
+<h3 id="example-get-an-application-39-s-information">Example: Get an application&rsquo;s information</h3>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/applications/<span class="o">{</span>applicationId<span class="o">}</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Application</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'a-j4f2jz53mq'</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Application</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'a-zuwwfzzrbea'</span><span class="p">,</span>
+    <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{applicationId}"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MyFirstApp"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"incomingCallUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.com/calls.php"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"incomingMessageUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.com/messages.php"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"autoAnswer"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="post-applications-applicationid">POST applications/{applicationId}</h2>
+
+<p>Makes changes to an application. POST a new JSON representation with the property values you desire to the URL that you got back in the &ldquo;Location&rdquo; header when you first created it.</p>
+
+<aside class="notice">
+NOTE: Properties you don&rsquo;t send will remain unchanged.
+</aside>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">name</td>
+<td style="text-align: left">A name you choose for this application.</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left">incomingCallUrl</td>
+<td style="text-align: left">A URL where call events will be sent for an inbound call.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">incomingCallUrlCallbackTimeout</td>
+<td style="text-align: left">Determine how long should the platform wait for incomingCallUrl&rsquo;s response before timing out in milliseconds.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">incomingCallFallbackUrl</td>
+<td style="text-align: left">The URL used to send the callback event if the request to incomingCallUrl fails.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">incomingMessageUrl</td>
+<td style="text-align: left">A URL where message events will be sent for an inbound SMS message.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">incomingMessageUrlCallbackTimeout</td>
+<td style="text-align: left">Determine how long should the platform wait for incomingMessageUrl&rsquo;s response before timing out in milliseconds.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">incomingMessageFallbackUrl</td>
+<td style="text-align: left">The URL used to send the callback event if the request to incomingMessageUrl fails.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackHttpMethod</td>
+<td style="text-align: left">Determine if the callback event should be sent via HTTP GET or HTTP POST. (If not set the default is HTTP POST).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">autoAnswer</td>
+<td style="text-align: left">Determines whether or not an incoming call should be automatically answered. Default value is &#39;true&rsquo;.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-update-application">Example: Update Application</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/applications/<span class="o">{</span>applicationId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="s1">'{"incomingCallUrl": "http://different.example.com/calls.php"}'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Application</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="s1">'a-j4f2j6vjmqz53mq'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">name</span><span class="p">:</span> <span class="s1">'Rename App1'</span><span class="p">,</span>
+    <span class="na">autoAnswer</span><span class="p">:</span> <span class="kc">false</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Application</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="s1">'a-zudcfzzrbea'</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="na">name</span><span class="p">:</span> <span class="s1">'Rename App2'</span><span class="p">,</span>
+        <span class="na">autoAnswer</span><span class="p">:</span> <span class="kc">false</span>
+    <span class="p">},</span>
+    <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+
+<h2 id="delete-applications-applicationid">DELETE applications/{applicationId}</h2>
+
+<p>Permanently deletes an application.</p>
+
+<h3 id="example-delete-an-application">Example: Delete an application.</h3>
+<pre class="highlight shell"><code>curl -v -X DELETE https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/applications/<span class="o">{</span>applicationId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Application</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="s1">'a-j4f2j6mqz53mq'</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Application</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="s1">'a-zuwwzrbea'</span><span class="p">,</span>
+    <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+
+          <h1 id="available-numbers">Available Numbers</h1>
+
+<p>The Available Numbers resource lets you search for numbers that are available for use with your application.</p>
+
+<h2 id="properties">Properties</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">number</td>
+<td style="text-align: left">The telephone number in E.164 format.</td>
+</tr>
+<tr>
+<td style="text-align: left">nationalNumber</td>
+<td style="text-align: left">The telephone number in a friendly national format.</td>
+</tr>
+<tr>
+<td style="text-align: left">patternMatch</td>
+<td style="text-align: left">The telephone number in a friendly national format with some numbers replaced by letters if a pattern was used to search the number.</td>
+</tr>
+<tr>
+<td style="text-align: left">city</td>
+<td style="text-align: left">The city of the phone number.</td>
+</tr>
+<tr>
+<td style="text-align: left">lata</td>
+<td style="text-align: left">Local access and transport area (LATA), represents an area within which a regional operating company is permitted to offer exchange telecommunications and exchange access services.</td>
+</tr>
+<tr>
+<td style="text-align: left">rateCenter</td>
+<td style="text-align: left">The rate center is a term used to identify a telephone local exchange service area.</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">The state of the phone number.</td>
+</tr>
+<tr>
+<td style="text-align: left">price</td>
+<td style="text-align: left">The monthly price for the phone number.</td>
+</tr>
+</tbody></table>
+
+<h2 id="get-availablenumbers-local">GET availableNumbers/local</h2>
+
+<p>Searches for available local numbers by location or pattern criteria.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">city</td>
+<td style="text-align: left">A city name.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">A two-letter US state abbreviation (&ldquo;CA&rdquo; for California).</td>
+<td style="text-align: left">**</td>
+</tr>
+<tr>
+<td style="text-align: left">zip</td>
+<td style="text-align: left">A 5-digit US ZIP code.</td>
+<td style="text-align: left">**</td>
+</tr>
+<tr>
+<td style="text-align: left">areaCode</td>
+<td style="text-align: left">A 3-digit telephone area code.</td>
+<td style="text-align: left">**</td>
+</tr>
+<tr>
+<td style="text-align: left">localNumber</td>
+<td style="text-align: left">It is defined as the first digits of a telephone number inside an area code for filtering the results. It must have at least 3 digits and the areaCode field must be filled.</td>
+<td style="text-align: left">***</td>
+</tr>
+<tr>
+<td style="text-align: left">inLocalCallingArea</td>
+<td style="text-align: left">Boolean value to indicate that the search for available numbers must consider overlayed areas. Only applied for localNumber searching.</td>
+<td style="text-align: left">***</td>
+</tr>
+<tr>
+<td style="text-align: left">quantity</td>
+<td style="text-align: left">The maximum number of numbers to return (default 10, maximum 5000).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">pattern</td>
+<td style="text-align: left">A number pattern that may include letters, digits, and the following wildcard characters: <br> ? : matches any single digit <br> * : matches zero or more digits<br> Don&rsquo;t forget to encode wildcard characters in the requested URL.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+** state, zip and areaCode are mutually exclusive, you may use only one of them per request.
+</aside>
+
+<aside class="notice">
+*** localNumber and inLocalCallingArea only applies for searching numbers in specific areaCode.
+</aside>
+
+<h3 id="example-search-for-city-state-and-pattern">Example: Search for City/State and Pattern</h3>
+
+<blockquote>
+<p>To find up to two available local numbers in the city of Cary, North Carolina, that match the pattern &ldquo;<em>2?9</em>&rdquo;, make the following request:</p>
+</blockquote>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/availableNumbers/local?city<span class="o">=</span>Cary&amp;state<span class="o">=</span>NC&amp;pattern<span class="o">=</span><span class="k">*</span>2%3F9<span class="k">*</span>&amp;quantity<span class="o">=</span>2 <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Search 3 available local phone numbers with area code 910</span>
+
+<span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">AvailableNumber</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="s2">"local"</span><span class="p">,</span> <span class="p">{</span> <span class="na">areaCode</span> <span class="p">:</span> <span class="s2">"910"</span><span class="p">,</span> <span class="na">quantity</span> <span class="p">:</span> <span class="mi">3</span> <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">numbers</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">AvailableNumber</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="s2">"local"</span><span class="p">,</span> <span class="p">{</span> <span class="na">areaCode</span> <span class="p">:</span> <span class="s2">"910"</span><span class="p">,</span> <span class="na">quantity</span> <span class="p">:</span> <span class="mi">3</span> <span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">numbers</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+  {
+    "number": "{number1}",
+    "nationalNumber": "{national_number1}",
+    "patternMatch": "          2 9 ",
+    "city": "CARY",
+    "lata": "426",
+    "rateCenter": "CARY",
+    "state": "NC",
+    "price": "0.60"
+  },
+  {
+    "number": "{number2}",
+    "nationalNumber": "{national_number2}",
+    "patternMatch": "          2 9 ",
+    "city": "CARY",
+    "lata": "426",
+    "rateCenter": "CARY",
+    "state": "NC",
+    "price": "0.60"
+  }
+]
+</code></pre>
+
+<h3 id="example-search-with-areacode-and-localnumber">Example: Search with areaCode and localNumber</h3>
+
+<blockquote>
+<p>To find up to two available local numbers in the area code 919 which the numbers begins with 867 and inside overlayed areas, make the following request:</p>
+</blockquote>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/availableNumbers/local?city<span class="o">=</span>Cary&amp;state<span class="o">=</span>NC&amp;pattern<span class="o">=</span><span class="k">*</span>2%3F9<span class="k">*</span>&amp;quantity<span class="o">=</span>2 <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+    {
+        "number": "{number1}",
+        "nationalNumber": "{national_number1}",
+        "city": "RALEIGH",
+        "rateCenter": "RALEIGH",
+        "state": "NC",
+        "price": "0.60"
+    },
+    {
+        "number": "{number2}",
+        "nationalNumber": "{national_number2}",
+        "city": "RALEIGH",
+        "rateCenter": "RALEIGH",
+        "state": "NC",
+        "price": "0.60"
+    }
+]
+</code></pre>
+
+<h2 id="post-availablenumbers-local">POST availableNumbers/local</h2>
+
+<p>Searches and order available local numbers by location criteria.</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">city</td>
+<td style="text-align: left">A city name.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">A two-letter US state abbreviation (&ldquo;CA&rdquo; for California).</td>
+<td style="text-align: left">**</td>
+</tr>
+<tr>
+<td style="text-align: left">zip</td>
+<td style="text-align: left">A 5-digit US ZIP code.</td>
+<td style="text-align: left">**</td>
+</tr>
+<tr>
+<td style="text-align: left">areaCode</td>
+<td style="text-align: left">A 3-digit telephone area code.</td>
+<td style="text-align: left">**</td>
+</tr>
+<tr>
+<td style="text-align: left">localNumber</td>
+<td style="text-align: left">It is defined as the first digits of a telephone number inside an area code for filtering the results. It must have at least 3 digits and the areaCode field must be filled.</td>
+<td style="text-align: left">***</td>
+</tr>
+<tr>
+<td style="text-align: left">inLocalCallingArea</td>
+<td style="text-align: left">Boolean value to indicate that the search for available numbers must consider overlayed areas. Only applied for localNumber searching.</td>
+<td style="text-align: left">***</td>
+</tr>
+<tr>
+<td style="text-align: left">quantity</td>
+<td style="text-align: left">The maximum number of numbers to return (default 10, maximum 5000).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">pattern</td>
+<td style="text-align: left">A number pattern that may include letters, digits, and the following wildcard characters: <br> ? : matches any single digit <br> * : matches zero or more digits<br> Don&rsquo;t forget to encode wildcard characters in the requested URL.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+** state, zip and areaCode are mutually exclusive, you may use only one of them per request.
+</aside>
+
+<aside class="notice">
+*** localNumber and inLocalCallingArea only applies for searching numbers in specific areaCode.
+</aside>
+
+<h3 id="example-search-and-allocate-for-city-state">Example: Search and allocate for city/state</h3>
+
+<blockquote>
+<p>To search and order two available local numbers in the city of Cary, North Carolina, make the following request</p>
+</blockquote>
+<pre class="highlight shell"><code>curl -v -X POST  https://api.catapult.inetwork.com/v1/availableNumbers/local?city<span class="o">=</span>Cary&amp;state<span class="o">=</span>NC&amp;quantity<span class="o">=</span>2 <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Search 2 available local phone numbers with area code 910 and order them</span>
+
+<span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">AvailableNumber</span><span class="p">.</span><span class="nx">searchAndOrder</span><span class="p">(</span><span class="s2">"local"</span><span class="p">,</span> <span class="p">{</span> <span class="na">areaCode</span> <span class="p">:</span> <span class="s2">"910"</span><span class="p">,</span> <span class="na">quantity</span> <span class="p">:</span> <span class="mi">2</span> <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">numbers</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">AvailableNumber</span><span class="p">.</span><span class="nx">serchAndOrder</span><span class="p">(</span><span class="s2">"local"</span><span class="p">,</span> <span class="p">{</span> <span class="na">areaCode</span> <span class="p">:</span> <span class="s2">"910"</span><span class="p">,</span> <span class="na">quantity</span> <span class="p">:</span> <span class="mi">2</span> <span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">numbers</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns a <code class="prettyprint">201</code> response JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+    {
+        "number": "{number1}",
+        "nationalNumber": "{national_number1}",
+        "price": "0.60",
+        "location": "https://.../v1/users/.../phoneNumbers/{numberId1}"
+    },
+    {
+        "number": "{number2}",
+        "nationalNumber": "{national_number2}",
+        "price": "0.60",
+        "location": "https://.../v1/users/.../phoneNumbers/{numberId2}"
+    }
+]
+</code></pre>
+
+<h2 id="get-availablenumbers-tollfree">GET availableNumbers/tollFree</h2>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">quantity</td>
+<td style="text-align: left">The maximum number of numbers to return (default 10, maximum 5000).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">pattern</td>
+<td style="text-align: left">A number pattern that may include letters, digits, and the following wildcard characters:<br>? : matches any single digit<br> * : matches zero or more digits<br>Don’t forget to encode wildcard characters in the requested URL.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>To find up to two available toll free numbers that match the pattern &ldquo;<em>2?9</em>&rdquo;, make the following request:</p>
+</blockquote>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/availableNumbers/tollFree?pattern<span class="o">=</span><span class="k">*</span>2%3F9<span class="k">*</span>&amp;quantity<span class="o">=</span>2 <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">AvailableNumber</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="s2">"tollFree"</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">quantity</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="na">pattern</span><span class="p">:</span> <span class="s2">"*2?9*"</span>
+ <span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">numbers</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">numbers</span><span class="p">)</span>
+<span class="p">});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">AvailableNumber</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="s2">"tollFree"</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">quantity</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="na">pattern</span><span class="p">:</span> <span class="s2">"*2?9*"</span> <span class="p">},</span>
+    <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">numbers</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">numbers</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+  {
+    "number":"{number1}",
+    "nationalNumber":"{national_number1}",
+    "patternMatch":"        2  9  ",
+    "price":"2.00"
+  },
+  {
+    "number":"{number2}",
+    "nationalNumber":"{national_number2}",
+    "patternMatch":"          2 9 ",
+    "price":"2.00"
+  }
+]
+</code></pre>
+
+<h2 id="post-availablenumbers-tollfree">POST availableNumbers/tollFree</h2>
+
+<p>Searches and order available Toll Free numbers.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">quantity</td>
+<td style="text-align: left">The maximum quantity of numbers for searching and order (default 1, maximum 10).</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-search-and-activate-toll-free-phone-number">Example: Search and activate toll free phone number</h3>
+
+<blockquote>
+<p>To search and order two available toll free numbers, make the following request:</p>
+</blockquote>
+<pre class="highlight shell"><code>curl -v -X POST  https://api.catapult.inetwork.com/v1/availableNumbers/tollFree?quantity<span class="o">=</span>2 <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Search and order tollfree numbers</span>
+<span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">AvailableNumber</span><span class="p">.</span><span class="nx">searchAndOrder</span><span class="p">(</span><span class="s2">"tollFree"</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">quantity</span> <span class="p">:</span> <span class="mi">2</span> <span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">numbers</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">numbers</span><span class="p">)</span>
+<span class="p">});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">AvailableNumber</span><span class="p">.</span><span class="nx">searchAndOrder</span><span class="p">(</span><span class="s2">"tollFree"</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">quantity</span> <span class="p">:</span> <span class="mi">2</span> <span class="p">},</span>
+    <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">numbers</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">numbers</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns a <code class="prettyprint">201</code> response JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+    {
+        "number": "{number1}",
+        "nationalNumber": "{national_number1}",
+        "price": "2.00",
+        "location": "https://.../v1/users/.../phoneNumbers/{numberId1}"
+    },
+    {
+        "number": "{number2}",
+        "nationalNumber": "{national_number2}",
+        "price": "2.00",
+        "location": "https://.../v1/users/.../phoneNumbers/{numberId2}"
+    }
+]
+</code></pre>
 
       </div>
       <div class="dark-box">
           <div class="lang-selector">
-                <a href="#" data-language-name="shell">shell</a>
-                <a href="#" data-language-name="ruby">ruby</a>
-                <a href="#" data-language-name="python">python</a>
+                <a href="#" data-language-name="shell">curl</a>
+                <a href="#" data-language-name="javascript">javascript</a>
           </div>
       </div>
     </div>
