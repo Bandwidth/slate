@@ -3833,6 +3833,880 @@ Location: /v1/users/{userId}/conferences/{confId}/members/{memberId}
   <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
 </code></pre>
 
+          <h1 id="domains">Domains</h1>
+
+<p>A domain is a way to logically group endpoints. There is a 100 domain max. per account limit. Most use cases require using a single domain for all endpoints. The name of the domain will be part of a public DNS record. For that reason, we let the customer choose their domain names. Once a domain has been created, endpoints can be created and managed within the context of the domain. Because endpoints can only exist within the context of a domain, creating a domain is the first step in creating endpoints.</p>
+
+<h2 id="properties">Properties</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">name</td>
+<td style="text-align: left">The name is a unique URI to be used in DNS lookups</td>
+</tr>
+<tr>
+<td style="text-align: left">description</td>
+<td style="text-align: left">String to describe the domain</td>
+</tr>
+<tr>
+<td style="text-align: left">endpoints</td>
+<td style="text-align: left">URL to use to GET list of endpoints on this domain.</td>
+</tr>
+<tr>
+<td style="text-align: left">id</td>
+<td style="text-align: left">Unique string to identify the domain resource</td>
+</tr>
+</tbody></table>
+
+<h2 id="get-domains">GET domains</h2>
+
+<p>This returns a list of the domains that have been created</p>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/domains <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Domain</span><span class="p">.</span><span class="nx">list</span><span class="p">()</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">domains</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">domains</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+{
+    "id" : "dom-xyz123",
+        "name" : "mycoolapp",
+    "description" : "disruptive app that's going to revolutonize telecom",
+        "endpoints" : "/v1/users/{user-id}/domains/dom-xyz123/endpoints"
+    },
+{
+    "id" : "dom-abc876",
+        "name" : "mycoolapp_stage",
+    "description" : "stage env for disruptive app",
+        "endpoints" : "/v1/users/{user-id}/domains/dom-abc876/endpoints"
+    }
+]
+</code></pre>
+
+<h2 id="post-domains">POST domains</h2>
+
+<p>This will create a domain.</p>
+
+<aside class="notice">
+Your account is limited to 100 domains per account. Most use cases require using a single domain for all endpoints.
+</aside>
+
+<h3 id="example-create-a-domain">Example: Create a domain</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/domains <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+        -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "name" : "mycoolapp",
+        "description" : "disruptive app that is going to revolutionize telecom"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">name</span><span class="p">:</span> <span class="s2">"mycoolapp"</span><span class="p">,</span>
+  <span class="na">description</span><span class="p">:</span> <span class="s2">"disruptive app that is going to revolutionize telecom"</span>
+<span class="p">}</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Domain</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">params</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">domainId</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">domainId</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns HTTP Header structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 201 Created
+Location: /v1/users/{user-id}/domains/{domain-id}
+</code></pre>
+
+<h2 id="delete-domain">DELETE domain</h2>
+
+<p>This will delete a domain</p>
+
+<h3 id="example-delete-a-domain">Example: Delete a domain</h3>
+<pre class="highlight shell"><code>curl -v -X DELETE https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/domain/<span class="o">{</span>domain-id<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Domain</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="s2">"{domain-id}"</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{});</span>
+</code></pre>
+
+          <h1 id="endpoints">Endpoints</h1>
+
+<p>An endpoint represents is an entity that can register with the Application Platform SIP Registrar and place and receive calls. This can be a device like a phone or a pad, or it can be a softphone on a computer.</p>
+
+<p>An endpoint is addressable using a unique SIP URI which is constructed using the endpoint&rsquo;s user name and the domain in which the endpoint exists.</p>
+
+<p>There are no restrictions on the number of SIP clients that can be associated with an endpoint.  That is, an application can create one endpoint in the App Platform and give the SIP URI and credentials to as many of their own clients as it likes.  However, when a call is made to the SIP URI for that endpoint, all clients registered as that endpoint (using that SIP URI and credentials to register) will receive the call.  The call will be completed to the first client that answers.  If you&rsquo;re looking for a default simultaneous ringing application this would be a great solution.  If you have an endpoint that goes directly to voicemail though, you might wonder why your other devices ring but by the time you answer, there&rsquo;s no call.</p>
+
+<p>If you don&rsquo;t want all your SIP clients to ring simultaneously, create an endpoint for each client.  You can still associate a single phone number with a group of clients, but the application has more control over which client will ring when that number is called.</p>
+
+<h2 id="where-to-register">Where to Register</h2>
+
+<p>When an endpoint is created on Bandwidth, a unique SIP URI is created to identify that endpoint.  That SIP URI is used in both the <code class="prettyprint">To</code> and <code class="prettyprint">From</code> headers in the REGISTER message.  The Request URI of the REGISTER message must use the domain from the SIP URI of the client registering.  The domain is resolved via DNS to determine where to send the REGISTER message.</p>
+
+<h2 id="calls-to-a-client">Calls to a Client</h2>
+
+<p>When a new incoming call is to a number the application has associated with one, or some of its clients, the application can initiate an outbound call using the SIP URI.  Any client registered using the credentials associated with that SIP URI will receive the call.  The first one to answer will be connected, on the other clients the call will be canceled.  Once that outbound call is connected, the application can bridge the original inbound call with the newly created outbound call.</p>
+
+<h2 id="calls-from-a-client">Calls from a Client</h2>
+
+<p>When a client wants to initiate a call, it sends an INVITE with the called number in the user part of the SIP URI in the &lsquo;To&rsquo; header.  The &#39;From&rsquo; header will be the SIP URI associated with the endpoint.</p>
+
+<p>An application must be associated with the endpoint representing the client in Bandwidth.  This is so Bandwidth can generate an event to the application to determine how a call should be handled.  If no application is associated with the endpoint, the client&rsquo;s call will be rejected.</p>
+
+<p>Where the INVITE is sent is determined in the same way as the REGISTER.  The domain from the client&rsquo;s SIP URI is used in the Request URI for the INVITE message.</p>
+
+<h2 id="properties">Properties</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">name</td>
+<td style="text-align: left">The endpoint’s name, which SIP clients use as the <code class="prettyprint">address of record</code> in the <code class="prettyprint">To</code> header when registering. The name must be a valid SIP <code class="prettyprint">user</code> or <code class="prettyprint">telephone-subscriber</code> string. RFC 3261 Section 19.1.1 defines the characters that are valid in those parts of a SIP URI. Names must be unique within the domain, and cannot be changed after the endpoint is created.</td>
+</tr>
+<tr>
+<td style="text-align: left">description</td>
+<td style="text-align: left">String to describe endpoint</td>
+</tr>
+<tr>
+<td style="text-align: left">domainId</td>
+<td style="text-align: left">The id of the domain in which the endpoint will be created. This is the id of the domain resource created in an earlier step.</td>
+</tr>
+<tr>
+<td style="text-align: left">applicationId</td>
+<td style="text-align: left">The id of the application associated with this endpoint. Application_id is used to determine the callback URL to be used when a client associated with the endpoint attempts to make a call.</td>
+</tr>
+<tr>
+<td style="text-align: left">enabled</td>
+<td style="text-align: left">When set to true, SIP clients can register as this device to receive and make calls. When set to false, registration, inbound, and outbound calling will not succeed. Default is true.</td>
+</tr>
+<tr>
+<td style="text-align: left">credentials</td>
+<td style="text-align: left">Contains SIP authentication credentials. See below for details of credentials.</td>
+</tr>
+<tr>
+<td style="text-align: left">sipUri</td>
+<td style="text-align: left">A SIP URI this device can be contacted at (via INVITE). This property is generated automatically and cannot be changed.</td>
+</tr>
+</tbody></table>
+
+<h2 id="credentials">Credentials</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">realm</td>
+<td style="text-align: left">The realm the SIP client must use when authenticating to use this device.<br>The realm is case-sensitive.<br>This property is generated automatically and cannot be changed.</td>
+</tr>
+<tr>
+<td style="text-align: left">username</td>
+<td style="text-align: left">The username the SIP client must use when authenticating to use this device.<br>The username is case-sensitive.<br>This property is generated automatically and cannot be changed.</td>
+</tr>
+<tr>
+<td style="text-align: left">password</td>
+<td style="text-align: left">The plain-text password the SIP client must use when authenticating to use this device.<br>The password is case-sensitive.<br>The password must be at least 6 characters long and contain only Latin 1 (ISO 8859-1) characters.</td>
+</tr>
+</tbody></table>
+
+<h2 id="get-domains-domain-id-endpoints">GET domains/{domain-id}/endpoints</h2>
+
+<p>This returns a list of all endpoints associated with a domain.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">page</td>
+<td style="text-align: left">Used for pagination to indicate the page requested for querying a list of endpoints. If no value is specified the default is 0.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">size</td>
+<td style="text-align: left">Used for pagination to indicate the size of each page requested for querying a list of endpoints. If no value is specified the default value is 25. (Maximum value 1000)</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-get-a-list-of-all-endpoints-for-a-domain">Example: Get a list of all endpoints for a domain</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/domains/<span class="o">{</span>domainId<span class="o">}</span>/endpoints <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Default size (25) using promises</span>
+ <span class="nx">client</span><span class="p">.</span><span class="nx">Endpoint</span><span class="p">.</span><span class="nx">list</span><span class="p">(</span><span class="s2">"domainId"</span><span class="p">)</span>
+     <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+    <span class="c1">// Default size (25) using callbacks</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Endpoint</span><span class="p">.</span><span class="nx">list</span><span class="p">(</span><span class="s2">"domainId"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">// Specify number of endpoints using promises</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Endpoint</span><span class="p">.</span><span class="nx">list</span><span class="p">(</span><span class="s2">"domainId"</span><span class="p">,</span> <span class="p">{</span><span class="na">size</span><span class="p">:</span> <span class="mi">1000</span><span class="p">})</span>
+        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">// Specify number of endpoints using callbacks</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Endpoint</span><span class="p">.</span><span class="nx">list</span><span class="p">(</span><span class="s2">"domainId"</span> <span class="p">{</span><span class="nl">size</span><span class="p">:</span> <span class="mi">1000</span><span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+{
+    "name" : "jsmith-mobile",
+    "description" : "John Smiths mobile client",
+    "domainId" : "{domain-id}",
+    "applicationId" : "{application-id}",
+    "enabled" : "true",
+    "sipUri" : "jsmith-mobile@doname.bwapp.bwsipp.io",
+    "credentials" : {
+        "realm" : "doname.bwapp.bwsipp.io",
+        "username" : "jsmith-mobile"
+    }
+}
+]
+</code></pre>
+
+<h2 id="post-domains-domain-id-endpoints">POST domains/{domain-id}/endpoints</h2>
+
+<p>This creates an endpoint.</p>
+
+<h3 id="example-create-an-endpoint">Example: Create an endpoint</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/domains/<span class="o">{</span>domain-id<span class="o">}</span>/endpoints <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "name" : "jsmith_mobile",
+        "description" : "John Smiths mobile client",
+        "domainId" : "{domain-id}",
+        "applicationId" : "{application-id}",
+        "enabled" : "false",
+        "credentials" : { "password" : "abc123" }
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Endpoint</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="s2">"domainId"</span><span class="p">,</span> <span class="p">{</span> <span class="na">name</span> <span class="p">:</span> <span class="s2">"my-endpoint"</span><span class="p">,</span> <span class="na">applicationId</span> <span class="p">:</span> <span class="s2">"appId"</span><span class="p">,</span>
+<span class="na">credentials</span> <span class="p">:</span> <span class="p">{</span> <span class="na">password</span> <span class="p">:</span> <span class="s2">"123456"</span> <span class="p">}}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">endpoint</span><span class="p">)</span> <span class="p">{});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Endpoint</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="s2">"domainId"</span><span class="p">,</span> <span class="p">{</span> <span class="na">name</span> <span class="p">:</span> <span class="s2">"my-endpoint"</span><span class="p">,</span> <span class="na">applicationId</span> <span class="p">:</span> <span class="s2">"appId"</span><span class="p">,</span>
+<span class="na">credentials</span> <span class="p">:</span> <span class="p">{</span> <span class="na">password</span> <span class="p">:</span> <span class="s2">"123456"</span> <span class="p">}},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">endpoint</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns HTTP Header structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 201 Created
+Location: /v1/users/{user-id}/domains/{domain-id}/endpoints/{endpoint-id}
+</code></pre>
+
+<h2 id="get-domains-domain-id-endpoints-endpoint-id">GET domains/{domain-id}/endpoints/{endpoint-id}</h2>
+
+<p>This returns a single endpoint.</p>
+
+<h3 id="example-get-a-single-endpoint">Example: Get a single endpoint</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/domains/<span class="o">{</span>domain-id<span class="o">}</span>/endpoints/<span class="o">{</span>endpoint-id<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Endpoint</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">domainId</span><span class="p">,</span> <span class="nx">endpointId</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">){});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Endpoint</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">domainId</span><span class="p">,</span> <span class="nx">endpointId</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">endpoint</span><span class="p">){});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"jsmith-mobile"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"John Smiths mobile client"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"domainId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"{domain-id}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"applicationId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"{application-id}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"enabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"sipUri"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"jsmith-mobile@doname.bwapp.bwsipp.io"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"credentials"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"realm"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"doname.bwapp.bwsipp.io"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"username"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"jsmith-mobile"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="delete-domains-domain-id-endpoints-endpoint-id">DELETE domains/{domain-id}/endpoints/{endpoint-id}</h2>
+
+<h3 id="example-remove-an-endpoint">Example: Remove an endpoint</h3>
+<pre class="highlight shell"><code>curl -v -X DELETE https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/domains/<span class="o">{</span>domain-id<span class="o">}</span>/endpoints/<span class="o">{</span>endpoint-id<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Endpoint</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="s2">"domainId"</span><span class="p">,</span> <span class="s2">"endpointId"</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">endpoint</span><span class="p">)</span> <span class="p">{});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Endpoint</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="s2">"domainId"</span><span class="p">,</span> <span class="s2">"endpointId"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">endpoint</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+<h2 id="post-domains-domain-id-endpoints-endpoint-id">POST domains/{domain-id}/endpoints/{endpoint-id}</h2>
+
+<p>This will update an endpoint.</p>
+
+<h3 id="example-update-an-endpoint">Example: Update an endpoint</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/domains/<span class="o">{</span>domain-id<span class="o">}</span>/endpoints/<span class="o">{</span>endpoint-id<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+    -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "description" : "John Smiths mobile client",
+        "applicationId" : "{application-id}",
+        "enabled" : "true",
+            "credentials" : {
+            "password" : "12345"
+        }
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Endpoint</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="s2">"domainId"</span><span class="p">,</span> <span class="s2">"endpointId"</span><span class="p">,</span> <span class="p">{</span> <span class="na">enabled</span> <span class="p">:</span> <span class="kc">true</span> <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">endpoint</span><span class="p">)</span> <span class="p">{});</span>
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Endpoint</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="s2">"domainId"</span><span class="p">,</span> <span class="s2">"endpointId"</span><span class="p">,</span> <span class="p">{</span> <span class="na">enabled</span> <span class="p">:</span> <span class="kc">true</span> <span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">endpoint</span><span class="p">)</span> <span class="p">{});</span>
+</code></pre>
+
+          <h1 id="errors">Errors</h1>
+
+<p>The Errors resource lets you see information about errors that happened in your API calls and during applications callbacks. This error information can be very helpful when you&rsquo;re debugging an application. Because error information can be large, and errors in the distant past are less useful than new ones, Bandwidth API limits the number of user errors it keeps.</p>
+
+<h2 id="error-properties">Error Properties</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">id</td>
+<td style="text-align: left">The unique id for the error.</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">The time the error occurred (UTC).</td>
+</tr>
+<tr>
+<td style="text-align: left">category</td>
+<td style="text-align: left">The error category, one of:<br><code class="prettyprint">authentication</code> - The requestor could not be authenticated. Incorrect or disabled credentials are common causes of these errors. <br><code class="prettyprint">authorization</code> - The requestor does not have sufficient permissions to perform the operation or access the resource, or some other authorization error occurred.<br> <code class="prettyprint">not-found</code> - The resource could not be found. <br><code class="prettyprint">bad-request</code> - The request information sent could not be understood or contained values that are not allowed.<br><code class="prettyprint">conflict</code> - The resource could not be modified because it was already modified by a different request.<br><code class="prettyprint">unavailable</code> - The resource or service is currently unavailable. It may become available shortly, or the request may have to be modified to succeed.<br><code class="prettyprint">credit</code> - The requestor has insufficient credit to perform the operation or access the resource.<br><code class="prettyprint">limit</code> - A usage limit or rate limit for a resource or service has been exceeded.<br><code class="prettyprint">payment</code> - There was an error processing a payment.</td>
+</tr>
+<tr>
+<td style="text-align: left">code</td>
+<td style="text-align: left">A specific error code string that identifies the type of error.</td>
+</tr>
+<tr>
+<td style="text-align: left">message</td>
+<td style="text-align: left">A message that describes the error condition in detail.</td>
+</tr>
+<tr>
+<td style="text-align: left">details</td>
+<td style="text-align: left">A list of name/value pairs of additional details that may help you debug the error.</td>
+</tr>
+</tbody></table>
+
+<h2 id="error-details-properties">Error Details Properties</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">name</td>
+<td style="text-align: left">The detail name; there is no complete list of detail names, but conventional resource ID names like userId are used to refer to resources associated with the error.</td>
+</tr>
+<tr>
+<td style="text-align: left">value</td>
+<td style="text-align: left">The detail value; the format and content depends on the name.</td>
+</tr>
+</tbody></table>
+
+<h2 id="get-errors">GET errors</h2>
+
+<p>Gets the most recent user errors for the user. Since this operation uses HTTP GET, all the properties are specified as HTTP request parameters.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">page</td>
+<td style="text-align: left">Used for pagination to indicate the page requested for querying a list of user errors. If no value is specified the default is 0.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">size</td>
+<td style="text-align: left">Used for pagination to indicate the size of each page requested for querying a list of user errors. If no value is specified the default value is 25. (Maximum value 1000)</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-get-errors">Example: Get errors</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/errors <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nb">Error</span><span class="p">.</span><span class="nx">list</span><span class="p">({</span><span class="na">size</span><span class="p">:</span> <span class="mi">1000</span><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">errorResponse</span><span class="p">){});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nb">Error</span><span class="p">.</span><span class="nx">list</span><span class="p">({</span><span class="na">size</span><span class="p">:</span> <span class="mi">1000</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">errorResponse</span><span class="p">){});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+   {
+      "time" : "2012-11-15T01:30:16.208Z",
+      "category" : "unavailable",
+      "id" : "{userErrorId1}",
+      "details" : [
+         {
+            "id" : "{userErrorDetailId1}"
+            "name" : "applicationId",
+            "value" : "{applicationId}",
+         },
+         {
+            "id" : "{userErrorDetailId2}"
+            "name" : "number",
+            "value" : "{number}",
+         },
+         {
+            "id" : "{userErrorDetailId3}"
+            "name" : "callId",
+            "value" : "{callId}",
+         }
+      ],
+      "message" : "Application {applicationId} (\"Dial a Tune\") for number
+                   {number} does not specify a URL for call events",
+      "code" : "no-callback-for-call"
+   },
+   {
+      "time" : "2012-11-15T01:29:24.512Z",
+      "category" : "unavailable",
+      "id" : "{userErrorId2}",
+      "message" : "No application is configured for number +19195556666",
+      "code" : "no-application-for-number"
+   },
+]
+</code></pre>
+
+<h2 id="get-errors-usererrorid">GET errors/{userErrorId}</h2>
+
+<p>Gets information about one error. No query parameters are supported.</p>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/errors/<span class="o">{</span>userErrorId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nb">Error</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">userErrorId</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">errorInfo</span><span class="p">){});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nb">Error</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">userErrorId</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">errorInfo</span><span class="p">){});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{userErrorId}"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"@id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"accountNonExpired"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"accountNonLocked"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"companyName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{companyName}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"credentialsNonExpired"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{email}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{firstName}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{userId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{lastName}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"password"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{password}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{username}"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="mi">1391514755496</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BAD_REQUEST"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"missing-property"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The 'call' resource property 'transferTo' is required but was not specified"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"details"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{userErrorDetailId1}"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"requestPath"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"users/{userId}/calls/{callId}"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{userErrorDetailId2}"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"remoteAddress"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{remoteAddress}"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{userErrorDetailId3}"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"requestMethod"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"POST"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h1 id="media">Media</h1>
+
+<p>The Media resource lets you upload your media files to Bandwidth API servers so they can be used in applications without requiring a separate hosting provider. You can upload files up to <code class="prettyprint">65MB</code> and file storage is free for an unlimited number of files. Files you upload can only be accessed by you when you supply your API access <code class="prettyprint">token</code> and <code class="prettyprint">secret</code>. They are not available to anonymous users. Bandwidth API supports the <code class="prettyprint">Cache-Control</code> header when you upload files.</p>
+
+<aside class="notice">
+You can upload files up to `65MB` and file storage is free for an unlimited number of files.
+</aside>
+
+<h2 id="get-media">GET media</h2>
+
+<p>Gets a list of your media files. No query parameters are supported.</p>
+
+<h3 id="example-list-your-media-files">Example: List Your Media Files</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/media <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Media</span><span class="p">.</span><span class="nx">list</span><span class="p">()</span>
+<span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">media</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">media</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+  {
+    "contentLength": 561276,
+    "mediaName": "{mediaName1}",
+    "content": "api.catapult.inetwork.com/.../media/{mediaName1}"
+  },
+  {
+    "contentLength": 2703360,
+    "mediaName": "{mediaName2}",
+    "content": "https://api.catapult.inetwork.com/.../media/{mediaName2}"
+  },
+  {
+    "contentLength": 2257901,
+    "mediaName": "{mediaName3}",
+        "content": "https://api.catapult.inetwork.com/.../media/{mediaName3}"
+  }
+]
+</code></pre>
+
+<h2 id="put-media-medianame">PUT media/{mediaName}</h2>
+
+<p>Uploads a file the normal HTTP way. You may add headers to the request in order to provide some control to your media-file.</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Header</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">Content-Length</td>
+<td style="text-align: left">Indicates the size of the entity-body.</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left">Cache-Control</td>
+<td style="text-align: left">General-header field is used to specify directives that MUST be obeyed by all caching mechanisms along the request/response chain.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">Content-Type</td>
+<td style="text-align: left">The media type of the entity-body.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-upload-an-mp3-file">Example: Upload an MP3 File</h3>
+
+<h2 id="get-media-medianame">GET media/{mediaName}</h2>
+
+<p>Downloads a media file you previously uploaded.</p>
+
+<h3 id="example-download-an-mp3-file">Example: Download an MP3 File</h3>
+
+<h2 id="delete-media-medianame">DELETE media/{mediaName}</h2>
+
+<p>Deletes a media file from Bandwidth API server. Make sure you don&rsquo;t have any application scripts still using the media before you delete. If you accidentally delete a media file, you can immediately upload a new file with the same name.</p>
+
+<h3 id="example-delete-an-mp3-file">Example: Delete an MP3 File</h3>
+
+          <h1 id="messages">Messages</h1>
+
+<p>The Messages resource lets you send SMS/MMS messages and view messages that were previously sent or received.</p>
+
+<h2 id="properties">Properties</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">id</td>
+<td style="text-align: left">The unique ID of the message.</td>
+</tr>
+<tr>
+<td style="text-align: left">from</td>
+<td style="text-align: left">The message sender’s telephone number (or short code).</td>
+</tr>
+<tr>
+<td style="text-align: left">to</td>
+<td style="text-align: left">Message recipient telephone number (or short code).</td>
+</tr>
+<tr>
+<td style="text-align: left">direction</td>
+<td style="text-align: left">Direction of message, in - a message that came from the telephone network to one of your numbers (an “inbound” message) or out - a message that was sent from one of your numbers to the telephone network (an “outbound” message)</td>
+</tr>
+<tr>
+<td style="text-align: left">text</td>
+<td style="text-align: left">The message contents. NOTE: We only store the message contents for 30 days. Any messages older than 30 days will not contain text.</td>
+</tr>
+<tr>
+<td style="text-align: left">media</td>
+<td style="text-align: left">Json array containing list of media urls to be sent as content for an mms. Valid URLs are: <br> https://api.catapult.inetwork.com/v1/users/&lt;user-id&gt;/media/<media-name></media-name> <br>We also support media URLs that are external to Bandwidth API, http:// or https:// format: <br> Example: http://customer-web-site.com/file.jpg <br> And coming soon, we are going to use file name from Content-Disposition header in case it’s passed by the media URLs that are external to Bandwidth API.</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">Message state, values are:  <br> * <code class="prettyprint">received</code><br> * <code class="prettyprint">queued</code><br> * <code class="prettyprint">sending</code><br> * <code class="prettyprint">sent</code> <br> * <code class="prettyprint">error</code></td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">The time the message resource was created (UTC, follows the ISO 8601 format).</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackUrl</td>
+<td style="text-align: left">The complete URL where the events related to the outgoing message will be sent.</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackTimeout</td>
+<td style="text-align: left">Determine how long should the platform wait for callbackUrl’s response before timing out (milliseconds).</td>
+</tr>
+<tr>
+<td style="text-align: left">fallbackUrl</td>
+<td style="text-align: left">The server URL used to send message events if the request to callbackUrl fails.</td>
+</tr>
+<tr>
+<td style="text-align: left">page</td>
+<td style="text-align: left">Used for pagination to indicate the page requested for querying a list of messages. If no value is specified the default is 0.</td>
+</tr>
+<tr>
+<td style="text-align: left">size</td>
+<td style="text-align: left">Used for pagination to indicate the size of each page requested for querying a list of messages. If no value is specified the default value is 25. (Maximum value 1000)</td>
+</tr>
+<tr>
+<td style="text-align: left">tag</td>
+<td style="text-align: left">A string that will be included in the callback events of the message.</td>
+</tr>
+<tr>
+<td style="text-align: left">receiptRequested</td>
+<td style="text-align: left">Requested receipt option for outbound messages: <code class="prettyprint">none</code> <code class="prettyprint">all</code> <code class="prettyprint">error</code> Default is <code class="prettyprint">none</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">deliveryState</td>
+<td style="text-align: left">One of the message delivery states <code class="prettyprint">waiting</code> <code class="prettyprint">delivered</code> <code class="prettyprint">not-delivered</code></td>
+</tr>
+<tr>
+<td style="text-align: left">deliveryCode</td>
+<td style="text-align: left">Numeric value of deliver code, see table for values.</td>
+</tr>
+<tr>
+<td style="text-align: left">deliveryDescription</td>
+<td style="text-align: left">Message delivery description for the respective delivery code</td>
+</tr>
+</tbody></table>
+
+<h2 id="message-request-receipt">Message Request Receipt</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Receipt</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">none</td>
+<td style="text-align: left">Delivery receipt will not be sent as callback event.</td>
+</tr>
+<tr>
+<td style="text-align: left">error</td>
+<td style="text-align: left">Only error delivery receipt event maybe sent as callback event.</td>
+</tr>
+<tr>
+<td style="text-align: left">all</td>
+<td style="text-align: left">Success or error delivery receipt maybe sent as callback event.</td>
+</tr>
+</tbody></table>
+
+<h2 id="message-states">Message States</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">State</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">received</td>
+<td style="text-align: left">The message was received.</td>
+</tr>
+<tr>
+<td style="text-align: left">queued</td>
+<td style="text-align: left">The message is waiting in queue and will be sent soon.</td>
+</tr>
+<tr>
+<td style="text-align: left">sending</td>
+<td style="text-align: left">The message was removed from queue and is being sent.</td>
+</tr>
+<tr>
+<td style="text-align: left">sent</td>
+<td style="text-align: left">The message was sent successfully.</td>
+</tr>
+<tr>
+<td style="text-align: left">error</td>
+<td style="text-align: left">There was an error sending or receiving a message (check errors resource for details).</td>
+</tr>
+</tbody></table>
+
+<h2 id="message-delivery-state">Message Delivery State</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">State</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">waiting</td>
+<td style="text-align: left">Waiting for receipt.</td>
+</tr>
+<tr>
+<td style="text-align: left">delivered</td>
+<td style="text-align: left">Receipt indicating that message was delivered.</td>
+</tr>
+<tr>
+<td style="text-align: left">not-delivered</td>
+<td style="text-align: left">Receipt indicating that message was not delivered.</td>
+</tr>
+</tbody></table>
+
+<h2 id="message-delivery-code">Message Delivery Code</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Code</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">0</td>
+<td style="text-align: left">Message delivered to carrier</td>
+</tr>
+<tr>
+<td style="text-align: left">100</td>
+<td style="text-align: left">Message not delivered to carrier</td>
+</tr>
+<tr>
+<td style="text-align: left">187</td>
+<td style="text-align: left">Statistical spam detected</td>
+</tr>
+<tr>
+<td style="text-align: left">188</td>
+<td style="text-align: left">Keyword spam detected</td>
+</tr>
+<tr>
+<td style="text-align: left">189</td>
+<td style="text-align: left">Spam detected</td>
+</tr>
+<tr>
+<td style="text-align: left">482</td>
+<td style="text-align: left">Loop detected</td>
+</tr>
+<tr>
+<td style="text-align: left">600</td>
+<td style="text-align: left">Destination carrier could not accept messages</td>
+</tr>
+<tr>
+<td style="text-align: left">610</td>
+<td style="text-align: left">Message submittion failed</td>
+</tr>
+<tr>
+<td style="text-align: left">620</td>
+<td style="text-align: left">Destination application error</td>
+</tr>
+<tr>
+<td style="text-align: left">630</td>
+<td style="text-align: left">Message not acknowledge</td>
+</tr>
+<tr>
+<td style="text-align: left">720</td>
+<td style="text-align: left">Invalid destination number</td>
+</tr>
+<tr>
+<td style="text-align: left">740</td>
+<td style="text-align: left">Invalid source number</td>
+</tr>
+<tr>
+<td style="text-align: left">999</td>
+<td style="text-align: left">Unknown error</td>
+</tr>
+</tbody></table>
+
+<h2 id="multiple-message-result-types">Multiple Message Result Types</h2>
+
+          
+          
+          
+          
       </div>
       <div class="dark-box">
           <div class="lang-selector">
