@@ -4703,10 +4703,1225 @@ You can upload files up to `65MB` and file storage is free for an unlimited numb
 
 <h2 id="multiple-message-result-types">Multiple Message Result Types</h2>
 
-          
-          
-          
-          
+<table><thead>
+<tr>
+<th style="text-align: left">Type</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">result</td>
+<td style="text-align: left">Values are<br><code class="prettyprint">accepted</code> - the message was accepted and the location points to the message resource <br> <code class="prettyprint">error</code> - the message was not accepted and the “error” property contains information.</td>
+</tr>
+<tr>
+<td style="text-align: left">location</td>
+<td style="text-align: left">When the result is <code class="prettyprint">accepted</code>, contains the URL of the message location.</td>
+</tr>
+</tbody></table>
+
+<h2 id="get-messages">GET messages</h2>
+
+<p>Gets a list messages you have sent or received. Since this operation uses HTTP GET, all the properties are specified as HTTP request parameters.</p>
+
+<p>Message results are paginated based on the <code class="prettyprint">size</code> parameter. If the number of messages found by the specified query parameters exceeds one page, the <code class="prettyprint">link</code> header on the HTTP response will contain the URL to request the next page of results. The <code class="prettyprint">link</code> header will continue to be set for each request, as long as there is another page of messages available.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">from</td>
+<td style="text-align: left">The phone number to filter the messages that came from (must be in E.164 format, like +19195551212).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">to</td>
+<td style="text-align: left">The phone number to filter the messages that was sent to (must be in E.164 format, like +19195551212).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">fromDateTime</td>
+<td style="text-align: left">The starting date time to filter the messages (must be in yyyy-MM-dd hh:mm:ss format, like 2014-05-25 12:00:00. You can suppress parts of the date or time, like 2014-05-25, but the missing parameters will be filled with zeros).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">toDateTime</td>
+<td style="text-align: left">The ending date time to filter the messages (must be in yyyy-MM-dd hh:mm:ss format, like 2014-05-25 12:00:00. You can suppress parts of the date or time, like 2014-05-25, but the missing parameters will be filled with zeros). Although it only supports seconds, we use milliseconds precision so if you want to include an event that happened on a given second you must set the next second on this parameter.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">page</td>
+<td style="text-align: left">Used for pagination to indicate the page requested for querying a list of messages. If no value is specified the default is 0.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">size</td>
+<td style="text-align: left">Used for pagination to indicate the size of each page requested for querying a list of messages. If no value is specified the default value is 25. (Maximum value 1000)</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">direction</td>
+<td style="text-align: left">Filter by direction of message, in - a message that came from the telephone network to one of your numbers (an “inbound” message) or out - a message that was sent from one of your numbers to the telephone network (an “outbound” message)</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">The message state to filter. values are:  <br> * <code class="prettyprint">received</code><br> * <code class="prettyprint">queued</code><br> * <code class="prettyprint">sending</code><br> * <code class="prettyprint">sent</code> <br> * <code class="prettyprint">error</code></td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">deliveryState</td>
+<td style="text-align: left">The message delivery state to filter. Values are <code class="prettyprint">waiting</code> <code class="prettyprint">delivered</code> <code class="prettyprint">not-delivered</code></td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">sortOrder</td>
+<td style="text-align: left">How to sort the messages. Values are <code class="prettyprint">asc</code> or <code class="prettyprint">desc</code> If no value is specified the default value is <code class="prettyprint">asc</code></td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-list-your-messages">Example: List your messages</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/messages <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//need to add this</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HEADER: &lt;https://api.catapult.inetwork.com/v1/users/u-dkjf9094802375s/messages?sortKeyLT=1458576004287000989&amp;size=1&gt;; rel="next"
+
+[
+    {
+        "id": "{messageId1}",
+        "messageId": "{messageId1}",
+        "from": "{fromNumber}",
+        "to": "{number}",
+        "text": "Good morning, this is a test message",
+        "time": "2012-10-05T20:37:38.048Z",
+        "direction": "out",
+        "state": "sent",
+        "media": []
+    },
+    {
+        "id": "{messageId2}",
+        "messageId": "{messageId2}",
+        "from": "{number}",
+        "to": "{toNumber}",
+        "text": "I received your test message",
+        "time": "2012-10-05T20:38:11.023Z",
+        "direction": "in",
+        "state": "received",
+        "media": []
+    },
+    {
+        "id": "{messageId3}",
+        "messageId": "{messageId3}",
+        "from": "{number}",
+        "to": "{toNumber}",
+        "text": "I received your MMS message",
+        "time": "2012-10-05T20:38:11.023Z",
+        "direction": "out",
+        "state": "sent",
+        "media": ["https://api.catapult.inetwork.com/v1/users/&lt;user-id&gt;/media/image.jpg"]
+    },
+    {
+        "id": "{messageId4}",
+        "messageId": "{messageId4}",
+        "from": "{number}",
+        "to": "{toNumber}",
+        "text": "I received your MMS message",
+        "time": "2012-10-05T20:38:11.023Z",
+        "direction": "out",
+        "state": "sent",
+        "media": ["https://api.catapult.inetwork.com/v1/users/&lt;user-id&gt;/media/image-1.jpg",
+                            "https://api.catapult.inetwork.com/v1/users/&lt;user-id&gt;/media/image-2.jpg",
+                            "http://customer-web-site.com/file.jpg"]
+    }
+]
+</code></pre>
+
+<h3 id="example-list-your-messages-by-from-number-fromnumber">Example: List your messages by from number {fromNumber}</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/messages?from<span class="o">=</span>%2b<span class="o">{</span>fromNumber<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Need to add this</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+    {
+        "id": "{messageId1}",
+        "messageId": "{messageId1}",
+        "from": "{fromNumber}",
+        "to": "{toNumber1}",
+        "text": "Good morning, this is a test message",
+        "time": "2012-10-05T20:37:38.048Z",
+        "direction": "out",
+        "state": "sent",
+        "media": []
+    },
+    {
+        "id": "{messageId2}",
+        "messageId": "{messageId2}",
+        "from": "{fromNumber}",
+        "to": "{toNumber2}",
+        "text": "I received your test message",
+        "time": "2012-10-05T20:38:11.023Z",
+        "direction": "in",
+        "state": "received",
+        "media": []
+    }
+]
+</code></pre>
+
+<h3 id="example-gets-a-list-messages-filtering-the-direction-and-todatetime">Example: Gets a list messages filtering the direction and toDateTime</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/messages?from<span class="o">=</span>%2b<span class="o">{</span>fromNumber<span class="o">}</span>&amp;direction<span class="o">=</span>out&amp;toDateTime<span class="o">=</span>2012-10-05%2020:37:39 <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//need to add this</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+    {
+        "id": "{messageId1}",
+        "messageId": "{messageId1}",
+        "from": "{fromNumber}",
+        "to": "{toNumber1}",
+        "text": "Good morning, this is a test message",
+        "time": "2012-10-05T20:37:38.048Z",
+        "direction": "out",
+        "state": "sent",
+        "media": []
+    }
+]
+</code></pre>
+
+<h2 id="post-messages">POST messages</h2>
+
+<p>Sends one or more messages.</p>
+
+<p>Sending a single message: To send a single text message, submit a single message representation as your request body. The response indicates the created message&rsquo;s URL in the Location header if it was created successfully. If there was an error with the message, the response body contains error information.</p>
+
+<p>Sending multiple messages: To send multiple messages in a single request, submit an array of message representations as your request body. The response entity will contain an array of response objects, with the same length and order as the submitted message list, so you can iterate in the results to check for errors. Each result contains the URL of the of the message if it was created successfully or error information.</p>
+
+<p>Important Note on Multiple Messages: There is a maximum limit of 50 messages sent per multiple messages request.</p>
+
+<p>Important Note on Rate Limits: You can send 1 message per second per Bandwidth phone number.</p>
+
+<p>International characters: Currently we support only the GSM 7 bit character set (GSM 03.38) .</p>
+
+<aside class="warning">
+When sending MMS, the size of all medias for specific message summed up should not exceed 1.5 MB
+</aside>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">from</td>
+<td style="text-align: left">One of your telephone numbers the message should come from (must be in E.164 format, like +19195551212).</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left">to</td>
+<td style="text-align: left">The phone number the message should be sent to (must be in E.164 format, like +19195551212).</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left">text</td>
+<td style="text-align: left">The contents of the text message (must be 2048 characters or less).</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left">media</td>
+<td style="text-align: left">For MMS messages, a media url to the location of the media or list of medias to be sent send with the message. For media details please check table Properties in the top of the page.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">receiptRequested</td>
+<td style="text-align: left">Requested receipt option for outbound messages: <code class="prettyprint">none</code> <code class="prettyprint">all</code> <code class="prettyprint">error</code> Default is <code class="prettyprint">none</code>.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackUrl</td>
+<td style="text-align: left">The server URL where the events related to the outgoing message will be sent to.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackHttpMethod</td>
+<td style="text-align: left">Determine if the callback event should be sent via <code class="prettyprint">HTTP GET</code> or <code class="prettyprint">HTTP POST</code>. Values are get or post Default is <code class="prettyprint">post</code></td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackTimeout</td>
+<td style="text-align: left">Determine how long should the platform wait for callbackUrl’s response before timing out (milliseconds).</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">fallbackUrl</td>
+<td style="text-align: left">The server URL used to send the message events if the request to callbackUrl fails.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">tag</td>
+<td style="text-align: left">Any string, it will be included in the callback events of the message.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-send-a-single-text-message">Example: Send a single text message</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/ <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+        -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "from": "{fromNumber}",
+        "to": "{toNumber}",
+        "text": "Good morning, this is a test message",
+        "callbackUrl": "http://my.callback.url"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span>
+    <span class="na">from</span> <span class="p">:</span> <span class="s2">"+19195551212"</span><span class="p">,</span>
+    <span class="na">to</span>   <span class="p">:</span> <span class="s2">"+19195551213"</span><span class="p">,</span>
+    <span class="na">text</span> <span class="p">:</span> <span class="s2">"Thank you for susbcribing to Unicorn Enterprises!"</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="c1">//{</span>
+<span class="c1">//  from : "+19195551212",</span>
+<span class="c1">//  to   : "+19195551213",</span>
+<span class="c1">//  text : "Thank you for susbcribing to Unicorn Enterprises!",</span>
+<span class="c1">//  id   : "..."</span>
+<span class="c1">//}</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns HTTP Header structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 201 Created
+Location: /v1/users/{userId}/messages/{messageId}
+</code></pre>
+
+<h3 id="example-send-a-single-mms-with-bandwidth-media">Example: Send a single mms with Bandwidth Media</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/ <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+        -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "from": "{fromNumber}",
+        "to": "{toNumber}",
+        "text": "Good morning, this is a test message",
+        "callbackUrl": "http://my.callback.url",
+        "media": ["https://api.catapult.inetwork.com/v1/users/&lt;user-id&gt;/media/image-1.jpg"]
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span>
+    <span class="na">from</span> <span class="p">:</span> <span class="s2">"+19195551212"</span><span class="p">,</span>
+    <span class="na">to</span>   <span class="p">:</span> <span class="s2">"+19195551213"</span><span class="p">,</span>
+    <span class="na">text</span> <span class="p">:</span> <span class="s2">"Thank you for susbcribing to Unicorn Enterprises!"</span><span class="p">,</span>
+    <span class="na">media</span><span class="p">:</span> <span class="p">[</span><span class="s2">"https://api.catapult.inetwork.com/v1/users/&lt;user-id&gt;/media/image-1.jpg"</span><span class="p">],</span>
+    <span class="na">callbackUrl</span><span class="p">:</span> <span class="s2">"http://my.callback.url"</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns HTTP Header structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 201 Created
+Location: /v1/users/{userId}/messages/{messageId}
+</code></pre>
+
+<h3 id="example-send-a-single-mms-with-external-media">Example: Send a single mms with external media</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/ <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+        -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "from": "{fromNumber}",
+        "to": "{toNumber}",
+        "text": "Good morning, this is a test message",
+        "callbackUrl": "http://my.callback.url",
+        "media": ["http://your-site.com/image-1.jpg"]
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span>
+    <span class="na">from</span> <span class="p">:</span> <span class="s2">"+19195551212"</span><span class="p">,</span>
+    <span class="na">to</span>   <span class="p">:</span> <span class="s2">"+19195551213"</span><span class="p">,</span>
+    <span class="na">text</span> <span class="p">:</span> <span class="s2">"Thank you for susbcribing to Unicorn Enterprises!"</span><span class="p">,</span>
+    <span class="na">media</span><span class="p">:</span> <span class="p">[</span><span class="s2">"http://your-site.com/image-1.jpg"</span><span class="p">],</span>
+    <span class="na">callbackUrl</span><span class="p">:</span> <span class="s2">"http://my.callback.url"</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns HTTP Header structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 201 Created
+Location: /v1/users/{userId}/messages/{messageId}
+</code></pre>
+
+<h3 id="example-send-three-messages-in-a-single-request">Example: Send three messages in a single request</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/ <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+        -d <span class="se">\</span>
+    <span class="s1">'
+    [
+        {
+            "from": "{fromNumber1}",
+            "to": "{toNumber1}",
+            "text": "This is the test message one",
+            "callbackUrl": "http://my.callback.url"
+        },
+        {
+            "from": "{fromNumber2}",
+            "to": "{toNumber2}",
+            "text": "This is the test message two",
+            "callbackUrl": "http://my.callback.url"
+        },
+        {
+            "from": "{fromNumber1}",
+            "to": "",
+            "callbackUrl": "",
+            "text": "This is the test message three",
+            "callbackUrl": "http://my.callback.url"
+        }
+    ]'</span>
+</code></pre>
+<pre class="highlight shell"><code>HTTP/1.1 202 ACCEPTED
+<span class="o">[</span>
+    <span class="o">{</span>
+        <span class="s2">"result"</span>: <span class="s2">"accepted"</span>,
+        <span class="s2">"location"</span>: <span class="s2">"https://.../v1/users/.../messages/{messageI1}"</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+        <span class="s2">"result"</span>: <span class="s2">"accepted"</span>,
+        <span class="s2">"location"</span>: <span class="s2">"https://.../v1/users/.../messages/{messageId2}"</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+        <span class="s2">"result"</span>: <span class="s2">"error"</span>,
+        <span class="s2">"error"</span>: <span class="o">{</span>
+            <span class="s2">"category"</span>: <span class="s2">"bad-request"</span>,
+            <span class="s2">"code"</span>: <span class="s2">"blank-property"</span>,
+            <span class="s2">"message"</span>: <span class="s2">"The 'message' resource property 'to' must contain at least one non-whitespace character"</span>,
+            <span class="s2">"details"</span>: <span class="o">[]</span>
+         <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">]</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">sendMultiple</span><span class="p">({</span>
+    <span class="na">from</span> <span class="p">:</span> <span class="s2">"+19195551211"</span><span class="p">,</span>
+    <span class="na">to</span>   <span class="p">:</span> <span class="s2">"+19195551213"</span><span class="p">,</span>
+    <span class="na">text</span> <span class="p">:</span> <span class="s2">"Thank you for susbcribing to Unicorn Enterprises!"</span>
+<span class="p">},</span> <span class="p">{</span>
+    <span class="na">from</span> <span class="p">:</span> <span class="s2">"+19195151212"</span><span class="p">,</span>
+    <span class="na">to</span>   <span class="p">:</span> <span class="s2">"+19195551214"</span><span class="p">,</span>
+    <span class="na">text</span> <span class="p">:</span> <span class="s2">"Thank you for susbcribing to Unicorn Enterprises!"</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">messages</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">messages</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//returns</span>
+<span class="p">[{</span>
+    <span class="na">result</span> <span class="p">:</span> <span class="s2">"failed"</span><span class="p">,</span>
+    <span class="na">error</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">category</span> <span class="p">:</span> <span class="s2">"authorization"</span><span class="p">,</span>
+        <span class="na">code</span>     <span class="p">:</span> <span class="s2">"number-access-denied"</span><span class="p">,</span>
+        <span class="na">message</span>  <span class="p">:</span> <span class="s2">"User ... does not have permission to use number +19195551211"</span><span class="p">,</span>
+        <span class="na">details</span>  <span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="na">name</span>  <span class="p">:</span> <span class="s2">"userId"</span><span class="p">,</span>
+                <span class="na">value</span> <span class="p">:</span> <span class="s2">"..."</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="na">name</span>  <span class="p">:</span> <span class="s2">"number"</span><span class="p">,</span>
+                <span class="na">value</span> <span class="p">:</span> <span class="s2">"+19195551211"</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+    <span class="p">},</span>
+    <span class="na">message</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="na">from</span> <span class="p">:</span> <span class="s2">"+19195551211"</span><span class="p">,</span>
+        <span class="na">to</span>   <span class="p">:</span> <span class="s2">"+19195551213"</span><span class="p">,</span>
+        <span class="na">text</span> <span class="p">:</span> <span class="s2">"Thank you for subscribing to Unicorn Enterprises!"</span>
+    <span class="p">}</span>
+<span class="p">},{</span>
+    <span class="na">result</span>  <span class="p">:</span> <span class="s2">"accepted"</span><span class="p">,</span>
+    <span class="na">message</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="na">from</span> <span class="p">:</span> <span class="s2">"+19195551212"</span><span class="p">,</span>
+        <span class="na">to</span>   <span class="p">:</span> <span class="s2">"+19195551214"</span><span class="p">,</span>
+        <span class="na">text</span> <span class="p">:</span> <span class="s2">"Thank you for subscribing to Unicorn Enterprises!"</span><span class="p">,</span>
+        <span class="na">id</span>   <span class="p">:</span> <span class="s2">"..."</span>
+    <span class="p">}</span>
+<span class="p">}]</span>
+</code></pre>
+
+<h3 id="example-request-receipt-for-single-text-message">Example: Request receipt for single text message</h3>
+
+<p>To send a text message with request receipt from {fromNumber} to {toNumber}, send the following request:</p>
+
+<h3 id="example-send-a-single-text-message-with-custom-callback-timeout-of-2-seconds">Example: Send a single text message with custom callback timeout of 2 seconds</h3>
+
+<h3 id="example-send-a-single-text-message-with-custom-callback-timeout-of-2-seconds-and-a-fallback-url">Example: Send a single text message with custom callback timeout of 2 seconds and a fallback URL</h3>
+
+<h2 id="get-messages-messageid">GET messages/{messageId}</h2>
+
+<p>Gets information about a previously sent or received message. No query parameters are supported.</p>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/messages/<span class="o">{</span>messageId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"{messageId}"</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">//callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"{messageId}"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+
+          <h1 id="number-info">Number Info</h1>
+
+<p>This resource provides a CNAM number info. CNAM is an acronym which stands for Caller ID Name. CNAM can be used to display the calling party&rsquo;s name alongside the phone number, to help users easily identify a caller. CNAM API allows the user to get the CNAM information of a particular number.</p>
+
+<h2 id="properties">Properties</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">name</td>
+<td style="text-align: left">The Caller ID name information.</td>
+</tr>
+<tr>
+<td style="text-align: left">number</td>
+<td style="text-align: left">The full phone number, specified in E.164 format.</td>
+</tr>
+<tr>
+<td style="text-align: left">created</td>
+<td style="text-align: left">The time this Caller ID information was first queried (UTC).</td>
+</tr>
+<tr>
+<td style="text-align: left">updated</td>
+<td style="text-align: left">The time this Caller ID information was last updated (UTC).</td>
+</tr>
+</tbody></table>
+
+<h2 id="get-numberinfo-number">GET numberInfo/{number}</h2>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/numberInfo/<span class="o">{</span>number<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">NumberInfo</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"+1234567890"</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">){});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">NumberInfo</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"+1234567890"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">info</span><span class="p">){});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-09-23T16:31:15Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Name"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number}"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"updated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-09-23T16:42:18Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h1 id="phone-numbers">Phone numbers</h1>
+
+<p>The Phone Numbers resource lets you get phone numbers for use with your programs and manage numbers you already have.</p>
+
+<h2 id="properties">Properties</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">id</td>
+<td style="text-align: left">The unique id of the phone number.</td>
+</tr>
+<tr>
+<td style="text-align: left">name</td>
+<td style="text-align: left">A name you choose for this number.</td>
+</tr>
+<tr>
+<td style="text-align: left">number</td>
+<td style="text-align: left">The telephone number in E.164 format.</td>
+</tr>
+<tr>
+<td style="text-align: left">nationalNumber</td>
+<td style="text-align: left">The telephone number in a friendly national format, e.g. (555) 5555-5555</td>
+</tr>
+<tr>
+<td style="text-align: left">city</td>
+<td style="text-align: left">The city of the phone number.</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">The state of the phone number.</td>
+</tr>
+<tr>
+<td style="text-align: left">applicationId</td>
+<td style="text-align: left">The unique id of an Application you want to associate with this number.</td>
+</tr>
+<tr>
+<td style="text-align: left">application</td>
+<td style="text-align: left">The URI of the application associated with the number for inbound phone calls and text messages.</td>
+</tr>
+<tr>
+<td style="text-align: left">fallbackNumber</td>
+<td style="text-align: left">Number to transfer an incoming call when the callback/fallback events can’t be delivered.</td>
+</tr>
+<tr>
+<td style="text-align: left">price</td>
+<td style="text-align: left">The monthly price for this number.</td>
+</tr>
+<tr>
+<td style="text-align: left">createdTime</td>
+<td style="text-align: left">Date when the number was created. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+<tr>
+<td style="text-align: left">numberState</td>
+<td style="text-align: left">The phone number state, values are <code class="prettyprint">enabled</code> or <code class="prettyprint">released</code></td>
+</tr>
+</tbody></table>
+
+<h2 id="get-phonenumbers">GET phoneNumbers</h2>
+
+<p>Gets a list of your numbers. Since this operation uses HTTP GET, all the properties are specified as HTTP request parameters.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">page</td>
+<td style="text-align: left">Used for pagination to indicate the page requested for querying a list of phone numbers. If no value is specified the default is 0.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">size</td>
+<td style="text-align: left">Used for pagination to indicate the size of each page requested for querying a list of phone numbers. If no value is specified the default value is 25. (Maximum value 1000)</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">applicationId</td>
+<td style="text-align: left">Used to filter the retrieved list of numbers by an associated application ID.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">Used to filter the retrieved list of numbers allocated for the authenticated user by a US state.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">name</td>
+<td style="text-align: left">Used to filter the retrieved list of numbers allocated for the authenticated user by it’s name.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">city</td>
+<td style="text-align: left">Used to filter the retrieved list of numbers allocated for the authenticated user by it’s city.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">numberState</td>
+<td style="text-align: left">Used to filter the retrieved list of numbers allocated for the authenticated user by the number state.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-list-phone-numbers">Example: List phone numbers</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/phoneNumbers <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">PhoneNumber</span><span class="p">.</span><span class="nx">list</span><span class="p">({</span><span class="na">size</span><span class="p">:</span> <span class="mi">1000</span><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">numbersResponse</span><span class="p">){});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">PhoneNumber</span><span class="p">.</span><span class="nx">list</span><span class="p">({</span><span class="na">size</span><span class="p">:</span> <span class="mi">1000</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">numbersResponse</span><span class="p">){});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+{
+   "id": "{numberId1}",
+   "application": "https://catapult.inetwork.com/v1/users/users/u-ly123/applications/a-j321",
+   "number":"{number1}",
+   "nationalNumber":"{national_number1}",
+   "name": "home phone",
+   "createdTime": "2013-02-13T17:46:08.374Z",
+   "state": "NC",
+   "price": "0.60",
+   "numberState": "enabled"
+},
+{
+   "id": "{numberId2}",
+   "application": "https://catapult.inetwork.com/v1/users/users/u-ly123/applications/a-j123",
+   "number":"{number2}",
+   "nationalNumber":"{national_number2}",
+   "name": "work phone",
+   "createdTime": "2013-02-13T18:32:05.223Z",
+   "state": "NC",
+   "price": "0.60",
+   "numberState": "enabled"
+}
+]
+</code></pre>
+
+<h2 id="post-phonenumbers">POST phoneNumbers</h2>
+
+<p>Allocates a number so you can use it to make and receive calls and send and receive messages.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">number</td>
+<td style="text-align: left">An available telephone number you want to use (must be in E.164 format, like +19195551212).</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left">name</td>
+<td style="text-align: left">A name you choose for this number.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">applicationId</td>
+<td style="text-align: left">The unique id of an Application you want to associate with this number.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">fallbackNumber</td>
+<td style="text-align: left">Number to transfer an incoming call when the callback/fallback events can’t be delivered.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-allocate-a-phone-number-to-your-account">Example: Allocate a phone number to your account</h3>
+
+<p>To allocate the phone number {number} with the name &ldquo;home phone&rdquo; and the fallbackNumber {fallback_number} you can make calls with it, send the following request:</p>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/ <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+        -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "number": "+15555555555",
+        "name": "home phone"
+        "fallbackNumber": "{fallback_number}"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Allocate number +1234567980</span>
+
+<span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">PhoneNumber</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span> <span class="na">number</span> <span class="p">:</span> <span class="s2">"+1234567890"</span> <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">number</span><span class="p">){});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">PhoneNumber</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span> <span class="na">number</span> <span class="p">:</span> <span class="s2">"+1234567890"</span> <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">number</span><span class="p">){});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns HTTP Header structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 201 Created
+Location: /v1/users/{userId}/phoneNumbers/{numberId}
+</code></pre>
+
+<h2 id="get-phonenumbers-numberid">GET phoneNumbers/{numberId}</h2>
+
+<p>Gets information about one of your numbers using the number&rsquo;s ID. No query parameters are supported.</p>
+
+<p>or</p>
+
+<p>Gets information about one of your numbers using the E.164 number string, like &ldquo;+19195551212&rdquo;. Remember to URL encode the plus sign prefix. No query parameters are supported.</p>
+
+<h3 id="example-get-number-properties-by-e-164-or-id">Example: Get number properties by E.164 or Id</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/phoneNumbers/%20<span class="o">{</span>number<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">PhoneNumber</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">numberId</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">number</span><span class="p">){});</span>
+<span class="c1">// or</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">PhoneNumber</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"+1234567890"</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">number</span><span class="p">){});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">PhoneNumber</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">numberId</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">number</span><span class="p">){});</span>
+<span class="c1">// or</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">PhoneNumber</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"+1234567890"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">number</span><span class="p">){});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{numberId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"application"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://catapult.inetwork.com/.../applications/{applicationId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"number"</span><span class="p">:</span><span class="s2">"{number}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"nationalNumber"</span><span class="p">:</span><span class="s2">"{national_number}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"home phone"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"createdTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-13T17:46:08.374Z"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Raleigh"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NC"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.60"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"numberState"</span><span class="p">:</span><span class="w"> </span><span class="s2">"enabled"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="post-phonenumbers-numberid">POST phoneNumbers/{numberId}</h2>
+
+<p>Makes changes to a number you have. POST a new JSON representation with the property values you desire to the URL that you got back in the &ldquo;Location&rdquo; header when you first allocated it. Properties you don&rsquo;t send will remain unchanged. The &ldquo;numberId&rdquo; refers to the numberId or the number itself. When using the number itself remember to URL encode the plus sign prefix.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">applicationId</td>
+<td style="text-align: left">The unique id of an Application resource you want to associate with this number for incoming calls and messages.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">name</td>
+<td style="text-align: left">A name you choose for this number.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">fallbackNumber</td>
+<td style="text-align: left">Number to transfer an incoming call when the callback/fallback events can’t be delivered.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-change-the-application-resource-a-phone-number-uses-for-inbound-calls-and-messages">Example: Change the Application resource a phone number uses for inbound calls and messages</h3>
+<pre class="highlight shell"><code>curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/phoneNumbers/<span class="o">{</span>numberId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+        -d <span class="se">\</span>
+    <span class="s1">'
+    {
+        "applicationId": "{application_id}"
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">PhoneNumber</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">numberId</span><span class="p">,</span> <span class="p">{</span><span class="na">applicationId</span><span class="p">:</span> <span class="s2">"{application_id}"</span><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(){});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">PhoneNumber</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">numberId</span><span class="p">,</span> <span class="p">{</span><span class="na">applicationId</span><span class="p">:</span> <span class="s2">"{application_id}"</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){});</span>
+</code></pre>
+
+<h2 id="delete-phonenumbers-numberid">DELETE phoneNumbers/{numberId}</h2>
+
+<p>Removes a number from your account so you can no longer make or receive calls, or send or receive messages with it. When you remove a number from your account, it will not be available to add back to your account, so be careful.</p>
+<pre class="highlight shell"><code>curl -v -X DELETE https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/phoneNumbers/<span class="o">{</span>numberId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">PhoneNumber</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">numberId</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(){});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">PhoneNumber</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">numberId</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){});</span>
+</code></pre>
+
+          <h1 id="recordings">Recordings</h1>
+
+<p>Retrieve information about call recordings. The recording information retrieved by GET method contains only textual data related to call recording as described on Properties section. To properly work with recorded media content such as download and removal of media file, please access /media documentation. To learn about how to transcribe recordings, read the /recordings/{id}/transcriptions documentation.</p>
+
+<h2 id="properties">Properties</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">id</td>
+<td style="text-align: left">The unique id of the recordings resource.</td>
+</tr>
+<tr>
+<td style="text-align: left">startTime</td>
+<td style="text-align: left">Date/time when the recording started. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+<tr>
+<td style="text-align: left">endTime</td>
+<td style="text-align: left">Date/time when the recording ended. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+<tr>
+<td style="text-align: left">call</td>
+<td style="text-align: left">The complete URL to the call resource this recording is associated with.</td>
+</tr>
+<tr>
+<td style="text-align: left">media</td>
+<td style="text-align: left">The complete URL to the media resource this recording is associated with.</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">The state of the recording, values are <br> <code class="prettyprint">recording</code> <br> *<code class="prettyprint">complete</code><br> *<code class="prettyprint">saving</code> <br> *<code class="prettyprint">error</code></td>
+</tr>
+<tr>
+<td style="text-align: left">page</td>
+<td style="text-align: left">Used for pagination to indicate the page requested for querying a list of recordings. If no value is specified the default is 0.</td>
+</tr>
+<tr>
+<td style="text-align: left">size</td>
+<td style="text-align: left">Used for pagination to indicate the size of each page requested for querying a list of recordings. If no value is specified the default value is 25. (Maximum value 1000)</td>
+</tr>
+</tbody></table>
+
+<h2 id="recording-states">Recording States</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">State</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">recording</td>
+<td style="text-align: left">Recording is currently active.</td>
+</tr>
+<tr>
+<td style="text-align: left">saving</td>
+<td style="text-align: left">Recording is complete but it is not available to download yet.</td>
+</tr>
+<tr>
+<td style="text-align: left">error</td>
+<td style="text-align: left">Recording could not be uploaded.</td>
+</tr>
+<tr>
+<td style="text-align: left">complete</td>
+<td style="text-align: left">Recording complete and available for downloading or playing.</td>
+</tr>
+</tbody></table>
+
+<h2 id="get-recordings">GET recordings</h2>
+
+<p>List all users&rsquo; call recordings. Since this operation uses HTTP GET, all the properties are specified as HTTP request parameters.</p>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">page</td>
+<td style="text-align: left">Used for pagination to indicate the page requested for querying a list. If no value is specified the default is 0.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">size</td>
+<td style="text-align: left">Used for pagination to indicate the size of each page requested for querying a list. If no value is specified the default value is 25. (Maximum value 1000)</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-list-all-recordings">Example: List all recordings</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/recordings <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Recording</span><span class="p">.</span><span class="nx">list</span><span class="p">({}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">recordings</span><span class="p">)</span> <span class="p">{});</span>
+
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Recording</span><span class="p">.</span><span class="nx">list</span><span class="p">({},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">recordings</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span> <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">recordings</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+{
+    "endTime": "2013-02-08T13:17:12.181Z",
+    "id": "{recordingId1}",
+    "media": "https://.../v1/users/.../media/{callId1}-1.wav",
+    "call": "https://.../v1/users/.../calls/{callId1}",
+    "startTime": "2013-02-08T13:15:47.587Z",
+    "state": "complete"
+  },
+  {
+    "endTime": "2013-02-08T14:05:15.587Z",
+    "id": "{recordingId2}",
+    "media": "https://.../v1/users/.../media/{callId1}-2.wav",
+    "call": "https://.../v1/users/.../calls/{callId1}",
+    "startTime": "2013-02-08T14:03:47.587Z",
+    "state": "complete"
+  },
+  {
+    "endTime": "2013-02-08T13:34:07.507Z",
+    "id": "{recordingId3}",
+    "media": "https://.../v1/users/.../media/{callId2}-1.wav",
+    "call": "https://.../v1/users/.../calls/{call2}",
+    "startTime": "2013-02-08T13:28:47.587Z",
+    "state": "complete"
+  }
+]
+</code></pre>
+
+<h2 id="get-recordings-recordingid">GET recordings/{recordingId}</h2>
+
+<p>Retrieve a specific call recording information in JSON format, identified by recordingId. For more details on how to retrieve the recorded media file, please access Media documentation.</p>
+
+<h3 id="example-get-recording-properties">Example: Get recording properties</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/recordings/<span class="o">{</span>recordingId<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">//Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Recording</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"{recordingId}"</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">recording</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">recording</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">//Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Recording</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"{recordingId}"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">recording</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span> <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">recording</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"endTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:17:12.181Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{recordingId}"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/.../media/c-bonay3r4mtwbplurq4nkt7q-1.wav"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"call"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/.../calls/{callId}"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:15:47.587Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"complete"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h1 id="transcriptions-beta">Transcriptions BETA</h1>
+
+<p>The Transcription resource lets you transcribe a voicemail recording. This resource can be either created automatically when the call property transcriptionEnabled is set to true, when call is created, or during the call by posting an event. The transcription is based on a call audio recording. By enabling/disabling call property recordingEnabled, a call can have more than one recording, so it&rsquo;s possible to have one or more transcriptions for each one of those recordings. When transcriptionEnabled is set to true all the recordings generated within that call are going to be transcribed, i.e, if you start to record a call, at any given time when the call is active, and then terminate the recording, the transcription resource will be automatically started for this recording; this process can happen many times.</p>
+
+<aside class="notice">
+It is important to note that our transcription service has been specifically tuned to transcribe voicemail recordings. It will not perform accurately when used in other scenarios such as IVR or support conversation recording. If you are interested in using transcription for these use cases, please contact us at .
+</aside>
+
+<h2 id="properties">Properties</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">id</td>
+<td style="text-align: left">The unique id of the transcriptions resource.</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">The state of the transcription, <code class="prettyprint">transcribing</code> <code class="prettyprint">completed</code> <code class="prettyprint">error</code></td>
+</tr>
+<tr>
+<td style="text-align: left">text</td>
+<td style="text-align: left">The transcribed text.</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">The date/time the transcription resource was created (UTC).</td>
+</tr>
+<tr>
+<td style="text-align: left">chargeableDuration</td>
+<td style="text-align: left">The seconds between activeTime and endTime for the recording; this is the time that is going to be used to charge the resource. Note: transcriptions is billed in 1 minute units.</td>
+</tr>
+<tr>
+<td style="text-align: left">textSize</td>
+<td style="text-align: left">The size of the transcribed text. If the text is longer than 1000 characters it will be cropped; the full text can be retrieved from the url available at textUrl property.</td>
+</tr>
+<tr>
+<td style="text-align: left">textUrl</td>
+<td style="text-align: left">An url to the full text; this property is available regardless the textSize.</td>
+</tr>
+</tbody></table>
+
+<h2 id="post-recordings-recording-id-transcriptions">POST recordings/{recording-id}/transcriptions</h2>
+
+<p>Request the transcription process to be started for the given recording id.</p>
+
+<h3 id="example-start-transcription-process">Example: Start Transcription process</h3>
+<pre class="highlight shell"><code><span class="c"># Note: Body is empty</span>
+curl -v -X POST https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/recordings/<span class="o">{</span>recording-id<span class="o">}</span>/transcriptions <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+        -d <span class="se">\</span>
+    <span class="s1">'
+    {
+
+    }'</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Recording</span><span class="p">.</span><span class="nx">createTranscription</span><span class="p">(</span><span class="nx">recordingId</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">transcription</span><span class="p">){});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Recording</span><span class="p">.</span><span class="nx">createTranscription</span><span class="p">(</span><span class="nx">recordingId</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">transcription</span><span class="p">){});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns HTTP Header structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>HTTP/1.1 201 Created
+Location: /v1/users/{user-id}/recordings/{recording-id}/transcriptions/{transcription-id}
+</code></pre>
+
+<h2 id="get-recordings-recording-id-transcriptions-transcription-id">GET recordings/{recording-id}/transcriptions/{transcription-id}</h2>
+
+<p>Get information about the transcription, regardless its state.</p>
+
+<h3 id="example-get-transcription-properties">Example: Get transcription properties</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/recordings/<span class="o">{</span>recording-id<span class="o">}</span>/transcriptions/<span class="o">{</span>transcription-id<span class="o">}</span> <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Recording</span><span class="p">.</span><span class="nx">getTranscription</span><span class="p">(</span><span class="nx">recordingId</span><span class="p">,</span> <span class="nx">transcriptionId</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">transcription</span><span class="p">){});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Recording</span><span class="p">.</span><span class="nx">getTranscription</span><span class="p">(</span><span class="nx">recordingId</span><span class="p">,</span> <span class="nx">transcriptionId</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">transcription</span><span class="p">){});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"chargeableDuration"</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{transcriptionId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hey there, I was calling to talk about plans for this saturday. "</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"textSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">63</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"textUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/.../media/{transcriptionId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-12-23T23:08:59Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="recordings-recording-id-transcriptions">recordings/{recording-id}/transcriptions</h2>
+
+<p>Get all the transcriptions that were made for the given recodingId</p>
+
+<h3 id="example-get-all-the-transcriptions-for-a-recording-resource-id">Example: Get all the transcriptions for a recording resource id</h3>
+<pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/recordings/<span class="o">{</span>recording-id<span class="o">}</span>/transcriptions <span class="se">\</span>
+    -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+    -H <span class="s2">"Content-type: application/json"</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Recording</span><span class="p">.</span><span class="nx">getTranscriptions</span><span class="p">(</span><span class="nx">recordingId</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">transcriptions</span><span class="p">){});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Recording</span><span class="p">.</span><span class="nx">getTranscriptions</span><span class="p">(</span><span class="nx">recordingId</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">transcriptions</span><span class="p">){});</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+    {
+        "chargeableDuration": 60,
+        "id": "{transcription-id}",
+        "state": "completed",        
+        "time": "2014-10-09T12:09:16Z",
+        "text": "{transcription-text}",
+        "textSize": 3627,
+        "textUrl": "{url-to-full-text}"
+    },
+    {
+        "chargeableDuration": 60,
+        "id": "{transcription-id}",
+        "state": "completed",
+        "text": "{transcription-text}",
+        "time": "2014-10-09T14:04:44Z",
+        "textSize": 72,
+        "textUrl": "{url-to-full-text}"
+    }
+]
+</code></pre>
+
       </div>
       <div class="dark-box">
           <div class="lang-selector">
