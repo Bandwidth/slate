@@ -91,7 +91,7 @@
       <script src="javascripts/all.js"></script>
   </head>
 
-  <body class="index" data-languages="[&quot;shell&quot;,&quot;javascript&quot;]">
+  <body class="index" data-languages="[&quot;shell&quot;,&quot;javascript&quot;,&quot;csharp&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -103,6 +103,7 @@
         <div class="lang-selector">
               <a href="#" data-language-name="shell">curl</a>
               <a href="#" data-language-name="javascript">NodeJS</a>
+              <a href="#" data-language-name="csharp">csharp</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -121,14 +122,361 @@
         
           <h1 id="get-started">Get Started</h1>
 
-<p>Before you can send your first SMS message, you will need to</p>
+<p>Before you can use the Bandwidth API, you will need to</p>
 
 <p><a href="http://bandwidth.com/products/application-platform/?utm_medium=social&amp;utm_source=docs&amp;utm_campaign=dtolb&amp;utm_content=_">Sign up</a> for a free Bandwidth API account.
 Get a number under the “My Numbers” tab (more specific instructions here)</p>
 
-<h2 id="send-your-first-sms-message">Send your first SMS Message</h2>
+          <h2 id="nodejs-library">NodeJS Library</h2>
 
-<p>To send your first SMS message we have included instructions for using Postman, a helpful program for testing APIs <a href="https://www.getpostman.com/">download</a>, and also code that can be found further down this page.</p>
+<p><a href="https://badge.fury.io/js/node-bandwidth"><img alt="npm version" src="https://badge.fury.io/js/node-bandwidth.svg" /></a>
+<a href="https://travis-ci.org/bandwidthcom/node-bandwidth"><img alt="Build Status" src="https://travis-ci.org/bandwidthcom/node-bandwidth.svg?branch=master" /></a>
+<a href="https://david-dm.org/bandwidthcom/node-bandwidth"><img alt="dependencies" src="https://david-dm.org/bandwidthcom/node-bandwidth.svg" /></a>
+<a href="https://snyk.io/package/npm/node-bandwidth"><img alt="Known Vulnerabilities" src="https://snyk.io/package/npm/node-bandwidth/badge.svg" /></a></p>
+
+<p><a href="https://github.com/bandwidthcom/node-bandwidth"><img alt="github" src="http://docs.whitesourcesoftware.com/download/attachments/17989744/github_logo.png?version=1&amp;modificationDate=1463491374000" /></a></p>
+
+<p>The current version is v2, released 5 August, 2016. Version 1.3.3 is available  <a href="https://github.com/bandwidthcom/node-bandwidth/tree/v1.3.3">here</a>.</p>
+
+<h3 id="full-api-reference"><a href="http://bwdemos.com/node-bandwidth/index.html">Full API Reference</a></h3>
+
+<p>The Full API Reference is available either as an interactive site or as a single Markdown file:</p>
+
+<ul>
+<li><a href="http://bwdemos.com/node-bandwidth/index.html">Site</a>.</li>
+<li><a href="https://github.com/bandwidthcom/node-bandwidth/blob/master/docs/api.md">Single MD file</a></li>
+</ul>
+
+<h3 id="installing-the-sdk">Installing the SDK</h3>
+
+<p><code class="prettyprint">node-bandwidth</code> is available on NPM:</p>
+
+<p>npm install &ndash;save node-bandwidth</p>
+
+<h3 id="supported-versions">Supported Versions</h3>
+
+<p><code class="prettyprint">node-bandwidth</code> should work on all versions of node newer than <code class="prettyprint">0.10.*</code>. However, due to the rapid development in the Node and npm environment, we can only provide <em>support</em> on <a href="https://github.com/nodejs/LTS">LTS versions of Node</a></p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Version</th>
+<th style="text-align: left">Support Level</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">&lt;0.10.*</td>
+<td style="text-align: left">Unsupported</td>
+</tr>
+<tr>
+<td style="text-align: left">0.10.*</td>
+<td style="text-align: left">Supported</td>
+</tr>
+<tr>
+<td style="text-align: left">0.12.*</td>
+<td style="text-align: left">Supported</td>
+</tr>
+<tr>
+<td style="text-align: left">&gt;=4.0 &lt;4.2</td>
+<td style="text-align: left">Unsupported</td>
+</tr>
+<tr>
+<td style="text-align: left"><strong>&gt;=4.2 &lt;5.* (Node v4 argon LTS)</strong></td>
+<td style="text-align: left"><strong>Recommended</strong></td>
+</tr>
+<tr>
+<td style="text-align: left">5.*</td>
+<td style="text-align: left">Unsupported</td>
+</tr>
+<tr>
+<td style="text-align: left">6.*</td>
+<td style="text-align: left">Unsupported</td>
+</tr>
+</tbody></table>
+
+<h3 id="client-initialization">Client initialization</h3>
+
+<p>All interaction with the API is done through a <code class="prettyprint">client</code> Object. The client constructor takes an Object containing configuration options. The following options are supported:</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Field name</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Default value</th>
+<th style="text-align: left">Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><code class="prettyprint">userId</code></td>
+<td style="text-align: left">Your user ID</td>
+<td style="text-align: left"><code class="prettyprint">undefined</code></td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">apiToken</code></td>
+<td style="text-align: left">Your API token</td>
+<td style="text-align: left"><code class="prettyprint">undefined</code></td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">apiSecret</code></td>
+<td style="text-align: left">Your API secret</td>
+<td style="text-align: left"><code class="prettyprint">undefined</code></td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">baseUrl</code></td>
+<td style="text-align: left">The Bandwidth API URL</td>
+<td style="text-align: left"><code class="prettyprint">https://api.catapult.inetwork.com</code></td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<p>To initialize the client object, provide your API credentials which can be found on your account page in <a href="https://catapult.inetwork.com/pages/catapult.jsf">the portal</a>.</p>
+<pre class="highlight javascript"><code><span class="kd">var</span> <span class="nx">Bandwidth</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"node-bandwidth"</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Bandwidth</span><span class="p">({</span>
+    <span class="na">userId</span>    <span class="p">:</span> <span class="s2">"YOUR_USER_ID"</span><span class="p">,</span> <span class="c1">// &lt;-- note, this is not the same as the username you used to login to the portal</span>
+    <span class="na">apiToken</span>  <span class="p">:</span> <span class="s2">"YOUR_API_TOKEN"</span><span class="p">,</span>
+    <span class="na">apiSecret</span> <span class="p">:</span> <span class="s2">"YOUR_API_SECRET"</span>
+<span class="p">});</span>
+</code></pre>
+
+<p>Your <code class="prettyprint">client</code> object is now ready to use the API.</p>
+
+<h3 id="callbacks-or-promises">Callbacks or Promises</h3>
+
+<p>All functions of the client object take an optional Node.js style <code class="prettyprint">(err, result)</code> callback, and also return a Promise. That way if you want to use Promises in your application, you don&rsquo;t have to wrap the SDK with a Promise library. You can simply do things like this:</p>
+
+<h4 id="promise-style">Promise style</h4>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span>
+    <span class="na">from</span> <span class="p">:</span> <span class="s2">"+12345678901"</span><span class="p">,</span> <span class="c1">// This must be a Catapult number on your account</span>
+    <span class="na">to</span>   <span class="p">:</span> <span class="s2">"+12345678902"</span><span class="p">,</span>
+    <span class="na">text</span> <span class="p">:</span> <span class="s2">"Hello world."</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Message sent with ID "</span> <span class="o">+</span> <span class="nx">message</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+
+<p>If you&rsquo;re not into that kind of thing you can also do things the &ldquo;old fashioned&rdquo; callback way:</p>
+
+<h4 id="callback-style">Callback style</h4>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span>
+    <span class="na">from</span> <span class="p">:</span> <span class="s2">"+12345678901"</span><span class="p">,</span> <span class="c1">// This must be a Catapult number on your account</span>
+    <span class="na">to</span>   <span class="p">:</span> <span class="s2">"+12345678902"</span><span class="p">,</span>
+    <span class="na">text</span> <span class="p">:</span> <span class="s2">"Hello world."</span>
+<span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Message sent with ID "</span> <span class="o">+</span> <span class="nx">message</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+
+<h3 id="providing-feedback">Providing feedback</h3>
+
+<p>For current discussions on 2.0 please see the <a href="https://github.com/bandwidthcom/node-bandwidth/labels/2.0">2.0 issues section on GitHub</a>. To start a new topic on 2.0, please open an issue and use the <code class="prettyprint">2.0</code> tag. Your feedback is greatly appreciated!</p>
+
+          <h2 id="c-library">C# Library</h2>
+
+<p>A .Net client library for the <a href="http://bandwidth.com/products/application-platform?utm_medium=social&amp;utm_source=github&amp;utm_campaign=dtolb&amp;utm_content=_">Bandwidth Application Platform</a></p>
+
+<p>The current version is v3.0, released ## August, 2016. Version 2.14 is available  <a href="https://github.com/bandwidthcom/csharp-bandwidth/tree/v2.14">here</a>.</p>
+
+<p><a href="https://ci.appveyor.com/project/avbel/csharp-bandwidth"><img alt="Build on .Net 4.5 (Windows)" src="https://ci.appveyor.com/api/projects/status/bhv8hs3fx9k6c33i?svg=true" /></a>
+<a href="https://travis-ci.org/bandwidthcom/csharp-bandwidth"><img alt="Build on .Net Core (Linux)" src="https://travis-ci.org/bandwidthcom/csharp-bandwidth.svg" /></a>
+<a href="https://coveralls.io/github/bandwidthcom/csharp-bandwidth"><img alt="Coverage Status" src="https://coveralls.io/repos/github/bandwidthcom/csharp-bandwidth/badge.svg" /></a></p>
+
+<p><a href="https://github.com/bandwidthcom/csharp-bandwidth/tree/v3-preview"><img alt="github" src="http://docs.whitesourcesoftware.com/download/attachments/17989744/github_logo.png?version=1&amp;modificationDate=1463491374000" /></a></p>
+
+<p><a href="http://bwdemos.com/csharp-bandwidth/html/R_Project_API.htm">Full API Reference</a></p>
+
+<h3 id="installing-the-sdk">Installing the SDK</h3>
+
+<p><code class="prettyprint">Bandwidth.Net</code> is available on Nuget (Nuget 3.0+ is required):</p>
+
+<p>Install-Package Bandwidth.Net</p>
+
+<h3 id="supported-versions">Supported Versions</h3>
+
+<p><code class="prettyprint">Bandwidth.Net</code> should work on all levels of .Net Framework 4.5+.</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Version</th>
+<th style="text-align: left">Support Level</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">&lt;4.5</td>
+<td style="text-align: left">Unsupported</td>
+</tr>
+<tr>
+<td style="text-align: left">4.5</td>
+<td style="text-align: left">Supported</td>
+</tr>
+<tr>
+<td style="text-align: left">4.6</td>
+<td style="text-align: left">Supported</td>
+</tr>
+<tr>
+<td style="text-align: left">.Net Core (netstandard1.6)</td>
+<td style="text-align: left">Supported</td>
+</tr>
+<tr>
+<td style="text-align: left">PCL (Profile111)</td>
+<td style="text-align: left">Supported</td>
+</tr>
+<tr>
+<td style="text-align: left">Xamarin (IOS, Android, MonoTouch)</td>
+<td style="text-align: left">Supported</td>
+</tr>
+</tbody></table>
+
+<h3 id="client-initialization">Client initialization</h3>
+
+<p>All interaction with the API is done through a class <code class="prettyprint">Client</code>. The <code class="prettyprint">Client</code> constructor takes an next options:</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Argument</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Default value</th>
+<th style="text-align: left">Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><code class="prettyprint">userId</code></td>
+<td style="text-align: left">Your user ID</td>
+<td style="text-align: left">none</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">apiToken</code></td>
+<td style="text-align: left">Your API token</td>
+<td style="text-align: left">none</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">apiSecret</code></td>
+<td style="text-align: left">Your API secret</td>
+<td style="text-align: left">none</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">baseUrl</code></td>
+<td style="text-align: left">The Bandwidth API URL</td>
+<td style="text-align: left"><code class="prettyprint">https://api.catapult.inetwork.com</code></td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<p>To initialize the <code class="prettyprint">Client</code> instance, provide your API credentials which can be found on your account page in <a href="https://catapult.inetwork.com/pages/catapult.jsf">the portal</a>.</p>
+<pre class="highlight csharp"><code><span class="k">using</span> <span class="nn">Bandwidth.Net</span><span class="p">;</span>
+
+<span class="n">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Client</span><span class="p">(</span>
+    <span class="s">"YOUR_USER_ID"</span><span class="p">,</span> <span class="c1">// &lt;-- note, this is not the same as the username you used to login to the portal
+</span>    <span class="s">"YOUR_API_TOKEN"</span><span class="p">,</span>
+    <span class="s">"YOUR_API_SECRET"</span>
+<span class="p">);</span>
+</code></pre>
+
+<p>Your <code class="prettyprint">client</code> object is now ready to use the API.</p>
+
+<h4 id="lazy-evalutions">Lazy evalutions</h4>
+
+<p>This library uses lazy evalutions in next cases:
+    - Object creation,
+    - Get list of objects</p>
+
+<h4 id="object-creation">Object Creation</h4>
+
+<p>When you create a bridge, call, message, etc. you will receive instance of <code class="prettyprint">ILazyInstance&lt;&gt;</code> as result. It allow you to get <code class="prettyprint">Id</code> of created object and created object on demand via property <code class="prettyprint">Instance</code>.</p>
+<pre class="highlight csharp"><code><span class="n">var</span> <span class="n">application</span> <span class="p">=</span> <span class="n">await</span> <span class="n">client</span><span class="p">.</span><span class="n">Application</span><span class="p">.</span><span class="nf">CreateAsync</span><span class="p">(</span><span class="k">new</span> <span class="n">CreateApplicationData</span> <span class="p">{</span><span class="n">Name</span> <span class="p">=</span> <span class="s">"MyFirstApp"</span><span class="p">});</span>
+
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">application</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span> <span class="c1">//will return Id of created application
+</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">application</span><span class="p">.</span><span class="n">Instance</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span> <span class="c1">//will make request to Catapult API to get application data
+</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">application</span><span class="p">.</span><span class="n">Instance</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span> <span class="c1">//will use cached application's data
+</span>
+</code></pre>
+
+<h4 id="get-list-of-objects">Get list of objects</h4>
+
+<p>Executing of methods which returns collections of objects will not execute Catapult API request immediately. THis request will be executed only when you try enumerate items of the collection.</p>
+<pre class="highlight csharp"><code><span class="n">var</span> <span class="n">calls</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">Call</span><span class="p">.</span><span class="nf">List</span><span class="p">();</span> <span class="c1">// will not execute any requests to Catapult API here
+</span>
+<span class="k">foreach</span><span class="p">(</span><span class="n">var</span> <span class="n">call</span> <span class="k">in</span> <span class="n">calls</span><span class="p">)</span> <span class="c1">// a request to Catapult API will be executed here
+</span><span class="p">{</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">call</span><span class="p">.</span><span class="n">From</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// or
+</span>
+<span class="n">var</span> <span class="n">list</span> <span class="p">=</span> <span class="n">calls</span><span class="p">.</span><span class="nf">ToList</span><span class="p">();</span> <span class="c1">// a request to Catapult API will be executed here
+</span>
+</code></pre>
+
+<h3 id="send-a-sms">Send a SMS</h3>
+<pre class="highlight csharp"><code><span class="n">var</span> <span class="n">message</span> <span class="p">=</span> <span class="n">await</span> <span class="n">client</span><span class="p">.</span><span class="n">Message</span><span class="p">.</span><span class="nf">SendAsync</span><span class="p">(</span><span class="k">new</span> <span class="n">MessageData</span> <span class="p">{</span>
+    <span class="n">From</span> <span class="p">=</span> <span class="s">"+12345678901"</span><span class="p">,</span> <span class="c1">// This must be a Bandwidth number on your account
+</span>    <span class="n">To</span>   <span class="p">=</span> <span class="s">"+12345678902"</span><span class="p">,</span>
+    <span class="n">Text</span> <span class="p">=</span> <span class="s">"Hello world."</span>
+<span class="p">});</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">"Message Id is {message.Id}"</span><span class="p">);</span>
+</code></pre>
+
+<h3 id="make-a-call">Make a call</h3>
+<pre class="highlight csharp"><code><span class="n">var</span> <span class="n">call</span> <span class="p">=</span> <span class="n">await</span> <span class="n">client</span><span class="p">.</span><span class="n">Call</span><span class="p">.</span><span class="nf">CreateAsync</span><span class="p">(</span><span class="k">new</span> <span class="n">CreateCallData</span> <span class="p">{</span>
+    <span class="n">From</span> <span class="p">=</span> <span class="s">"+12345678901"</span><span class="p">,</span> <span class="c1">// This must be a Bandwidth number on your account
+</span>    <span class="n">To</span>   <span class="p">=</span> <span class="s">"+12345678902"</span>
+<span class="p">});</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">"Call Id is {call.Id}"</span><span class="p">);</span>
+</code></pre>
+
+<h3 id="providing-feedback">Providing feedback</h3>
+
+<p>For current discussions on 3.0 please see the <a href="https://github.com/bandwidthcom/csharp-bandwidth/labels/3.0">3.0 issues section on GitHub</a>. To start a new topic on 3.0, please open an issue and use the <code class="prettyprint">3.0</code> tag. Your feedback is greatly appreciated!</p>
+
+          <h2 id="python-library">Python Library</h2>
+
+<p><a href="https://travis-ci.org/bandwidthcom/python-bandwidth"><img alt="Build Status" src="https://travis-ci.org/bandwidthcom/python-bandwidth.svg?branch=master" /></a> <a href="https://caniusepython3.com/project/bandwidth-sdk"><img alt="Can I Use Python 3?" src="https://caniusepython3.com/project/bandwidth-sdk.svg" /></a></p>
+
+<p><a href="https://github.com/bandwidthcom/python-bandwidth"><img alt="github" src="http://docs.whitesourcesoftware.com/download/attachments/17989744/github_logo.png?version=1&amp;modificationDate=1463491374000" /></a></p>
+
+<p>Client library for the <a href="http://ap.bandwidth.com/docs/rest-api/">Bandwidth App Platform</a></p>
+
+<h3 id="documentation-and-tutorials">Documentation and Tutorials</h3>
+
+<p><a href="http://bandwidth-sdk.readthedocs.org/en/latest/">Read the Docs</a></p>
+
+<h3 id="installation">Installation</h3>
+
+<p><code class="prettyprint">pip install bandwidth_sdk</code></p>
+
+<h3 id="requirements">Requirements</h3>
+
+<ul>
+<li><a href="http://bandwidth.com/products/application-platform/?utm_medium=social&amp;utm_source=github&amp;utm_campaign=dtolb&amp;utm_content=_">Bandwidth Account</a></li>
+<li><a href="https://www.python.org/downloads/">At least Python 2.7</a></li>
+</ul>
+
+          <h2 id="java-library">Java Library</h2>
+
+<p><a href="https://github.com/bandwidthcom/java-bandwidth"><img alt="github" src="http://docs.whitesourcesoftware.com/download/attachments/17989744/github_logo.png?version=1&amp;modificationDate=1463491374000" /></a></p>
+
+<p><a href="http://www.javadoc.io/doc/com.bandwidth.sdk/bandwidth-java-sdk"><img alt="Javadocs" src="http://www.javadoc.io/badge/com.bandwidth.sdk/bandwidth-java-sdk.svg" /></a></p>
+
+<p><a href="https://github.com/bandwidthcom/java-bandwidth-examples">Code Examples</a></p>
+
+<h3 id="bugs-issues">Bugs/Issues</h3>
+
+<p>Please open an issue in this repository and we&rsquo;ll handle it directly. If you have any questions please contact us at openapi@bandwidth.com.</p>
 
           <h1 id="account">Account</h1>
 
@@ -389,27 +737,27 @@ Get a number under the “My Numbers” tab (more specific instructions here)</p
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-  {
-    "id": "{transactionId1}",
-    "time": "2013-02-21T13:39:09.122Z",
-    "amount": "0.00750",
-    "type": "charge",
-    "units": "1",
-    "productType": "sms-out",
-    "number": "{number}"
-  },
-  {
-    "id": "{transactionId2}",
-    "time": "2013-02-21T13:37:42.079Z",
-    "amount": "0.00750",
-    "type": "charge",
-    "units": "1",
-    "productType": "sms-out",
-    "number": "{number}"
-  }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{transactionId1}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-21T13:39:09.122Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00750"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"charge"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"productType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sms-out"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number}"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{transactionId2}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-21T13:37:42.079Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00750"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"charge"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"productType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sms-out"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number}"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h3 id="example-get-transactions-by-date">Example: Get transactions by date</h3>
 <pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/account/transations?fromDate<span class="o">=</span>2013-02-21T13:38:00 <span class="se">\</span>
@@ -439,18 +787,18 @@ Get a number under the “My Numbers” tab (more specific instructions here)</p
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-  {
-    "id": "{transactionId}",
-    "time": "2013-02-21T13:39:09.122Z",
-    "amount": "0.00750",
-    "type": "charge",
-    "units": "1",
-    "productType": "sms-out",
-    "number": "{number}"
-  }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{transactionId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-21T13:39:09.122Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00750"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"charge"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"productType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sms-out"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number}"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h3 id="example-get-transactions-filtering-by-date">Example: Get transactions filtering by date</h3>
 <pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/account/transations?toDate<span class="o">=</span>2013-02-21T13:40:00&amp;fromDate<span class="o">=</span>2013-02-21T13:38:00 <span class="se">\</span>
@@ -481,18 +829,18 @@ Get a number under the “My Numbers” tab (more specific instructions here)</p
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-  {
-    "id": "{transactionId}",
-    "time": "2013-02-21T13:39:09.122Z",
-    "amount": "0.00750",
-    "type": "charge",
-    "units": "1",
-    "productType": "sms-out",
-    "number": "{number}"
-  }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{transactionId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-21T13:39:09.122Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00750"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"charge"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"productType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sms-out"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number}"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h3 id="example-get-transactions-limiting-result">Example: Get transactions limiting result</h3>
 <pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/account/transations?maxItems<span class="o">=</span>1 <span class="se">\</span>
@@ -522,18 +870,18 @@ Get a number under the “My Numbers” tab (more specific instructions here)</p
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-  {
-    "id": "{transactionId}",
-    "time": "2013-02-21T13:39:09.122Z",
-    "amount": "0.00750",
-    "type": "charge",
-    "units": "1",
-    "productType": "sms-out",
-    "number": "{number}"
-  }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{transactionId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-21T13:39:09.122Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00750"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"charge"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"productType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sms-out"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number}"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h3 id="example-get-transactions-of-payment-type">Example: Get transactions of payment type</h3>
 <pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/account/transations?type<span class="o">=</span>Payment <span class="se">\</span>
@@ -563,23 +911,23 @@ Get a number under the “My Numbers” tab (more specific instructions here)</p
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-  {
-    "id": "{transactionId1}",
-    "time": "2013-02-15T18:43:50.602Z",
-    "amount": "1000.00000",
-    "type": "payment",
-    "units": "0"
-  },
-  {
-    "id": "{transactionId2}",
-    "time": "2013-02-05T14:56:51.279Z",
-    "amount": "5000.00000",
-    "type": "payment",
-    "units": "0"
-  }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{transactionId1}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-15T18:43:50.602Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1000.00000"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"payment"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{transactionId2}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-05T14:56:51.279Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5000.00000"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"payment"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
           <h1 id="applications">Applications</h1>
 
@@ -682,23 +1030,23 @@ Get a number under the “My Numbers” tab (more specific instructions here)</p
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-  {
-    "id": "{applicationId}",
-    "name": "MyFirstApp",
-    "incomingCallUrl": "http://example.com/calls.php",
-    "incomingMessageUrl": "http://example.com/messages.php",
-    "autoAnswer": true
-  },
-  {
-    "id": "{applicationId}",
-    "name": "MySecondApp",
-    "incomingCallUrl": "http://example.com/app2/calls.php",
-    "incomingMessageUrl": "http://example.com/app2/messages.php",
-    "autoAnswer": false
-  }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{applicationId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MyFirstApp"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"incomingCallUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.com/calls.php"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"incomingMessageUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.com/messages.php"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"autoAnswer"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{applicationId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MySecondApp"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"incomingCallUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.com/app2/calls.php"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"incomingMessageUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.com/app2/messages.php"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"autoAnswer"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h2 id="post-applications">POST applications</h2>
 
@@ -1082,29 +1430,29 @@ NOTE: Properties you don&rsquo;t send will remain unchanged.
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-  {
-    "number": "{number1}",
-    "nationalNumber": "{national_number1}",
-    "patternMatch": "          2 9 ",
-    "city": "CARY",
-    "lata": "426",
-    "rateCenter": "CARY",
-    "state": "NC",
-    "price": "0.60"
-  },
-  {
-    "number": "{number2}",
-    "nationalNumber": "{national_number2}",
-    "patternMatch": "          2 9 ",
-    "city": "CARY",
-    "lata": "426",
-    "rateCenter": "CARY",
-    "state": "NC",
-    "price": "0.60"
-  }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number1}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"nationalNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{national_number1}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"patternMatch"</span><span class="p">:</span><span class="w"> </span><span class="s2">"          2 9 "</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CARY"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"lata"</span><span class="p">:</span><span class="w"> </span><span class="s2">"426"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"rateCenter"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CARY"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NC"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.60"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number2}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"nationalNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{national_number2}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"patternMatch"</span><span class="p">:</span><span class="w"> </span><span class="s2">"          2 9 "</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CARY"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"lata"</span><span class="p">:</span><span class="w"> </span><span class="s2">"426"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"rateCenter"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CARY"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NC"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.60"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h3 id="example-search-with-areacode-and-localnumber">Example: Search with areaCode and localNumber</h3>
 
@@ -1119,25 +1467,25 @@ NOTE: Properties you don&rsquo;t send will remain unchanged.
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-    {
-        "number": "{number1}",
-        "nationalNumber": "{national_number1}",
-        "city": "RALEIGH",
-        "rateCenter": "RALEIGH",
-        "state": "NC",
-        "price": "0.60"
-    },
-    {
-        "number": "{number2}",
-        "nationalNumber": "{national_number2}",
-        "city": "RALEIGH",
-        "rateCenter": "RALEIGH",
-        "state": "NC",
-        "price": "0.60"
-    }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"nationalNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{national_number1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RALEIGH"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"rateCenter"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RALEIGH"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NC"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.60"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"nationalNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{national_number2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RALEIGH"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"rateCenter"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RALEIGH"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NC"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.60"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h2 id="post-availablenumbers-local">POST availableNumbers/local</h2>
 
@@ -1221,21 +1569,21 @@ NOTE: Properties you don&rsquo;t send will remain unchanged.
 <blockquote>
 <p>The above command returns a <code class="prettyprint">201</code> response JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-    {
-        "number": "{number1}",
-        "nationalNumber": "{national_number1}",
-        "price": "0.60",
-        "location": "https://.../v1/users/.../phoneNumbers/{numberId1}"
-    },
-    {
-        "number": "{number2}",
-        "nationalNumber": "{national_number2}",
-        "price": "0.60",
-        "location": "https://.../v1/users/.../phoneNumbers/{numberId2}"
-    }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"nationalNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{national_number1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.60"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/.../phoneNumbers/{numberId1}"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"nationalNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{national_number2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.60"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/.../phoneNumbers/{numberId2}"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h2 id="get-availablenumbers-tollfree">GET availableNumbers/tollFree</h2>
 
@@ -1293,21 +1641,21 @@ NOTE: Properties you don&rsquo;t send will remain unchanged.
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-  {
-    "number":"{number1}",
-    "nationalNumber":"{national_number1}",
-    "patternMatch":"        2  9  ",
-    "price":"2.00"
-  },
-  {
-    "number":"{number2}",
-    "nationalNumber":"{national_number2}",
-    "patternMatch":"          2 9 ",
-    "price":"2.00"
-  }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"number"</span><span class="p">:</span><span class="s2">"{number1}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"nationalNumber"</span><span class="p">:</span><span class="s2">"{national_number1}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"patternMatch"</span><span class="p">:</span><span class="s2">"        2  9  "</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"price"</span><span class="p">:</span><span class="s2">"2.00"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"number"</span><span class="p">:</span><span class="s2">"{number2}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"nationalNumber"</span><span class="p">:</span><span class="s2">"{national_number2}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"patternMatch"</span><span class="p">:</span><span class="s2">"          2 9 "</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"price"</span><span class="p">:</span><span class="s2">"2.00"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h2 id="post-availablenumbers-tollfree">POST availableNumbers/tollFree</h2>
 
@@ -1362,21 +1710,21 @@ NOTE: Properties you don&rsquo;t send will remain unchanged.
 <blockquote>
 <p>The above command returns a <code class="prettyprint">201</code> response JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-    {
-        "number": "{number1}",
-        "nationalNumber": "{national_number1}",
-        "price": "2.00",
-        "location": "https://.../v1/users/.../phoneNumbers/{numberId1}"
-    },
-    {
-        "number": "{number2}",
-        "nationalNumber": "{national_number2}",
-        "price": "2.00",
-        "location": "https://.../v1/users/.../phoneNumbers/{numberId2}"
-    }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"nationalNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{national_number1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.00"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/.../phoneNumbers/{numberId1}"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"nationalNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{national_number2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.00"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/.../phoneNumbers/{numberId2}"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
           <h1 id="bridges">Bridges</h1>
 
@@ -1502,27 +1850,27 @@ NOTE: Properties you don&rsquo;t send will remain unchanged.
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-  {
-    "id": "{bridgeId}",
-    "state": "completed",
-    "bridgeAudio": "true",
-    "calls":"https://.../v1/users/{userId}/bridges/{bridgeId}/calls",
-    "createdTime": "2013-04-22T13:55:30.279Z",
-    "activatedTime": "2013-04-22T13:55:30.280Z",
-    "completedTime": "2013-04-22T13:56:30.122Z"
-  },
-  {
-    "id": "{bridgeId}",
-    "state": "completed",
-    "bridgeAudio": "true",
-    "calls":"https://.../v1/users/{userId}/bridges/{bridgeId}/calls",
-    "createdTime": "2013-04-22T13:58:30.121Z",
-    "activatedTime": "2013-04-22T13:58:30.122Z",
-    "completedTime": "2013-04-22T13:59:30.122Z"
-  }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{bridgeId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"bridgeAudio"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"calls"</span><span class="p">:</span><span class="s2">"https://.../v1/users/{userId}/bridges/{bridgeId}/calls"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"createdTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-04-22T13:55:30.279Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"activatedTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-04-22T13:55:30.280Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"completedTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-04-22T13:56:30.122Z"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{bridgeId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"bridgeAudio"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"calls"</span><span class="p">:</span><span class="s2">"https://.../v1/users/{userId}/bridges/{bridgeId}/calls"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"createdTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-04-22T13:58:30.121Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"activatedTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-04-22T13:58:30.122Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"completedTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-04-22T13:59:30.122Z"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h2 id="post-bridges">POST bridges</h2>
 
@@ -1827,35 +2175,35 @@ Location: /v1/users/{userId}/calls/{bridgeId}
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-    {
-        "activeTime": "2013-05-22T19:49:39Z",
-        "direction": "out",
-        "from": "{fromNumber}",
-        "id": "{callId1}",
-        "bridgeId": "{bridgeId}",
-        "startTime": "2013-05-22T19:49:35Z",
-        "state": "active",
-        "to": "{toNumber1}",
-        "recordingEnabled": false,
-        "events": "https://api.catapult.inetwork.com/v1/users/{userId}/calls/{callId1}/events",
-        "bridge": "https://api.catapult.inetwork.com/v1/users/{userId}/bridges/{bridgeId}"
-    },
-    {
-        "activeTime": "2013-05-22T19:50:16Z",
-        "direction": "out",
-        "from": "{fromNumber}",
-        "id": "{callId2}",
-        "bridgeId": "{bridgeId}",
-        "startTime": "2013-05-22T19:50:16Z",
-        "state": "active",
-        "to": "{toNumber2}",
-        "recordingEnabled": false,
-        "events": "https://api.catapult.inetwork.com/v1/users/{userId}/calls/{callId2}/events",
-        "bridge": "https://api.catapult.inetwork.com/v1/users/{userId}/bridges/{bridgeId}"
-    }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"activeTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-05-22T19:49:39Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{fromNumber}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"bridgeId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{bridgeId}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-05-22T19:49:35Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{toNumber1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"recordingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/calls/{callId1}/events"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"bridge"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/bridges/{bridgeId}"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"activeTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-05-22T19:50:16Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{fromNumber}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"bridgeId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{bridgeId}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-05-22T19:50:16Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{toNumber2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"recordingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/calls/{callId2}/events"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"bridge"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/bridges/{bridgeId}"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
           <h1 id="calls">Calls</h1>
 
@@ -2085,39 +2433,39 @@ Location: /v1/users/{userId}/calls/{bridgeId}
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-    {
-        "id": "{callId1}",
-        "direction": "out",
-        "from": "{fromNumber}",
-        "to": "{number}",
-        "recordingEnabled": false,
-        "callbackUrl": "",
-        "state": "completed",
-        "startTime": "2013-02-08T13:15:47.587Z",
-        "activeTime": "2013-02-08T13:15:52.347Z",
-        "endTime": "2013-02-08T13:15:55.887Z",
-        "chargeableDuration": 60,
-        "events": "https://.../calls/{callId1}/events",
-        "sipHeaders" : {
-                "X-Header-1" : "value-1",
-                "X-Header-2" : "value2"
-        }
-    },
-    {
-        "id": "{callId2}",
-        "direction": "out",
-        "from": "{number}",
-        "to": "{toNumber}",
-        "recordingEnabled": false,
-        "callbackUrl": "",
-        "state": "active",
-        "startTime": "2013-02-08T13:15:47.587Z",
-        "activeTime": "2013-02-08T13:15:52.347Z",
-        "events": "https://.../calls/{callId2}/events"
-    }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{fromNumber}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"recordingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"callbackUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:15:47.587Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"activeTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:15:52.347Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"endTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:15:55.887Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"chargeableDuration"</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../calls/{callId1}/events"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"sipHeaders"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"X-Header-1"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"value-1"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"X-Header-2"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"value2"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{toNumber}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"recordingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"callbackUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:15:47.587Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"activeTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:15:52.347Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../calls/{callId2}/events"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h3 id="example-list-your-calls-by-from-number-fromnumber">Example: List your calls by from number {fromNumber}</h3>
 <pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/calls?from<span class="o">=</span>%2b19195551212 <span class="se">\</span>
@@ -2135,35 +2483,35 @@ Location: /v1/users/{userId}/calls/{bridgeId}
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-    {
-        "id": "{callId1}",
-        "direction": "out",
-        "from": "{fromNumber}",
-        "to": "{toNumber1}",
-        "recordingEnabled": false,
-        "callbackUrl": "",
-        "state": "completed",
-        "startTime": "2013-02-08T13:15:47.587Z",
-        "activeTime": "2013-02-08T13:15:52.347Z",
-        "endTime": "2013-02-08T13:15:55.887Z",
-        "chargeableDuration": 60,
-        "events": "https://.../calls/{callId1}/events"
-    },
-    {
-        "id": "{callId2}",
-        "direction": "out",
-        "from": "{fromNumber}",
-        "to": "{toNumber2}",
-        "recordingEnabled": false,
-        "callbackUrl": "",
-        "state": "active",
-        "startTime": "2013-02-08T13:15:47.587Z",
-        "activeTime": "2013-02-08T13:15:52.347Z",
-        "events": "https://.../calls/{callId2}/events"
-    }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{fromNumber}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{toNumber1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"recordingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"callbackUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:15:47.587Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"activeTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:15:52.347Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"endTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:15:55.887Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"chargeableDuration"</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../calls/{callId1}/events"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{fromNumber}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{toNumber2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"recordingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"callbackUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:15:47.587Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"activeTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:15:52.347Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../calls/{callId2}/events"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h2 id="post-calls">POST calls</h2>
 
@@ -2641,61 +2989,61 @@ The call resource returned in the &ldquo;Location&rdquo; header can be modified 
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-    {
-        "id": "{callEventId1}",
-        "time": "2012-09-19T13:55:41.343Z",
-        "name": "create"
-    },
-    {
-        "id": "{callEventId2}",
-        "time": "2012-09-19T13:55:45.583Z",
-        "name": "answer"
-    },
-    {
-        "id": "{callEventId3}",
-        "time": "2012-09-19T13:55:45.583Z",
-        "name": "CHANNEL_EXECUTE",
-        "data": "{"applicationName":"park"}"
-    },
-    {
-        "id": "{callEventId4}",
-        "time": "2012-09-19T13:55:51.283Z",
-        "name": "CHANNEL_EXECUTE",
-        "data": "{"applicationName":"playback","applicationData":"test.mp3"}"
-    },
-    {
-        "id": "{callEventId5}",
-        "time": "2012-09-19T13:55:45.583Z",
-        "name": "playback",
-        "data": "start"
-    },
-    {
-        "id": "{callEventId6}",
-        "time": "2012-09-19T13:55:45.583Z",
-        "name": "playback",
-        "data": "done"
-    },
-    {
-        "id": "{callEventId7}",
-        "time": "2012-09-19T13:55:55.503Z",
-        "name": "CHANNEL_EXECUTE_COMPLETE",
-        "data": "{"applicationName":"playback","applicationData":"test.mp3"}"
-    },
-    {
-        "id": "{callEventId8}",
-        "time": "2012-09-19T13:55:58.323Z",
-        "name": "hangup",
-        "data": "NORMAL_CLEARING"
-    },
-    {
-        "id": "{callEventId9}",
-        "time": "2012-09-19T13:55:58.343Z",
-        "name": "CHANNEL_EXECUTE_COMPLETE",
-        "data": "{"applicationName":"playback","applicationData":"test.mp3"}"
-    }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callEventId1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-09-19T13:55:41.343Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"create"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callEventId2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-09-19T13:55:45.583Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"answer"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callEventId3}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-09-19T13:55:45.583Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CHANNEL_EXECUTE"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"applicationName\":\"park\"}"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callEventId4}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-09-19T13:55:51.283Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CHANNEL_EXECUTE"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"applicationName\":\"playback\",\"applicationData\":\"test.mp3\"}"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callEventId5}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-09-19T13:55:45.583Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"playback"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"start"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callEventId6}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-09-19T13:55:45.583Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"playback"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"done"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callEventId7}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-09-19T13:55:55.503Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CHANNEL_EXECUTE_COMPLETE"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"applicationName\":\"playback\",\"applicationData\":\"test.mp3\"}"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callEventId8}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-09-19T13:55:58.323Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hangup"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NORMAL_CLEARING"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callEventId9}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-09-19T13:55:58.343Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CHANNEL_EXECUTE_COMPLETE"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"applicationName\":\"playback\",\"applicationData\":\"test.mp3\"}"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h2 id="get-calls-callid-events-calleventid">GET calls/{callId}/events/{callEventId}</h2>
 
@@ -2739,28 +3087,25 @@ The call resource returned in the &ldquo;Location&rdquo; header can be modified 
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>GET /v1/{userId}/calls/{callId}/recordings
-HTTP/1.1 200 OK
-
-[
-    {
-        "endTime": "2013-02-08T12:06:55.007Z",
-        "id": "{recordingId1}",
-        "media": "https://.../v1/users/.../media/{callId}-1.wav",
-        "call": "https://.../v1/users/.../calls/{callId}",
-        "startTime": "2013-02-08T12:05:17.807Z",
-        "state": "complete"
-    },
-    {
-        "endTime": "2013-02-08T13:15:65.887Z",
-        "id": "{recordingId2}",
-        "media": "https://.../v1/users/.../media/{callId}-2.wav",
-        "call": "https://.../v1/users/.../calls/{callId}",
-        "startTime": "2013-02-08T13:15:55.887Z",
-        "state": "complete"
-    }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"endTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T12:06:55.007Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{recordingId1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/.../media/{callId}-1.wav"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"call"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/.../calls/{callId}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T12:05:17.807Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"complete"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"endTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:15:65.887Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{recordingId2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/.../media/{callId}-2.wav"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"call"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/.../calls/{callId}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:15:55.887Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"complete"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h2 id="get-calls-callid-transcriptions">GET calls/{callId}/transcriptions</h2>
 
@@ -3470,40 +3815,40 @@ Location: /v1/users/{userId}/conferences/{confId}/members/{memberId}
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-    {
-            "addedTime": "2013-07-12T15:54:47-02",
-            "hold": false,
-            "id": "{memberId1}",
-            "mute": false,
-            "state": "active",
-            "joinTone": false,
-            "leavingTone": false,
-            "call": "https://localhost:8444/v1/users/{userId}/calls/{callId1}"
-    },
-    {
-            "addedTime": "2013-07-12T15:55:12-02",
-            "hold": false,
-            "id": "{memberId2}",
-            "mute": false,
-            "state": "active",
-            "joinTone": false,
-            "leavingTone": false,
-            "call": "https://localhost:8444/v1/users/{userId}/calls/{callId2}"
-    },
-    {
-            "addedTime": "2013-07-12T15:56:12-02",
-            "hold": false,
-            "id": "{memberId3}",
-            "mute": false,
-            "removedTime": "2013-07-12T15:56:59-02",
-            "state": "completed",
-            "joinTone": false,
-            "leavingTone": false,
-            "call": "https://localhost:8444/v1/users/{userId}/calls/{callId3}"
-    }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"addedTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-07-12T15:54:47-02"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"hold"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{memberId1}"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"mute"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"joinTone"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"leavingTone"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"call"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://localhost:8444/v1/users/{userId}/calls/{callId1}"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"addedTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-07-12T15:55:12-02"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"hold"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{memberId2}"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"mute"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"joinTone"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"leavingTone"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"call"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://localhost:8444/v1/users/{userId}/calls/{callId2}"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"addedTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-07-12T15:56:12-02"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"hold"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{memberId3}"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"mute"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"removedTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-07-12T15:56:59-02"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"joinTone"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"leavingTone"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"call"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://localhost:8444/v1/users/{userId}/calls/{callId3}"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h2 id="post-conferences-conferenceid-members-memberid">POST conferences/{conferenceId}/members/{memberId}</h2>
 
@@ -3745,7 +4090,11 @@ Location: /v1/users/{userId}/conferences/{confId}/members/{memberId}
 
           <h1 id="domains">Domains</h1>
 
-<p>A domain is a way to logically group endpoints. There is a 100 domain max. per account limit. Most use cases require using a single domain for all endpoints. The name of the domain will be part of a public DNS record. For that reason, we let the customer choose their domain names. Once a domain has been created, endpoints can be created and managed within the context of the domain. Because endpoints can only exist within the context of a domain, creating a domain is the first step in creating endpoints.</p>
+<p>A domain is a way to logically group endpoints.  The name of the domain will be part of a public DNS record. For that reason, we let the customer choose their domain names. Once a domain has been created, endpoints can be created and managed within the context of the domain. Because endpoints can only exist within the context of a domain, creating a domain is the first step in creating endpoints.</p>
+
+<aside class="warning">
+There is a 100 domain max per account limit. Most use cases require using a single domain for all endpoints.
+</aside>
 
 <h2 id="properties">Properties</h2>
 
@@ -3789,21 +4138,21 @@ Location: /v1/users/{userId}/conferences/{confId}/members/{memberId}
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-{
-    "id" : "dom-xyz123",
-        "name" : "mycoolapp",
-    "description" : "disruptive app that's going to revolutonize telecom",
-        "endpoints" : "/v1/users/{user-id}/domains/dom-xyz123/endpoints"
-    },
-{
-    "id" : "dom-abc876",
-        "name" : "mycoolapp_stage",
-    "description" : "stage env for disruptive app",
-        "endpoints" : "/v1/users/{user-id}/domains/dom-abc876/endpoints"
-    }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+</span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"dom-xyz123"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"mycoolapp"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"disruptive app that's going to revolutonize telecom"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"endpoints"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"/v1/users/{user-id}/domains/dom-xyz123/endpoints"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+</span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"dom-abc876"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"mycoolapp_stage"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"stage env for disruptive app"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"endpoints"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"/v1/users/{user-id}/domains/dom-abc876/endpoints"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h2 id="post-domains">POST domains</h2>
 
@@ -3988,21 +4337,21 @@ Location: /v1/users/{user-id}/domains/{domain-id}
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-{
-    "name" : "jsmith-mobile",
-    "description" : "John Smiths mobile client",
-    "domainId" : "{domain-id}",
-    "applicationId" : "{application-id}",
-    "enabled" : "true",
-    "sipUri" : "jsmith-mobile@doname.bwapp.bwsipp.io",
-    "credentials" : {
-        "realm" : "doname.bwapp.bwsipp.io",
-        "username" : "jsmith-mobile"
-    }
-}
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+</span><span class="p">{</span><span class="w">
+    </span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"jsmith-mobile"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"John Smiths mobile client"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"domainId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"{domain-id}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"applicationId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"{application-id}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"enabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"sipUri"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"jsmith-mobile@doname.bwapp.bwsipp.io"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"credentials"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"realm"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"doname.bwapp.bwsipp.io"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"username"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"jsmith-mobile"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h2 id="post-domains-domain-id-endpoints">POST domains/{domain-id}/endpoints</h2>
 
@@ -4205,41 +4554,41 @@ Location: /v1/users/{user-id}/domains/{domain-id}/endpoints/{endpoint-id}
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-   {
-      "time" : "2012-11-15T01:30:16.208Z",
-      "category" : "unavailable",
-      "id" : "{userErrorId1}",
-      "details" : [
-         {
-            "id" : "{userErrorDetailId1}"
-            "name" : "applicationId",
-            "value" : "{applicationId}",
-         },
-         {
-            "id" : "{userErrorDetailId2}"
-            "name" : "number",
-            "value" : "{number}",
-         },
-         {
-            "id" : "{userErrorDetailId3}"
-            "name" : "callId",
-            "value" : "{callId}",
-         }
-      ],
-      "message" : "Application {applicationId} (\"Dial a Tune\") for number
-                   {number} does not specify a URL for call events",
-      "code" : "no-callback-for-call"
-   },
-   {
-      "time" : "2012-11-15T01:29:24.512Z",
-      "category" : "unavailable",
-      "id" : "{userErrorId2}",
-      "message" : "No application is configured for number +19195556666",
-      "code" : "no-application-for-number"
-   },
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+   </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"time"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-11-15T01:30:16.208Z"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"category"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"unavailable"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"{userErrorId1}"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"details"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+         </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"{userErrorDetailId1}"</span><span class="w">
+            </span><span class="s2">"name"</span><span class="w"> </span><span class="err">:</span><span class="w"> </span><span class="s2">"applicationId"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"{applicationId}"</span><span class="p">,</span><span class="w">
+         </span><span class="err">}</span><span class="p">,</span><span class="w">
+         </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"{userErrorDetailId2}"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"number"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"{number}"</span><span class="p">,</span><span class="w">
+         </span><span class="err">}</span><span class="p">,</span><span class="w">
+         </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"{userErrorDetailId3}"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"callId"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+         </span><span class="err">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nt">"message"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Application {applicationId} (\"Dial a Tune\") for number
+                   {number} does not specify a URL for call events"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"no-callback-for-call"</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"time"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-11-15T01:29:24.512Z"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"category"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"unavailable"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"{userErrorId2}"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"message"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"No application is configured for number +19195556666"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"no-application-for-number"</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h2 id="get-errors-usererrorid">GET errors/{userErrorId}</h2>
 
@@ -4328,24 +4677,24 @@ You can upload files up to `65MB` and file storage is free for an unlimited numb
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-  {
-    "contentLength": 561276,
-    "mediaName": "{mediaName1}",
-    "content": "api.catapult.inetwork.com/.../media/{mediaName1}"
-  },
-  {
-    "contentLength": 2703360,
-    "mediaName": "{mediaName2}",
-    "content": "https://api.catapult.inetwork.com/.../media/{mediaName2}"
-  },
-  {
-    "contentLength": 2257901,
-    "mediaName": "{mediaName3}",
-        "content": "https://api.catapult.inetwork.com/.../media/{mediaName3}"
-  }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"contentLength"</span><span class="p">:</span><span class="w"> </span><span class="mi">561276</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"mediaName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{mediaName1}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"api.catapult.inetwork.com/.../media/{mediaName1}"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"contentLength"</span><span class="p">:</span><span class="w"> </span><span class="mi">2703360</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"mediaName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{mediaName2}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/.../media/{mediaName2}"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"contentLength"</span><span class="p">:</span><span class="w"> </span><span class="mi">2257901</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"mediaName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{mediaName3}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/.../media/{mediaName3}"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h2 id="put-media-medianame">PUT media/{mediaName}</h2>
 
@@ -4708,56 +5057,57 @@ You can upload files up to `65MB` and file storage is free for an unlimited numb
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <pre class="highlight plaintext"><code>HEADER: &lt;https://api.catapult.inetwork.com/v1/users/u-dkjf9094802375s/messages?sortKeyLT=1458576004287000989&amp;size=1&gt;; rel="next"
-
-[
-    {
-        "id": "{messageId1}",
-        "messageId": "{messageId1}",
-        "from": "{fromNumber}",
-        "to": "{number}",
-        "text": "Good morning, this is a test message",
-        "time": "2012-10-05T20:37:38.048Z",
-        "direction": "out",
-        "state": "sent",
-        "media": []
-    },
-    {
-        "id": "{messageId2}",
-        "messageId": "{messageId2}",
-        "from": "{number}",
-        "to": "{toNumber}",
-        "text": "I received your test message",
-        "time": "2012-10-05T20:38:11.023Z",
-        "direction": "in",
-        "state": "received",
-        "media": []
-    },
-    {
-        "id": "{messageId3}",
-        "messageId": "{messageId3}",
-        "from": "{number}",
-        "to": "{toNumber}",
-        "text": "I received your MMS message",
-        "time": "2012-10-05T20:38:11.023Z",
-        "direction": "out",
-        "state": "sent",
-        "media": ["https://api.catapult.inetwork.com/v1/users/&lt;user-id&gt;/media/image.jpg"]
-    },
-    {
-        "id": "{messageId4}",
-        "messageId": "{messageId4}",
-        "from": "{number}",
-        "to": "{toNumber}",
-        "text": "I received your MMS message",
-        "time": "2012-10-05T20:38:11.023Z",
-        "direction": "out",
-        "state": "sent",
-        "media": ["https://api.catapult.inetwork.com/v1/users/&lt;user-id&gt;/media/image-1.jpg",
-                            "https://api.catapult.inetwork.com/v1/users/&lt;user-id&gt;/media/image-2.jpg",
-                            "http://customer-web-site.com/file.jpg"]
-    }
-]
 </code></pre>
+<pre class="highlight json"><code><span class="w">
+</span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"messageId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{fromNumber}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Good morning, this is a test message"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-05T20:37:38.048Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sent"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"messageId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{toNumber}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"I received your test message"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-05T20:38:11.023Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"in"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"received"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId3}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"messageId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId3}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{toNumber}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"I received your MMS message"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-05T20:38:11.023Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sent"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"https://api.catapult.inetwork.com/v1/users/&lt;user-id&gt;/media/image.jpg"</span><span class="p">]</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId4}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"messageId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId4}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{number}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{toNumber}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"I received your MMS message"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-05T20:38:11.023Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sent"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"https://api.catapult.inetwork.com/v1/users/&lt;user-id&gt;/media/image-1.jpg"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/&lt;user-id&gt;/media/image-2.jpg"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"http://customer-web-site.com/file.jpg"</span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h3 id="example-list-your-messages-by-from-number-fromnumber">Example: List your messages by from number {fromNumber}</h3>
 <pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/messages?from<span class="o">=</span>%2b<span class="o">{</span>fromNumber<span class="o">}</span> <span class="se">\</span>
@@ -4770,31 +5120,31 @@ You can upload files up to `65MB` and file storage is free for an unlimited numb
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-    {
-        "id": "{messageId1}",
-        "messageId": "{messageId1}",
-        "from": "{fromNumber}",
-        "to": "{toNumber1}",
-        "text": "Good morning, this is a test message",
-        "time": "2012-10-05T20:37:38.048Z",
-        "direction": "out",
-        "state": "sent",
-        "media": []
-    },
-    {
-        "id": "{messageId2}",
-        "messageId": "{messageId2}",
-        "from": "{fromNumber}",
-        "to": "{toNumber2}",
-        "text": "I received your test message",
-        "time": "2012-10-05T20:38:11.023Z",
-        "direction": "in",
-        "state": "received",
-        "media": []
-    }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"messageId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{fromNumber}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{toNumber1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Good morning, this is a test message"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-05T20:37:38.048Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sent"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"messageId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{fromNumber}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{toNumber2}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"I received your test message"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-05T20:38:11.023Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"in"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"received"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h3 id="example-gets-a-list-messages-filtering-the-direction-and-todatetime">Example: Gets a list messages filtering the direction and toDateTime</h3>
 <pre class="highlight shell"><code>curl -v -X GET https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>userId<span class="o">}</span>/messages?from<span class="o">=</span>%2b<span class="o">{</span>fromNumber<span class="o">}</span>&amp;direction<span class="o">=</span>out&amp;toDateTime<span class="o">=</span>2012-10-05%2020:37:39 <span class="se">\</span>
@@ -4807,20 +5157,20 @@ You can upload files up to `65MB` and file storage is free for an unlimited numb
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-    {
-        "id": "{messageId1}",
-        "messageId": "{messageId1}",
-        "from": "{fromNumber}",
-        "to": "{toNumber1}",
-        "text": "Good morning, this is a test message",
-        "time": "2012-10-05T20:37:38.048Z",
-        "direction": "out",
-        "state": "sent",
-        "media": []
-    }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"messageId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{fromNumber}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{toNumber1}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Good morning, this is a test message"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-05T20:37:38.048Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sent"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h2 id="post-messages">POST messages</h2>
 
@@ -5311,31 +5661,31 @@ Location: /v1/users/{userId}/messages/{messageId}
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-{
-   "id": "{numberId1}",
-   "application": "https://catapult.inetwork.com/v1/users/users/u-ly123/applications/a-j321",
-   "number":"{number1}",
-   "nationalNumber":"{national_number1}",
-   "name": "home phone",
-   "createdTime": "2013-02-13T17:46:08.374Z",
-   "state": "NC",
-   "price": "0.60",
-   "numberState": "enabled"
-},
-{
-   "id": "{numberId2}",
-   "application": "https://catapult.inetwork.com/v1/users/users/u-ly123/applications/a-j123",
-   "number":"{number2}",
-   "nationalNumber":"{national_number2}",
-   "name": "work phone",
-   "createdTime": "2013-02-13T18:32:05.223Z",
-   "state": "NC",
-   "price": "0.60",
-   "numberState": "enabled"
-}
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+</span><span class="p">{</span><span class="w">
+   </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{numberId1}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"application"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://catapult.inetwork.com/v1/users/users/u-ly123/applications/a-j321"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"number"</span><span class="p">:</span><span class="s2">"{number1}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"nationalNumber"</span><span class="p">:</span><span class="s2">"{national_number1}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"home phone"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"createdTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-13T17:46:08.374Z"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NC"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.60"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"numberState"</span><span class="p">:</span><span class="w"> </span><span class="s2">"enabled"</span><span class="w">
+</span><span class="p">},</span><span class="w">
+</span><span class="p">{</span><span class="w">
+   </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{numberId2}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"application"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://catapult.inetwork.com/v1/users/users/u-ly123/applications/a-j123"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"number"</span><span class="p">:</span><span class="s2">"{number2}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"nationalNumber"</span><span class="p">:</span><span class="s2">"{national_number2}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"work phone"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"createdTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-13T18:32:05.223Z"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NC"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.60"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"numberState"</span><span class="p">:</span><span class="w"> </span><span class="s2">"enabled"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h2 id="post-phonenumbers">POST phoneNumbers</h2>
 
@@ -5621,33 +5971,33 @@ Location: /v1/users/{userId}/phoneNumbers/{numberId}
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-{
-    "endTime": "2013-02-08T13:17:12.181Z",
-    "id": "{recordingId1}",
-    "media": "https://.../v1/users/.../media/{callId1}-1.wav",
-    "call": "https://.../v1/users/.../calls/{callId1}",
-    "startTime": "2013-02-08T13:15:47.587Z",
-    "state": "complete"
-  },
-  {
-    "endTime": "2013-02-08T14:05:15.587Z",
-    "id": "{recordingId2}",
-    "media": "https://.../v1/users/.../media/{callId1}-2.wav",
-    "call": "https://.../v1/users/.../calls/{callId1}",
-    "startTime": "2013-02-08T14:03:47.587Z",
-    "state": "complete"
-  },
-  {
-    "endTime": "2013-02-08T13:34:07.507Z",
-    "id": "{recordingId3}",
-    "media": "https://.../v1/users/.../media/{callId2}-1.wav",
-    "call": "https://.../v1/users/.../calls/{call2}",
-    "startTime": "2013-02-08T13:28:47.587Z",
-    "state": "complete"
-  }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+</span><span class="p">{</span><span class="w">
+    </span><span class="nt">"endTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:17:12.181Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{recordingId1}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/.../media/{callId1}-1.wav"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"call"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/.../calls/{callId1}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:15:47.587Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"complete"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"endTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T14:05:15.587Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{recordingId2}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/.../media/{callId1}-2.wav"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"call"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/.../calls/{callId1}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T14:03:47.587Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"complete"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"endTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:34:07.507Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{recordingId3}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/.../media/{callId2}-1.wav"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"call"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://.../v1/users/.../calls/{call2}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-02-08T13:28:47.587Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"complete"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
 <h2 id="get-recordings-recordingid">GET recordings/{recordingId}</h2>
 
@@ -5814,27 +6164,27 @@ Location: /v1/users/{user-id}/recordings/{recording-id}/transcriptions/{transcri
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-    {
-        "chargeableDuration": 60,
-        "id": "{transcription-id}",
-        "state": "completed",        
-        "time": "2014-10-09T12:09:16Z",
-        "text": "{transcription-text}",
-        "textSize": 3627,
-        "textUrl": "{url-to-full-text}"
-    },
-    {
-        "chargeableDuration": 60,
-        "id": "{transcription-id}",
-        "state": "completed",
-        "text": "{transcription-text}",
-        "time": "2014-10-09T14:04:44Z",
-        "textSize": 72,
-        "textUrl": "{url-to-full-text}"
-    }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"chargeableDuration"</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{transcription-id}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">        
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-10-09T12:09:16Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{transcription-text}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"textSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">3627</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"textUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{url-to-full-text}"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"chargeableDuration"</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{transcription-id}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{transcription-text}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-10-09T14:04:44Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"textSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">72</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"textUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{url-to-full-text}"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
           <h1 id="intelligence-services-beta">Intelligence Services BETA</h1>
 
@@ -5917,24 +6267,25 @@ Early access will begin in Q3. Email signup@bandwidth.com to obtain early access
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-    {
-        "number":"5554446666",
-        "nationalNumber":"+15554446666",
-        "carrier": "AT&amp;T Wireless",
-        "lineType": "Mobile",
-        "reputationScore": "4",
-        "riskType": "Spam",
-        "riskCategory": "Phishing"
-    }
-]
-</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"number"</span><span class="p">:</span><span class="s2">"5554446666"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"nationalNumber"</span><span class="p">:</span><span class="s2">"+15554446666"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"carrier"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AT&amp;T Wireless"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"lineType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mobile"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"reputationScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"riskType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Spam"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"riskCategory"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Phishing"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
 
       </div>
       <div class="dark-box">
           <div class="lang-selector">
                 <a href="#" data-language-name="shell">curl</a>
                 <a href="#" data-language-name="javascript">NodeJS</a>
+                <a href="#" data-language-name="csharp">csharp</a>
           </div>
       </div>
     </div>
