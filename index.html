@@ -111,7 +111,7 @@
       <div id="toc">
       </div>
         <ul class="toc-footer">
-            <li><a href='http://bandwidth.com/products/application-platform/?utm_medium=social&utm_source=docs&utm_campaign=dtolb&utm_content=_'>Create an API Key</a></li>
+            <li><a href='http://bandwidth.com/products/application-platform/?utm_medium=social&utm_source=docs&utm_campaign=dtolb&utm_content=_'>Sign up for Bandwidth</a></li>
             <li><a href='http://github.com/tripit/slate'>Documentation by Slate</a></li>
         </ul>
     </div>
@@ -126,99 +126,9 @@
 <p><a href="http://bandwidth.com/products/application-platform/?utm_medium=social&amp;utm_source=docs&amp;utm_campaign=dtolb&amp;utm_content=_">Sign up</a> for a free Bandwidth API account.
 Get a number under the “My Numbers” tab (more specific instructions here)</p>
 
-<h1 id="send-your-first-sms-message">Send your first SMS Message</h1>
+<h2 id="send-your-first-sms-message">Send your first SMS Message</h2>
 
 <p>To send your first SMS message we have included instructions for using Postman, a helpful program for testing APIs <a href="https://www.getpostman.com/">download</a>, and also code that can be found further down this page.</p>
-
-          <h1 id="intelligence-services">Intelligence Services</h1>
-
-<p>Use number intelligence to block traffic from spammers and fraudsters. This feature is in beta. Early access will begin in Q3. Email signup@bandwidth.com to obtain early access.</p>
-
-<h2 id="number-intelligence-properties">Number Intelligence Properties</h2>
-
-<table><thead>
-<tr>
-<th style="text-align: left">PROPERTY</th>
-<th style="text-align: left">DESCRIPTION</th>
-</tr>
-</thead><tbody>
-<tr>
-<td style="text-align: left">number</td>
-<td style="text-align: left">The telephone number in E.164 format. <code class="prettyprint">+13334445555</code></td>
-</tr>
-<tr>
-<td style="text-align: left">nationalNumber</td>
-<td style="text-align: left">The telephone number in a friendly national format, e.g. (555) 555-5555</td>
-</tr>
-<tr>
-<td style="text-align: left">carrier</td>
-<td style="text-align: left">The company who provides the service for this number.</td>
-</tr>
-<tr>
-<td style="text-align: left">lineType</td>
-<td style="text-align: left">The type of service provided on this number. Options include: <code class="prettyprint">landline</code>, <code class="prettyprint">fixed_voip</code>, <code class="prettyprint">non_fixed_voip</code>, <code class="prettyprint">mobile</code>,<code class="prettyprint">voicemail</code>, <code class="prettyprint">tollfree</code>, <code class="prettyprint">premium</code>, <code class="prettyprint">other</code>.</td>
-</tr>
-<tr>
-<td style="text-align: left">reputationScore</td>
-<td style="text-align: left">Measures the risk of the number being associated with spam / fraudulent behavior. Valid values between 1 - 4.</td>
-</tr>
-<tr>
-<td style="text-align: left">riskType</td>
-<td style="text-align: left">Type of risk this number is associated with. Types include <code class="prettyprint">spam</code>, <code class="prettyprint">risk</code>, <code class="prettyprint">not_applicable</code>.</td>
-</tr>
-<tr>
-<td style="text-align: left">riskCategory</td>
-<td style="text-align: left">Category of risk associated with the number. Categories include: <code class="prettyprint">not_spam</code>, <code class="prettyprint">debt_collector</code> ,<code class="prettyprint">telemarketer</code>, <code class="prettyprint">political_call</code>, <code class="prettyprint">phone_survey</code>, <code class="prettyprint">phishing,extortion</code>, <code class="prettyprint">irs_scam</code>, <code class="prettyprint">tax_scam</code>, <code class="prettyprint">tech_support_scam</code>, <code class="prettyprint">vacation_scam</code>, <code class="prettyprint">lucky_winner_scam</code>, <code class="prettyprint">scam</code>, <code class="prettyprint">tollfree_pumping</code>, <code class="prettyprint">other_spam.</code></td>
-</tr>
-</tbody></table>
-
-<h2 id="get-intelligenceservices">GET intelligenceServices</h2>
-
-<p>This resource will provide number intelligence data for the number provided.</p>
-
-<table><thead>
-<tr>
-<th><code class="prettyprint">GET</code></th>
-<th>/v1/users/{user-id}/intelligenceServices/number/{number}</th>
-</tr>
-</thead><tbody>
-</tbody></table>
-
-<h3 id="supported-parameters">Supported Parameters</h3>
-
-<table><thead>
-<tr>
-<th style="text-align: left">PARAMETER</th>
-<th style="text-align: left">DESCRIPTION</th>
-<th style="text-align: left">MANDATORY</th>
-</tr>
-</thead><tbody>
-<tr>
-<td style="text-align: left">reputation</td>
-<td style="text-align: left">Includes number reputation information.</td>
-<td style="text-align: left">no</td>
-</tr>
-</tbody></table>
-<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/intelligenceServices/number/15554446666?reputation<span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
-  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
-  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
-</code></pre>
-
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight plaintext"><code>[
-    {
-        "number":"5554446666",
-        "nationalNumber":"+15554446666",
-        "carrier": "AT&amp;T Wireless",
-        "lineType": "Mobile",
-        "reputationScore": "4",
-        "riskType": "Spam",
-        "riskCategory": "Phishing"
-    }
-]
-</code></pre>
 
           <h1 id="account">Account</h1>
 
@@ -5781,7 +5691,11 @@ Location: /v1/users/{userId}/phoneNumbers/{numberId}
 <p>The Transcription resource lets you transcribe a voicemail recording. This resource can be either created automatically when the call property transcriptionEnabled is set to true, when call is created, or during the call by posting an event. The transcription is based on a call audio recording. By enabling/disabling call property recordingEnabled, a call can have more than one recording, so it&rsquo;s possible to have one or more transcriptions for each one of those recordings. When transcriptionEnabled is set to true all the recordings generated within that call are going to be transcribed, i.e, if you start to record a call, at any given time when the call is active, and then terminate the recording, the transcription resource will be automatically started for this recording; this process can happen many times.</p>
 
 <aside class="notice">
-It is important to note that our transcription service has been specifically tuned to transcribe voicemail recordings. It will not perform accurately when used in other scenarios such as IVR or support conversation recording. If you are interested in using transcription for these use cases, please contact us at .
+It is important to note that our transcription service has been specifically tuned to transcribe voicemail recordings. It will not perform accurately when used in other scenarios such as IVR or support conversation recording.
+</aside>
+
+<aside class="success">
+If you are interested in using transcription for these use cases, please contact us at signup@bandwidth.com.
 </aside>
 
 <h2 id="properties">Properties</h2>
@@ -5918,6 +5832,100 @@ Location: /v1/users/{user-id}/recordings/{recording-id}/transcriptions/{transcri
         "time": "2014-10-09T14:04:44Z",
         "textSize": 72,
         "textUrl": "{url-to-full-text}"
+    }
+]
+</code></pre>
+
+          <h1 id="intelligence-services-beta">Intelligence Services BETA</h1>
+
+<p>Use number intelligence to block traffic from spammers and fraudsters. This feature is in beta.</p>
+
+<aside class="success">
+Early access will begin in Q3. Email signup@bandwidth.com to obtain early access.
+</aside>
+
+<h2 id="number-intelligence-properties">Number Intelligence Properties</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">PROPERTY</th>
+<th style="text-align: left">DESCRIPTION</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">number</td>
+<td style="text-align: left">The telephone number in E.164 format. <code class="prettyprint">+13334445555</code></td>
+</tr>
+<tr>
+<td style="text-align: left">nationalNumber</td>
+<td style="text-align: left">The telephone number in a friendly national format, e.g. (555) 555-5555</td>
+</tr>
+<tr>
+<td style="text-align: left">carrier</td>
+<td style="text-align: left">The company who provides the service for this number.</td>
+</tr>
+<tr>
+<td style="text-align: left">lineType</td>
+<td style="text-align: left">The type of service provided on this number. Options include: <code class="prettyprint">landline</code>, <code class="prettyprint">fixed_voip</code>, <code class="prettyprint">non_fixed_voip</code>, <code class="prettyprint">mobile</code>,<code class="prettyprint">voicemail</code>, <code class="prettyprint">tollfree</code>, <code class="prettyprint">premium</code>, <code class="prettyprint">other</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">reputationScore</td>
+<td style="text-align: left">Measures the risk of the number being associated with spam / fraudulent behavior. Valid values between 1 - 4.</td>
+</tr>
+<tr>
+<td style="text-align: left">riskType</td>
+<td style="text-align: left">Type of risk this number is associated with. Types include <code class="prettyprint">spam</code>, <code class="prettyprint">risk</code>, <code class="prettyprint">not_applicable</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">riskCategory</td>
+<td style="text-align: left">Category of risk associated with the number. Categories include: <code class="prettyprint">not_spam</code>, <code class="prettyprint">debt_collector</code> ,<code class="prettyprint">telemarketer</code>, <code class="prettyprint">political_call</code>, <code class="prettyprint">phone_survey</code>, <code class="prettyprint">phishing,extortion</code>, <code class="prettyprint">irs_scam</code>, <code class="prettyprint">tax_scam</code>, <code class="prettyprint">tech_support_scam</code>, <code class="prettyprint">vacation_scam</code>, <code class="prettyprint">lucky_winner_scam</code>, <code class="prettyprint">scam</code>, <code class="prettyprint">tollfree_pumping</code>, <code class="prettyprint">other_spam.</code></td>
+</tr>
+</tbody></table>
+
+<h2 id="get-intelligenceservices">GET intelligenceServices</h2>
+
+<p>This resource will provide number intelligence data for the number provided.</p>
+
+<table><thead>
+<tr>
+<th><code class="prettyprint">GET</code></th>
+<th>/v1/users/{user-id}/intelligenceServices/number/{number}</th>
+</tr>
+</thead><tbody>
+</tbody></table>
+
+<h3 id="supported-parameters">Supported Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">PARAMETER</th>
+<th style="text-align: left">DESCRIPTION</th>
+<th style="text-align: left">MANDATORY</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">reputation</td>
+<td style="text-align: left">Includes number reputation information.</td>
+<td style="text-align: left">no</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user-id<span class="o">}</span>/intelligenceServices/number/15554446666?reputation<span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>[
+    {
+        "number":"5554446666",
+        "nationalNumber":"+15554446666",
+        "carrier": "AT&amp;T Wireless",
+        "lineType": "Mobile",
+        "reputationScore": "4",
+        "riskType": "Spam",
+        "riskCategory": "Phishing"
     }
 ]
 </code></pre>
