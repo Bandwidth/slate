@@ -1,0 +1,117 @@
+<h2 id="conference-member-event">Conference Member Event</h2>
+
+<p>Bandwidth API sends this message to the application when a conference member has joined / left the conference or when it as muted or put on hold.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is <code class="prettyprint">conference-member.</code></td>
+</tr>
+<tr>
+<td style="text-align: left">activeMembers</td>
+<td style="text-align: left">Number of active members in conference.</td>
+</tr>
+<tr>
+<td style="text-align: left">conferenceId</td>
+<td style="text-align: left">The conference id associated with the event.</td>
+</tr>
+<tr>
+<td style="text-align: left">callId</td>
+<td style="text-align: left">The call id of the specific call of the member in conference.</td>
+</tr>
+<tr>
+<td style="text-align: left">memberId</td>
+<td style="text-align: left">The unique member id of the member in the conference.</td>
+</tr>
+<tr>
+<td style="text-align: left">memberUri</td>
+<td style="text-align: left">The full URL of the member resource.</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">Status of member in conference. Values are <code class="prettyprint">active</code> or <code class="prettyprint">completed</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">hold</td>
+<td style="text-align: left">Members is on hold in conference and can not hear or speak. Values are <code class="prettyprint">true</code> or <code class="prettyprint">false</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">mute</td>
+<td style="text-align: left">Members audio is muted in conference. Values are <code class="prettyprint">true</code> or <code class="prettyprint">false</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">Date/time of event. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"activeMembers"</span><span class="p">:</span><span class="w"> </span><span class="s2">"integer"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"hold"</span><span class="p">:</span><span class="w"> </span><span class="s2">"boolean"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"memberId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"memberUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"mute"</span><span class="p">:</span><span class="w"> </span><span class="s2">"boolean"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-a-member-has-joined-the-conference">Example: A member has joined the conference</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"activeMembers"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"conference-member"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"hold"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"memberId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{memberId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"memberUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/conferences/{conferenceId}/members/{memberId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"mute"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-07-12T20:53:11.646Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-a-member-has-left-the-conference">Example: A member has left the conference</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"activeMembers"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"conference-member"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"hold"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"memberId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{memberId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"memberUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/conferences/{conferenceId}/members/{memberId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"mute"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-07-12T20:53:11.646Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-a-member-was-muted">Example: A member was muted</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"activeMembers"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"conference-member"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"hold"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"memberId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{memberId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"memberUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/conferences/{conferenceId}/members/{memberId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"mute"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-07-12T20:53:11.646Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>

@@ -133,7 +133,7 @@ Get a number under the “My Numbers” tab (more specific instructions here)</p
 <a href="https://david-dm.org/bandwidthcom/node-bandwidth"><img alt="dependencies" src="https://david-dm.org/bandwidthcom/node-bandwidth.svg" /></a>
 <a href="https://snyk.io/package/npm/node-bandwidth"><img alt="Known Vulnerabilities" src="https://snyk.io/package/npm/node-bandwidth/badge.svg" /></a></p>
 
-<p><a href="https://github.com/bandwidthcom/node-bandwidth"><img alt="github" src="http://docs.whitesourcesoftware.com/download/attachments/17989744/github_logo.png?version=1&amp;modificationDate=1463491374000" /></a></p>
+<p><a href="https://github.com/bandwidthcom/node-bandwidth"><img alt="github" src="images/github_logo.png" /></a></p>
 
 <p>The current version is v2, released 5 August, 2016. Version 1.3.3 is available  <a href="https://github.com/bandwidthcom/node-bandwidth/tree/v1.3.3">here</a>.</p>
 
@@ -290,7 +290,7 @@ Get a number under the “My Numbers” tab (more specific instructions here)</p
 <a href="https://travis-ci.org/bandwidthcom/csharp-bandwidth"><img alt="Build on .Net Core (Linux)" src="https://travis-ci.org/bandwidthcom/csharp-bandwidth.svg" /></a>
 <a href="https://coveralls.io/github/bandwidthcom/csharp-bandwidth"><img alt="Coverage Status" src="https://coveralls.io/repos/github/bandwidthcom/csharp-bandwidth/badge.svg" /></a></p>
 
-<p><a href="https://github.com/bandwidthcom/csharp-bandwidth/tree/v3-preview"><img alt="github" src="http://docs.whitesourcesoftware.com/download/attachments/17989744/github_logo.png?version=1&amp;modificationDate=1463491374000" /></a></p>
+<p><a href="https://github.com/bandwidthcom/csharp-bandwidth/tree/v3-preview"><img alt="github" src="images/github_logo.png" /></a></p>
 
 <p><a href="http://bwdemos.com/csharp-bandwidth/html/R_Project_API.htm">Full API Reference</a></p>
 
@@ -446,7 +446,7 @@ Get a number under the “My Numbers” tab (more specific instructions here)</p
 
 <p><a href="https://travis-ci.org/bandwidthcom/python-bandwidth"><img alt="Build Status" src="https://travis-ci.org/bandwidthcom/python-bandwidth.svg?branch=master" /></a> <a href="https://caniusepython3.com/project/bandwidth-sdk"><img alt="Can I Use Python 3?" src="https://caniusepython3.com/project/bandwidth-sdk.svg" /></a></p>
 
-<p><a href="https://github.com/bandwidthcom/python-bandwidth"><img alt="github" src="http://docs.whitesourcesoftware.com/download/attachments/17989744/github_logo.png?version=1&amp;modificationDate=1463491374000" /></a></p>
+<p><a href="https://github.com/bandwidthcom/python-bandwidth"><img alt="github" src="images/github_logo.png" /></a></p>
 
 <p>Client library for the <a href="http://ap.bandwidth.com/docs/rest-api/">Bandwidth App Platform</a></p>
 
@@ -467,7 +467,7 @@ Get a number under the “My Numbers” tab (more specific instructions here)</p
 
           <h2 id="java-library">Java Library</h2>
 
-<p><a href="https://github.com/bandwidthcom/java-bandwidth"><img alt="github" src="http://docs.whitesourcesoftware.com/download/attachments/17989744/github_logo.png?version=1&amp;modificationDate=1463491374000" /></a></p>
+<p><a href="https://github.com/bandwidthcom/java-bandwidth"><img alt="github" src="images/github_logo.png" /></a></p>
 
 <p><a href="http://www.javadoc.io/doc/com.bandwidth.sdk/bandwidth-java-sdk"><img alt="Javadocs" src="http://www.javadoc.io/badge/com.bandwidth.sdk/bandwidth-java-sdk.svg" /></a></p>
 
@@ -6233,16 +6233,6 @@ Early access will begin in Q3. Email signup@bandwidth.com to obtain early access
 
 <h2 id="get-intelligenceservices">GET intelligenceServices</h2>
 
-<p>This resource will provide number intelligence data for the number provided.</p>
-
-<table><thead>
-<tr>
-<th><code class="prettyprint">GET</code></th>
-<th>/v1/users/{user-id}/intelligenceServices/number/{number}</th>
-</tr>
-</thead><tbody>
-</tbody></table>
-
 <h3 id="supported-parameters">Supported Parameters</h3>
 
 <table><thead>
@@ -6278,6 +6268,2150 @@ Early access will begin in Q3. Email signup@bandwidth.com to obtain early access
     </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
+
+          <h1 id="rest-api-callbacks">Rest API Callbacks</h1>
+
+<p>HTTP Callback events (Webhooks) are events that are sent to your application server via HTTP to notify you of activity related to your Bandwidth phone numbers, phone calls and messages.</p>
+
+<h2 id="how-to-receive-http-callback-events-on-your-web-server">How to receive HTTP callback events on your web server</h2>
+
+<p>You can set the URL to receive these events in two ways:</p>
+
+<ul>
+<li>Create <a href="#applications">/applications</a>, set incomingCallUrl and incomingMessageUrl and associate the applications to the <a href="#phone-numbers">/phoneNumbers</a> you want to receive HTTP callback events for.</li>
+<li>Create an outgoing <a href="#post-calls">/calls</a> and <a href="#post-messages">/messages</a> set the callbackUrl property to your web server endpoint</li>
+</ul>
+
+<p>When you set callback URLs in an application you create, Bandwidth API will send events as JSON objects to those URLs as they happen. Based on these events, the program that serves these URLs can control the flow of calls and messages by calling back to Bandwidth APIs.</p>
+
+<p><img alt="diagram" src="images/callback-events1.png" /></p>
+
+<h2 id="securing-your-web-server-with-http-basic-auth">Securing your web server with HTTP Basic Auth</h2>
+
+<p>You can password protect your web server for Bandwidth Callbacks for example:</p>
+
+<p><code class="prettyprint">https://username:password@yoursecurehost.com/yoursecureapp</code></p>
+
+          <h2 id="sms-event">SMS Event</h2>
+
+<p>Bandwidth API sends this event to the application when an SMS is sent or received.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is <code class="prettyprint">sms</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">direction</td>
+<td style="text-align: left">Direction of message, <br>* <code class="prettyprint">in</code> - a message that came from the telephone network to one of your numbers (an “inbound” message) <br> * <code class="prettyprint">out</code> - a message that was sent from one of your numbers to the telephone network (an “outbound” message)</td>
+</tr>
+<tr>
+<td style="text-align: left">from</td>
+<td style="text-align: left">The message sender’s telephone number (or short code).</td>
+</tr>
+<tr>
+<td style="text-align: left">to</td>
+<td style="text-align: left">Message recipient telephone number (or short code).</td>
+</tr>
+<tr>
+<td style="text-align: left">messageId</td>
+<td style="text-align: left">The unique id of the message resource for this event.</td>
+</tr>
+<tr>
+<td style="text-align: left">messageUri</td>
+<td style="text-align: left">The full URL of the message resource.</td>
+</tr>
+<tr>
+<td style="text-align: left">text</td>
+<td style="text-align: left">The message’s text contents.</td>
+</tr>
+<tr>
+<td style="text-align: left">applicationId</td>
+<td style="text-align: left">The application id associated with the phone number receiving the inbound message.</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">The time the message resource was created (UTC, follows the ISO 8601 format).</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">Message state, values are received queued sending sent error</td>
+</tr>
+<tr>
+<td style="text-align: left">deliveryState</td>
+<td style="text-align: left">One of the message delivery states <code class="prettyprint">waiting</code> <code class="prettyprint">delivered</code> <code class="prettyprint">not-delivered</code></td>
+</tr>
+<tr>
+<td style="text-align: left">deliveryCode</td>
+<td style="text-align: left">Numeric value of deliver code, see values <a href="#message-delivery-code">here</a>.</td>
+</tr>
+<tr>
+<td style="text-align: left">deliveryDescription</td>
+<td style="text-align: left">Message delivery description for the respective delivery code.</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"messageId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"messageUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"applicationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"deliveryState"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"deliveryCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"deliveryDescription"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-incoming-sms-event">Example: Incoming SMS Event</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+ </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"sms"</span><span class="p">,</span><span class="w">
+ </span><span class="nt">"direction"</span><span class="p">:</span><span class="s2">"in"</span><span class="p">,</span><span class="w">
+ </span><span class="nt">"messageId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId}"</span><span class="p">,</span><span class="w">
+ </span><span class="nt">"messageUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/messages/{messageId}"</span><span class="p">,</span><span class="w">
+ </span><span class="nt">"from"</span><span class="p">:</span><span class="s2">"+13233326955"</span><span class="p">,</span><span class="w">
+ </span><span class="nt">"to"</span><span class="p">:</span><span class="s2">"+13865245000"</span><span class="p">,</span><span class="w">
+ </span><span class="nt">"text"</span><span class="p">:</span><span class="s2">"Example"</span><span class="p">,</span><span class="w">
+ </span><span class="nt">"applicationId"</span><span class="p">:</span><span class="s2">"{appId}"</span><span class="p">,</span><span class="w">
+ </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2012-11-14T16:13:06.076Z"</span><span class="p">,</span><span class="w">
+ </span><span class="nt">"state"</span><span class="p">:</span><span class="s2">"received"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-outgoing-sms-event">Example: Outgoing SMS Event</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"sms"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"direction"</span><span class="p">:</span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"messageId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"messageUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/messages/{messageId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"from"</span><span class="p">:</span><span class="s2">"+13233326955"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"to"</span><span class="p">:</span><span class="s2">"+13865245000"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"text"</span><span class="p">:</span><span class="s2">"Example"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2012-11-14T16:13:06.076Z"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"state"</span><span class="p">:</span><span class="s2">"sent"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-outgoing-sms-with-delivery-request-event">Example: Outgoing SMS with Delivery Request Event</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"sms"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"direction"</span><span class="p">:</span><span class="s2">"in"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"messageId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{messageId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"messageUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/messages/{messageId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"from"</span><span class="p">:</span><span class="s2">"+13233326955"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"to"</span><span class="p">:</span><span class="s2">"+13865245000"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"text"</span><span class="p">:</span><span class="s2">"Example"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"applicationId"</span><span class="p">:</span><span class="s2">"{appId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2012-11-14T16:13:06.076Z"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"state"</span><span class="p">:</span><span class="s2">"received"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="mms-event">MMS Event</h2>
+
+<p>Events sent to your server for inbound and outbound MMS messages.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">PROPERTY</th>
+<th style="text-align: left">DESCRIPTION</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is <code class="prettyprint">mms</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">direction</td>
+<td style="text-align: left">Direction of message<br> * <code class="prettyprint">in</code> - a message that came from the telephone network to one of your numbers (an “inbound” message)<br>*<code class="prettyprint">out</code> - a message that was sent from one of your numbers to the telephone network (an “outbound” message)</td>
+</tr>
+<tr>
+<td style="text-align: left">from</td>
+<td style="text-align: left">The message sender’s telephone number (or short code).</td>
+</tr>
+<tr>
+<td style="text-align: left">to</td>
+<td style="text-align: left">Message recipient telephone number (or short code).</td>
+</tr>
+<tr>
+<td style="text-align: left">messageId</td>
+<td style="text-align: left">The unique id of the message resource for this event.</td>
+</tr>
+<tr>
+<td style="text-align: left">messageUri</td>
+<td style="text-align: left">The full URL of the message resource.</td>
+</tr>
+<tr>
+<td style="text-align: left">text</td>
+<td style="text-align: left">The message contents.</td>
+</tr>
+<tr>
+<td style="text-align: left">applicationId</td>
+<td style="text-align: left">The application id associated with the phone number receiving the inbound messages.</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">The time the message resource was created (UTC, follows the ISO 8601 format).</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">Message state, values are <code class="prettyprint">received</code> <code class="prettyprint">queued</code> <code class="prettyprint">sending</code> <code class="prettyprint">sent</code> <code class="prettyprint">error</code></td>
+</tr>
+<tr>
+<td style="text-align: left">media</td>
+<td style="text-align: left">URIs of media files associate with the MMS message.</td>
+</tr>
+</tbody></table>
+
+<h4 id="example-inbound-mms">Example: Inbound MMS</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"mms"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"to"</span><span class="p">:</span><span class="s2">"+12534483100"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"from"</span><span class="p">:</span><span class="s2">"+15035555555"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2015-08-04T21:50:12Z"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"text"</span><span class="p">:</span><span class="s2">"Hello MMS!"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"direction"</span><span class="p">:</span><span class="s2">"in"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"applicationId"</span><span class="p">:</span><span class="s2">"a-rj7jf3fz7teaqupveqpug3i"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"state"</span><span class="p">:</span><span class="s2">"received"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"messageId"</span><span class="p">:</span><span class="s2">"m-dr4mcch2wfb6frcls677glq"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"media"</span><span class="p">:[</span><span class="w">
+      </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{user-id}/media/A3087419-73C2-4A03-BB39-06BF3B1C240F-m-dr4mcch2wfb6frcls677glq.jpg"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{user-id}/media/123_1-m-dr4mcch2wfb6frcls677glq.smil"</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+    </span><span class="nt">"messageUri"</span><span class="p">:</span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{user-id}/messages/m-dr4mcch2wfb6frcls677glq"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="answer-event">Answer Event</h2>
+
+<p>Bandwidth API sends this message to the application when the call is answered.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is <code class="prettyprint">answer</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">to</td>
+<td style="text-align: left">The phone number or SIP address that received the call. Phone numbers are in E.164 format (e.g. +15555555555) -or- SIP addresses (e.g. identify@domain.com).</td>
+</tr>
+<tr>
+<td style="text-align: left">from</td>
+<td style="text-align: left">The phone number or SIP address that made the call. Phone numbers are in E.164 format (e.g. +15555555555) -or- SIP addresses (e.g. identify@domain.com).</td>
+</tr>
+<tr>
+<td style="text-align: left">callState</td>
+<td style="text-align: left">The call state. Value will be <code class="prettyprint">active</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">callId</td>
+<td style="text-align: left">The call id associated with the event.</td>
+</tr>
+<tr>
+<td style="text-align: left">callUri</td>
+<td style="text-align: left">The full URL of the call resource for this event.</td>
+</tr>
+<tr>
+<td style="text-align: left">tag</td>
+<td style="text-align: left">String provided when call created.</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">Date when the event occurred. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"from"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"to"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callId"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callState"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"date"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-basic-answer-event">Example: Basic answer event</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"answer"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"from"</span><span class="p">:</span><span class="s2">"+15753222083"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"to"</span><span class="p">:</span><span class="s2">"+13865245000"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callId"</span><span class="p">:</span><span class="s2">"{call-id}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{user-id}/calls/{call-id}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callState"</span><span class="p">:</span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2012-11-14T16:28:31.536Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-answer-event-with-tag-property">Example: Answer event with tag property</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"answer"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"from"</span><span class="p">:</span><span class="s2">"+15753222083"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"to"</span><span class="p">:</span><span class="s2">"+13865245000"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callId"</span><span class="p">:</span><span class="s2">"{call-id}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{user-id}/calls/{call-id}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callState"</span><span class="p">:</span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2012-11-14T16:29:35.427Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"tag"</span><span class="p">:</span><span class="s2">"example-tag"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="audio-file-playback-events">Audio File Playback Events</h2>
+
+<p>Bandwidth API sends this message to the application when audio file playback is started or done playing.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is <code class="prettyprint">playback</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">status</td>
+<td style="text-align: left">Values are <code class="prettyprint">started</code> or <code class="prettyprint">done</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">callId</td>
+<td style="text-align: left">The call id associated with the event.</td>
+</tr>
+<tr>
+<td style="text-align: left">callUri</td>
+<td style="text-align: left">The full URL of the call resource for this event.</td>
+</tr>
+<tr>
+<td style="text-align: left">tag</td>
+<td style="text-align: left">String provided when playback started.</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">Date when the event occurred. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"tag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-audio-playback-event-started">Example: Audio Playback Event - Started</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"playback"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"callId"</span><span class="p">:</span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"callUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/calls/{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"started"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2012-11-14T15:56:05.896Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-audio-playback-event-done-playing">Example: Audio Playback Event - Done Playing</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"playback"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"callId"</span><span class="p">:</span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"callUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/calls/{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"started"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2012-11-14T15:56:05.896Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="calltimeout-event">CallTimeout Event</h2>
+
+<p>Bandwidth API sends this message to the application when the call is not answered until the specified timeout.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is <code class="prettyprint">timeout</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">callId</td>
+<td style="text-align: left">The call id associated with the event.</td>
+</tr>
+<tr>
+<td style="text-align: left">callUri</td>
+<td style="text-align: left">The complete URL of the call resource for this event.</td>
+</tr>
+<tr>
+<td style="text-align: left">from</td>
+<td style="text-align: left">The phone number or SIP address that made the call. Phone numbers are in E.164 format (e.g. +15555555555) -or- SIP addresses (e.g. identify@domain.com).</td>
+</tr>
+<tr>
+<td style="text-align: left">to</td>
+<td style="text-align: left">The phone number or SIP address that received the call. Phone numbers are in E.164 format (e.g. +15555555555) -or- SIP addresses (e.g. identify@domain.com).</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">Date/time of event. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-timeout">Example timeout</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"timeout"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"from"</span><span class="p">:</span><span class="s2">"+12096626728"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"to"</span><span class="p">:</span><span class="s2">"+15756162105"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"callId"</span><span class="p">:</span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"callUri"</span><span class="p">:</span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/calls/{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2013-11-06T14:25:58.857Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="conference-event">Conference Event</h2>
+
+<p>Bandwidth API sends this event to the application when a conference is created or completed.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is <code class="prettyprint">conference</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">conferenceId</td>
+<td style="text-align: left">The conference id associated with the event.</td>
+</tr>
+<tr>
+<td style="text-align: left">conferenceUri</td>
+<td style="text-align: left">The full URL of the conference resource for this event.</td>
+</tr>
+<tr>
+<td style="text-align: left">status</td>
+<td style="text-align: left">Values are <code class="prettyprint">created</code> or <code class="prettyprint">completed</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">createdTime</td>
+<td style="text-align: left">Date/time conference created. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+<tr>
+<td style="text-align: left">completedTime</td>
+<td style="text-align: left">Date/time conference completed. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"createdTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"completedTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-conference-created-event">Example: Conference created event</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/conferences/{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"conference"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"created"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"createdTime"</span><span class="p">:</span><span class="s2">"2013-07-12T16:26:55.685-02:00"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-conferenece-completed-event">Example: Conferenece completed event</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/conferences/{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"conference"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"createdTime"</span><span class="p">:</span><span class="s2">"2013-07-12T16:29:32.521-02:00"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"completedTime"</span><span class="p">:</span><span class="s2">"2013-07-12T16:45:10.103-02:00"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="conference-audio-file-playback-event">Conference Audio File Playback Event</h2>
+
+<p>Bandwidth API sends this message to the application when audio playback has started or is done (stopped) in a conference. Note: For playback event in conference member, use the call playback event.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is <code class="prettyprint">conference-playback</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">conferenceId</td>
+<td style="text-align: left">The conference id associated with the event.</td>
+</tr>
+<tr>
+<td style="text-align: left">conferenceUri</td>
+<td style="text-align: left">The full URL of the conference resource for this event.</td>
+</tr>
+<tr>
+<td style="text-align: left">status</td>
+<td style="text-align: left">Values are <code class="prettyprint">started</code> or <code class="prettyprint">done</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">Date/time of event. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceUri"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"date"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-audio-file-playback-in-conference-has-started">Example: Audio file playback in conference has started</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"conference-playback"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="s2">"{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/conferences/{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"started"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2013-07-12T21:18:19.966Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-audio-file-playback-in-conference-is-done">Example: Audio file playback in conference is done</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"conference-playback"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="s2">"{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/conferences/{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"done"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2013-07-12T21:18:19.966Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="conference-member-event">Conference Member Event</h2>
+
+<p>Bandwidth API sends this message to the application when a conference member has joined / left the conference or when it as muted or put on hold.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is <code class="prettyprint">conference-member.</code></td>
+</tr>
+<tr>
+<td style="text-align: left">activeMembers</td>
+<td style="text-align: left">Number of active members in conference.</td>
+</tr>
+<tr>
+<td style="text-align: left">conferenceId</td>
+<td style="text-align: left">The conference id associated with the event.</td>
+</tr>
+<tr>
+<td style="text-align: left">callId</td>
+<td style="text-align: left">The call id of the specific call of the member in conference.</td>
+</tr>
+<tr>
+<td style="text-align: left">memberId</td>
+<td style="text-align: left">The unique member id of the member in the conference.</td>
+</tr>
+<tr>
+<td style="text-align: left">memberUri</td>
+<td style="text-align: left">The full URL of the member resource.</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">Status of member in conference. Values are <code class="prettyprint">active</code> or <code class="prettyprint">completed</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">hold</td>
+<td style="text-align: left">Members is on hold in conference and can not hear or speak. Values are <code class="prettyprint">true</code> or <code class="prettyprint">false</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">mute</td>
+<td style="text-align: left">Members audio is muted in conference. Values are <code class="prettyprint">true</code> or <code class="prettyprint">false</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">Date/time of event. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"activeMembers"</span><span class="p">:</span><span class="w"> </span><span class="s2">"integer"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"hold"</span><span class="p">:</span><span class="w"> </span><span class="s2">"boolean"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"memberId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"memberUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"mute"</span><span class="p">:</span><span class="w"> </span><span class="s2">"boolean"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-a-member-has-joined-the-conference">Example: A member has joined the conference</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"activeMembers"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"conference-member"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"hold"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"memberId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{memberId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"memberUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/conferences/{conferenceId}/members/{memberId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"mute"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-07-12T20:53:11.646Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-a-member-has-left-the-conference">Example: A member has left the conference</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"activeMembers"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"conference-member"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"hold"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"memberId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{memberId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"memberUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/conferences/{conferenceId}/members/{memberId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"mute"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-07-12T20:53:11.646Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-a-member-was-muted">Example: A member was muted</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"activeMembers"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"conference-member"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"hold"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"memberId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{memberId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"memberUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/conferences/{conferenceId}/members/{memberId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"mute"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-07-12T20:53:11.646Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="conference-speak-event">Conference Speak Event</h2>
+
+<p>Bandwidth API sends this message to the application when text-to-speech speaking has started or is done (stopped) in a conference. Note:— For speak event in conference member, use the call speak event.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is <code class="prettyprint">conference-speak</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">conferenceId</td>
+<td style="text-align: left">The conference id associated with the event.</td>
+</tr>
+<tr>
+<td style="text-align: left">conferenceUri</td>
+<td style="text-align: left">The full URL of the conference resource for this event.</td>
+</tr>
+<tr>
+<td style="text-align: left">status</td>
+<td style="text-align: left">Values are <code class="prettyprint">started</code> or <code class="prettyprint">done</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">Date/time of event. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceUri"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"date"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-text-to-speech-in-a-conference-has-started">Example: Text-to-speech in a conference has started</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"conference-speak"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="s2">"{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/conferences/{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"started"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2013-07-12T21:18:19.966Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-text-to-speech-in-a-conference-is-done">Example: Text-to-speech in a conference is done</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"conference-speak"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceId"</span><span class="p">:</span><span class="s2">"{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"conferenceUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/conferences/{conferenceId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"done"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2013-07-12T21:18:19.966Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="dtmf-event">DTMF Event</h2>
+
+<p>Bandwidth API sends this message to the application when it receives number pad tone signals during a call.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is <code class="prettyprint">dtmf</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">callId</td>
+<td style="text-align: left">The call id associated with the event.</td>
+</tr>
+<tr>
+<td style="text-align: left">callUri</td>
+<td style="text-align: left">The complete URL of the call resource for this event.</td>
+</tr>
+<tr>
+<td style="text-align: left">dtmfDigit</td>
+<td style="text-align: left">The digit pressed. Only a single digit is returned.</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">Date/time of event. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"dtmfDigit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-user-pressed-39-5-39-key-on-keypad">Example: User pressed &lsquo;5&rsquo; key on keypad</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"dtmf"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"callId"</span><span class="p">:</span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"callUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/calls/{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"dtmfDigit"</span><span class="p">:</span><span class="s2">"5"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2012-11-14T15:56:09.276Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="gather-event">Gather Event</h2>
+
+<p>The Bandwidth API generates a gather event when the gather command completes in a call.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is gather.</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">The state of the gather. Value is completed.</td>
+</tr>
+<tr>
+<td style="text-align: left">digits</td>
+<td style="text-align: left">The digits collected from user.</td>
+</tr>
+<tr>
+<td style="text-align: left">reason</td>
+<td style="text-align: left"><br> max-digits - The maximum number of digits specified for the gather com.<br> terminating-digit - The digit specified in the gather com was entered.<br> inter-digit-timeout - A timeout occurred indicating the maximum amount of time to wait between digits, or before the first digit was pressed.<br> hung-up - Call was hung up thus terminating the gather.</td>
+</tr>
+<tr>
+<td style="text-align: left">callId</td>
+<td style="text-align: left">The call id associated with the event.</td>
+</tr>
+<tr>
+<td style="text-align: left">gatherId</td>
+<td style="text-align: left">The gather event unique id.</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">Date/time of event. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"gatherId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"digits"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-gather-event-completed-because-the-max-digits-were-reached">Example: Gather event completed because the max-digits were reached</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"gather"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"reason"</span><span class="p">:</span><span class="s2">"max-digits"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"digits"</span><span class="p">:</span><span class="s2">"25"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2014-07-31T01:01:27Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"callId"</span><span class="p">:</span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"gatherId"</span><span class="p">:</span><span class="s2">"{gatherId}"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="incoming-call-event">Incoming Call Event</h2>
+
+<p>Bandwidth API sends this message to the application when an incoming call arrives. For incoming call the callback set is the one related to the Application associated with the called number.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is incomingcall.</td>
+</tr>
+<tr>
+<td style="text-align: left">callId</td>
+<td style="text-align: left">The call id associated with the event.</td>
+</tr>
+<tr>
+<td style="text-align: left">callUri</td>
+<td style="text-align: left">The complete URL of the call resource for this event.</td>
+</tr>
+<tr>
+<td style="text-align: left">from</td>
+<td style="text-align: left">The phone number or SIP address that made the call. Phone numbers are in E.164 format (e.g. +15555555555) -or- SIP addresses (e.g. identify@domain.com).</td>
+</tr>
+<tr>
+<td style="text-align: left">to</td>
+<td style="text-align: left">The phone number or SIP address that received the call. Phone numbers are in E.164 format (e.g. +15555555555) -or- SIP addresses (e.g. identify@domain.com).</td>
+</tr>
+<tr>
+<td style="text-align: left">callState</td>
+<td style="text-align: left">The state of the call, value is active.</td>
+</tr>
+<tr>
+<td style="text-align: left">applicationId</td>
+<td style="text-align: left">The id of the application associated with phone number for this this incoming call.</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">Date/time of event. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callState"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"applicationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-incoming-call-event">Example: Incoming Call Event</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"incomingcall"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"from"</span><span class="p">:</span><span class="s2">"+13233326955"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"to"</span><span class="p">:</span><span class="s2">"+13865245000"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"callId"</span><span class="p">:</span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"callUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/calls/{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"callState"</span><span class="p">:</span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"applicationId"</span><span class="p">:</span><span class="s2">"{appId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2012-11-14T16:21:59.616Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="hangup-event">Hangup Event</h2>
+
+<p>Bandwidth API sends this message to the application when the call ends.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is hangup.</td>
+</tr>
+<tr>
+<td style="text-align: left">callId</td>
+<td style="text-align: left">The call id associated with the event.</td>
+</tr>
+<tr>
+<td style="text-align: left">callUri</td>
+<td style="text-align: left">The complete URL of the call resource for this event.</td>
+</tr>
+<tr>
+<td style="text-align: left">from</td>
+<td style="text-align: left">The phone number or SIP address that made the call. Phone numbers are in E.164 format (e.g. +15555555555) -or- SIP addresses (e.g. identify@domain.com).</td>
+</tr>
+<tr>
+<td style="text-align: left">to</td>
+<td style="text-align: left">The phone number or SIP address that received the call. Phone numbers are in E.164 format (e.g. +15555555555) -or- SIP addresses (e.g. identify@domain.com).</td>
+</tr>
+<tr>
+<td style="text-align: left">cause</td>
+<td style="text-align: left">The cause of the hangup event, the value is NORMAL_CLEARING.</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">Date/time of event. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"cause"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-hangup-event">Example: Hangup Event</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"hangup"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"callId"</span><span class="p">:</span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"callUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/calls/{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"from"</span><span class="p">:</span><span class="s2">"+13233326955"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"to"</span><span class="p">:</span><span class="s2">"+13233326955"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"cause"</span><span class="p">:</span><span class="s2">"NORMAL_CLEARING"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"time"</span><span class="p">:</span><span class="s2">"2012-11-14T15:56:12.636Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="recording-event">Recording Event</h2>
+
+<p>Bandwidth API sends this event to the application when an the recording media file is saved or an error occurs while saving it.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is recording.</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">The state of the recording, callback event values are complete or error.</td>
+</tr>
+<tr>
+<td style="text-align: left">status</td>
+<td style="text-align: left">The state of the recording, callback event values are complete or error.</td>
+</tr>
+<tr>
+<td style="text-align: left">callId</td>
+<td style="text-align: left">The call id associated with the event.</td>
+</tr>
+<tr>
+<td style="text-align: left">recordingId</td>
+<td style="text-align: left">The unique id of the recording resource.</td>
+</tr>
+<tr>
+<td style="text-align: left">recordingUri</td>
+<td style="text-align: left">The full URL of the recording resource.</td>
+</tr>
+<tr>
+<td style="text-align: left">startTime</td>
+<td style="text-align: left">Date/time the recording started. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+<tr>
+<td style="text-align: left">endTime</td>
+<td style="text-align: left">Date/time the recording completed. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"recordingId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"recordingUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"endTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-recording-media-file-saved-and-available">Example: Recording media file saved and available</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"recording"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"recordingId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{recordingId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"recordingUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/recordings/{recordingId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"complete"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-08-19T16:56:57.643Z"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"endTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-08-19T16:57:08.712Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-recording-media-file-saving-failed">Example: Recording media file saving failed</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"recording"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"recordingId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{recordingId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"recordingUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/recordings/{recordingId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"error"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-08-19T16:56:57.643Z"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"endTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-08-19T16:57:08.712Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="speak-event">Speak Event</h2>
+
+<p>Bandwidth API sends this message to the application when text-to-speech starts or stops.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is <code class="prettyprint">speak</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">status</td>
+<td style="text-align: left">Values are <code class="prettyprint">started</code> or <code class="prettyprint">done</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">Values are <code class="prettyprint">PLAYBACK_START</code> or <code class="prettyprint">PLAYBACK_STOP</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">callId</td>
+<td style="text-align: left">The call id associated with the event.</td>
+</tr>
+<tr>
+<td style="text-align: left">callUri</td>
+<td style="text-align: left">The full URL of the call resource for this event.</td>
+</tr>
+<tr>
+<td style="text-align: left">tag</td>
+<td style="text-align: left">String provided when text-to-speech started.</td>
+</tr>
+<tr>
+<td style="text-align: left">time</td>
+<td style="text-align: left">Date when the event occurred. Timestamp follows the ISO8601 format (UTC).</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"tag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-text-to-speech-started-events">Example: Text to Speech - Started Events</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"callUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/calls/{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"speak"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"started"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-06-26T17:55:45.748Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-text-to-speech-done-events">Example: Text to Speech - Done Events</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"callId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"callUri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/calls/{callId}"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"eventType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"speak"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"done"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-06-26T17:55:46.768Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h2 id="transcription-event-beta">Transcription Event – BETA</h2>
+
+<p>Bandwidth API sends this event to the application when a transcription is terminated or an error occurs while processing it.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">eventType</td>
+<td style="text-align: left">The event type, value is <code class="prettyprint">transcription</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">transcriptionId</td>
+<td style="text-align: left">The unique id of the transcription.</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">The state of the transcription, values are <code class="prettyprint">completed</code> or <code class="prettyprint">error</code></td>
+</tr>
+<tr>
+<td style="text-align: left">status</td>
+<td style="text-align: left">The state of the transcription, values are <code class="prettyprint">completed</code> or <code class="prettyprint">error</code></td>
+</tr>
+<tr>
+<td style="text-align: left">textSize</td>
+<td style="text-align: left">Total character count of text.</td>
+</tr>
+<tr>
+<td style="text-align: left">text</td>
+<td style="text-align: left">The first 1026 characters of the text of the completed transcription.</td>
+</tr>
+<tr>
+<td style="text-align: left">textUrl</td>
+<td style="text-align: left">The full URL of the entire text content of the transcription.</td>
+</tr>
+<tr>
+<td style="text-align: left">transcriptionUri</td>
+<td style="text-align: left">The full URL of the transcription resource.</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"transcriptionUri"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"textSize"</span><span class="p">:</span><span class="s2">"integer"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"text"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"textUrl"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"recordingId"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"state"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+   </span><span class="nt">"transcriptionId"</span><span class="p">:</span><span class="s2">"string"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-transcription-completed-and-available">Example: Transcription completed and available</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"transcription"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"transcriptionUri"</span><span class="p">:</span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/recordings/{recordingId}/transcriptions/{transcriptionId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"textSize"</span><span class="p">:</span><span class="mi">3627</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"text"</span><span class="p">:</span><span class="s2">"I\u0027m this program is brought to you by Stanford University, please visit us at Stanford dot Edu. I\u0027m honored to be with you today for your commencement from one of the finest universities in the world through the fetal. I never graduated from college and this is the closest I\u0027ve never gotten to a college graduation today. I want to tell you three stories from my life, that\u0027s it no big deal. Just three stories. The first story is about connecting the dots. I dropped out of college after the first six months, but then stayed around is a drop in for another 18 months or so before I really quit. So why I dropped out it started before I was born my biological mother was a young man a graduate student and she decided to put up for adoption. She feels very strongly that I should be adopted by college graduates. So everything was all set for me to be adopted birth by a lawyer and his wife, except when I popped out they decided at the last minute that they really want a girl. So my parents who a ..."</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"textUrl"</span><span class="p">:</span><span class="s2">"https://api.catapult.inetwork.com/v1/users/{userId}/media/{transcriptionId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"recordingId"</span><span class="p">:</span><span class="s2">"{recordingId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"transcriptionId"</span><span class="p">:</span><span class="s2">"{transcriptionId}"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h4 id="example-error-generating-transcription">Example: Error generating transcription</h4>
+<pre class="highlight plaintext"><code>POST http://[External server URL]
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"eventType"</span><span class="p">:</span><span class="s2">"transcription"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"error"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"recordingId"</span><span class="p">:</span><span class="s2">"{recordingId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"state"</span><span class="p">:</span><span class="s2">"error"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"transcriptionId"</span><span class="p">:</span><span class="s2">"{transcriptionId}"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+          <h1 id="http-error-codes">HTTP Error Codes</h1>
+
+<p>Categorized error codes generated by the application.</p>
+
+<h2 id="400-bad_request">400 – BAD_REQUEST</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Code</th>
+<th style="text-align: left">Message</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">invalid-zip-code</td>
+<td style="text-align: left">The ZIP code <code class="prettyprint">${0}</code> did not map to a location where telephone numbers are available</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">The media size must be specified by the <code class="prettyprint">${0}</code> header</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-available-number-search-order</td>
+<td style="text-align: left">The maximum quantity of numbers searching and ordering is</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-available-number-search-order</td>
+<td style="text-align: left">A query and order numbers cannot contain pattern</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-available-number-search</td>
+<td style="text-align: left">localNumber must contain a maximum of 4 digits</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">An LNP port in cannot be changed when it is in the ${0} state</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">You cannot make changes to other properties while cancelling an LNP port in</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">Unknown new LNP state ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">The file size must be specified by the <code class="prettyprint">${0}</code> header</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">Invalid LNP port in state transition from ${0} to ${1}</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">The callerId <code class="prettyprint">${0}</code> is not allowed. It must be <code class="prettyprint">private</code> or a phone number owned by user</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">The <code class="prettyprint">${0}</code> resource property <code class="prettyprint">${1}</code> must be greater than ${2}</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">The <code class="prettyprint">${0}</code> resource property <code class="prettyprint">${1}</code> exceeds the limit of ${2}</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">The <code class="prettyprint">${0}</code> resource property <code class="prettyprint">${1}</code> must be one of the following values: ${2}</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-available-number-search</td>
+<td style="text-align: left">For searching by City the State is also required.</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-available-number-search</td>
+<td style="text-align: left">Specify a State ZIP Code or Area Code with your query.</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-available-number-search</td>
+<td style="text-align: left">A query cannot combine City with ZIP Code.</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-available-number-search</td>
+<td style="text-align: left">A query cannot combine City with Area Code or Local Number.</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-available-number-search</td>
+<td style="text-align: left">A query cannot combine ZIP Code and State with Area Code or Local Number.</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-available-number-search</td>
+<td style="text-align: left">A query cannot combine ZIP Code with Area Code or Local Number.</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-available-number-search</td>
+<td style="text-align: left">A query cannot combine ZIP Code with State.</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-available-number-search</td>
+<td style="text-align: left">A query cannot combine State with Area Code or Local Number.</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-available-number-search</td>
+<td style="text-align: left">An Area Code must be 3 digits.</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-available-number-search</td>
+<td style="text-align: left">Local Number must contains at least 3 digits.</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-available-number-search</td>
+<td style="text-align: left">The maximum quantity of numbers is 5000</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">Quantity must be greater than zero.</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">Your application must have a least one callback URL.</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">Your application call fallback URL may not be blank/empty.</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">Your application must have a call callback URL in order to have a fallback URL.</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">Your application sms fallback URL may not be blank/empty.</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">Your application must have a sms callback URL in order to have a fallback URL.</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">Incoming Call callback timeout must be greater than 0</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">Incoming Call callback timeout must not surpass 10000</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">Incoming SMS callback timeout must be greater than 0</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">Incoming SMS callback timeout must not surpass 10000</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">Invalid ${0} URL. ${0} is not a valid URL</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">Invalid phone number</td>
+</tr>
+<tr>
+<td style="text-align: left">validation-error</td>
+<td style="text-align: left">Bad parameters</td>
+</tr>
+<tr>
+<td style="text-align: left">callback-invalid-url</td>
+<td style="text-align: left">The URL <code class="prettyprint">${0}</code> is not a valid callbackUrl/fallbackUrl</td>
+</tr>
+<tr>
+<td style="text-align: left">callback-url-invalid</td>
+<td style="text-align: left">The callback URL <code class="prettyprint">${0}</code> is not a valid URL</td>
+</tr>
+<tr>
+<td style="text-align: left">bridge-invalid-operation</td>
+<td style="text-align: left">No active calls in the bridge ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">bridge-bridged-callId</td>
+<td style="text-align: left">The callId ${0} is already in another bridge</td>
+</tr>
+<tr>
+<td style="text-align: left">bridge-invalid-state</td>
+<td style="text-align: left">Unable to update bridge ${0}. Invalid bridge state ${1}</td>
+</tr>
+<tr>
+<td style="text-align: left">bridge-invalid-state</td>
+<td style="text-align: left">Invalid state Id ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">message-delay-limit</td>
+<td style="text-align: left">Message tried to be delayed over the maximum limit.</td>
+</tr>
+</tbody></table>
+
+<h2 id="401-authorization">401 – AUTHORIZATION</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Code</th>
+<th style="text-align: left">Message</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">user-access-denied</td>
+<td style="text-align: left">User ${0} does not have permission to access user ${1}</td>
+</tr>
+<tr>
+<td style="text-align: left">number-access-denied</td>
+<td style="text-align: left">User ${0} does not have permission to use number ${1}</td>
+</tr>
+<tr>
+<td style="text-align: left">no-allocated-number</td>
+<td style="text-align: left">User ${0} does not have allocated numbers</td>
+</tr>
+<tr>
+<td style="text-align: left">lnp-invalid-billing-number</td>
+<td style="text-align: left">LNP billing number ${0} is invalid</td>
+</tr>
+</tbody></table>
+
+<h2 id="403-credit">403 – CREDIT</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Code</th>
+<th style="text-align: left">Message</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">insufficient-available-balance</td>
+<td style="text-align: left">Your account’s available balance of ${0} is insufficient for this transaction in the amount of ${1}.</td>
+</tr>
+</tbody></table>
+
+<h2 id="403-limit">403 – LIMIT</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Code</th>
+<th style="text-align: left">Message</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">message-rate-limit</td>
+<td style="text-align: left">You can send ${0} messages per ${1} seconds calculated as the average over ${2} seconds. Your rate is: ${3}</td>
+</tr>
+<tr>
+<td style="text-align: left">multi-message-limit</td>
+<td style="text-align: left">The number of messages [0]<em>i</em><em>n</em><em>t</em><em>h</em><em>e</em><em>m</em><em>u</em><em>l</em><em>t</em><em>i</em><em>m</em><em>e</em><em>s</em><em>s</em><em>a</em><em>g</em><em>e</em><em>r</em><em>e</em><em>q</em><em>u</em><em>e</em><em>s</em><em>t</em><em>i</em><em>s</em><em>g</em><em>r</em><em>e</em><em>a</em><em>t</em><em>e</em><em>r</em><em>t</em><em>h</em><em>a</em><em>n</em><em>t</em><em>h</em><em>e</em><em>l</em><em>i</em><em>m</em><em>i</em><em>t</em>[{1}].</td>
+</tr>
+<tr>
+<td style="text-align: left">conference-max-members</td>
+<td style="text-align: left">The conference ${0} reached the max number of members</td>
+</tr>
+<tr>
+<td style="text-align: left">call-rate-limit</td>
+<td style="text-align: left">You can create ${0} calls per ${1} seconds calculated as the average over ${2} seconds. Your rate is: ${3}</td>
+</tr>
+</tbody></table>
+
+<h2 id="403-forbidden">403 – FORBIDDEN</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Code</th>
+<th style="text-align: left">Message</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">invalid-rate-center</td>
+<td style="text-align: left">The city <code class="prettyprint">${0}</code> in the state <code class="prettyprint">${1}</code> was not found</td>
+</tr>
+<tr>
+<td style="text-align: left">application-access-denied</td>
+<td style="text-align: left">User ${0} does not have permission to use application ${1}</td>
+</tr>
+<tr>
+<td style="text-align: left">media-size-overflow</td>
+<td style="text-align: left">The media size ${0} bytes is larger than the maximum ${1} bytes</td>
+</tr>
+<tr>
+<td style="text-align: left">media-invalid-url</td>
+<td style="text-align: left">The media URL <code class="prettyprint">${0}</code> is invalid.</td>
+</tr>
+<tr>
+<td style="text-align: left">media-not-supported</td>
+<td style="text-align: left">Media type not supported ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">bridge-callIds-overflow</td>
+<td style="text-align: left">Only two calls are allowed in a bridge ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">bridge-callIds-overflow</td>
+<td style="text-align: left">Bridge ${0} already has 2 calls</td>
+</tr>
+<tr>
+<td style="text-align: left">maximum-recording-value-request</td>
+<td style="text-align: left">Recording call maximum duration cannot exceed ${0} seconds.</td>
+</tr>
+<tr>
+<td style="text-align: left">call-id-not-found</td>
+<td style="text-align: left">Call Id not found. callId ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-call-conference-id</td>
+<td style="text-align: left">Invalid conference Id in call. conferenceId ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">message-from-toll-free</td>
+<td style="text-align: left">Messages cannot be sent from toll free numbers <code class="prettyprint">${0}</code></td>
+</tr>
+<tr>
+<td style="text-align: left">message-from-toll-free</td>
+<td style="text-align: left">User only have Toll-Free numbers allocated. Messages cannot be sent from toll free numbers</td>
+</tr>
+<tr>
+<td style="text-align: left">message-illegal-state</td>
+<td style="text-align: left">The message <code class="prettyprint">${0}</code> cannot be dequeued since isn`t queued</td>
+</tr>
+<tr>
+<td style="text-align: left">conference-error</td>
+<td style="text-align: left">Unable to update conference ${0}. Invalid conference state ${1}</td>
+</tr>
+<tr>
+<td style="text-align: left">signup-user-not-found</td>
+<td style="text-align: left">Signup user ${0} not found</td>
+</tr>
+<tr>
+<td style="text-align: left">signup-user-not-found</td>
+<td style="text-align: left">Signup user`s email ${0} not found</td>
+</tr>
+<tr>
+<td style="text-align: left">call-audio-invalid-state</td>
+<td style="text-align: left">The audio for call ${0} could not be updated. The audio has already finished or does not exist.</td>
+</tr>
+<tr>
+<td style="text-align: left">call-invalid-state</td>
+<td style="text-align: left">Unable to update call ${0}. Invalid call state ${1}</td>
+</tr>
+<tr>
+<td style="text-align: left">call-invalid-state</td>
+<td style="text-align: left">Unable to update call ${0}. You can<code class="prettyprint">t update the call</code>s state after being set to ${1}.</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-call-to-number</td>
+<td style="text-align: left">Cannot make a call to number ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">lnp-loa-content-length-overflow</td>
+<td style="text-align: left">The content length ${0} bytes is larger than the maximum ${1} bytes</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-cnam-search</td>
+<td style="text-align: left">Invalid number formatting: ${0}. Use E.164 formatted numbers</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-recording-state</td>
+<td style="text-align: left">Cannot transcribe the recording ${0}. The state must be complete</td>
+</tr>
+<tr>
+<td style="text-align: left">restricted-number</td>
+<td style="text-align: left">The number ${0} is restricted and cannot be used to send message.</td>
+</tr>
+</tbody></table>
+
+<h2 id="404-not_found">404 – NOT_FOUND</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Code</th>
+<th style="text-align: left">Message</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">user-not-found</td>
+<td style="text-align: left">The user <code class="prettyprint">${0}</code> could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">user-not-found</td>
+<td style="text-align: left">Reset Password User ${0} not found</td>
+</tr>
+<tr>
+<td style="text-align: left">user-not-found</td>
+<td style="text-align: left">Reset Password User for email ${0} not found</td>
+</tr>
+<tr>
+<td style="text-align: left">user-not-found</td>
+<td style="text-align: left">Signup user ${0} not found</td>
+</tr>
+<tr>
+<td style="text-align: left">user-not-found</td>
+<td style="text-align: left">Signup user`s email ${0} not found</td>
+</tr>
+<tr>
+<td style="text-align: left">application-not-found</td>
+<td style="text-align: left">The application ${0} could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">reset-password-user-not-found</td>
+<td style="text-align: left">Reset Password User ${0} not found</td>
+</tr>
+<tr>
+<td style="text-align: left">reset-password-user-not-found</td>
+<td style="text-align: left">Reset Password User for email ${0} not found</td>
+</tr>
+<tr>
+<td style="text-align: left">media-invalid-content-lenght</td>
+<td style="text-align: left">The media source <code class="prettyprint">${0}</code> header could not be parsed as a number</td>
+</tr>
+<tr>
+<td style="text-align: left">media-not-found</td>
+<td style="text-align: left">The media resource named <code class="prettyprint">${0}</code> could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">info-track-not-found</td>
+<td style="text-align: left">Info not found for id: ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">bridge-not-found</td>
+<td style="text-align: left">The bridge ${0} could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">recording-not-found</td>
+<td style="text-align: left">The recording ${0} could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">user-rate-limit-not-found</td>
+<td style="text-align: left">User Rate Limit ${0} not found</td>
+</tr>
+<tr>
+<td style="text-align: left">rate-limit-not-found</td>
+<td style="text-align: left">User Rate Limit ${0} not found</td>
+</tr>
+<tr>
+<td style="text-align: left">rate-limit-not-found</td>
+<td style="text-align: left">Rate Limit ${0} not found</td>
+</tr>
+<tr>
+<td style="text-align: left">user-error-not-found</td>
+<td style="text-align: left">The user error <code class="prettyprint">${0}</code> could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">cron-task-not-found</td>
+<td style="text-align: left">The cron task <code class="prettyprint">${0}</code> could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">conference-member-not-found</td>
+<td style="text-align: left">The conference member ${0} could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">pre-pay-balance-not-found</td>
+<td style="text-align: left">The pre pay balance for user <code class="prettyprint">${0}</code> could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">pre-pay-balance-not-found</td>
+<td style="text-align: left">The pre pay balance <code class="prettyprint">${0}</code> could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">pre-pay-product-price-not-found</td>
+<td style="text-align: left">The pre-pay product price ${0} could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">order-number-quantity-unavailable</td>
+<td style="text-align: left">Only a partial quantity of the total telephone numbers ordered could be fulfilled.</td>
+</tr>
+<tr>
+<td style="text-align: left">number-not-found</td>
+<td style="text-align: left">The number ${0} could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">message-not-found</td>
+<td style="text-align: left">The message <code class="prettyprint">${0}</code> could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">message-not-found</td>
+<td style="text-align: left">Notification message ${0} not found</td>
+</tr>
+<tr>
+<td style="text-align: left">billing-address-info-not-found</td>
+<td style="text-align: left">The BillingAddressInfo ${0} could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">conference-not-found</td>
+<td style="text-align: left">The conference ${0} could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">api-token-not-found</td>
+<td style="text-align: left">The API token <code class="prettyprint">${0}</code> could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">call-not-found</td>
+<td style="text-align: left">The call ${0} could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">demo-number-not-found</td>
+<td style="text-align: left">Demo number not found: ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">user-notification-target-not-found</td>
+<td style="text-align: left">Notification target ${0} not found</td>
+</tr>
+<tr>
+<td style="text-align: left">notification-message-not-found</td>
+<td style="text-align: left">Notification message ${0} not found</td>
+</tr>
+<tr>
+<td style="text-align: left">lnp-loa-invalid-content-length</td>
+<td style="text-align: left">The content source <code class="prettyprint">${0}</code> header could not be parsed as a number</td>
+</tr>
+<tr>
+<td style="text-align: left">lnp-port-in-loa-not-found</td>
+<td style="text-align: left">The LNP port in LOA <code class="prettyprint">${0}</code> could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">lnp-port-in-not-found</td>
+<td style="text-align: left">The LNP port in <code class="prettyprint">${0}</code> could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">cnam-not-found</td>
+<td style="text-align: left">Couldn`t find CNAM for number ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">service-provider-not-found</td>
+<td style="text-align: left">The service provider ${0} could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">service-provider-endpoint-pattern-not-found</td>
+<td style="text-align: left">The service provider endpoint pattern ${0} could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">gateway-not-found</td>
+<td style="text-align: left">The gateway ${0} could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">transcription-not-found</td>
+<td style="text-align: left">The transcription ${0} could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">transcription-not-found</td>
+<td style="text-align: left">The transcription ${0} from recording ${1} could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">user-notification-not-found</td>
+<td style="text-align: left">The user notification <code class="prettyprint">${0}</code> could not be found</td>
+</tr>
+<tr>
+<td style="text-align: left">resource-not-found</td>
+<td style="text-align: left">The requested resource could not be found.</td>
+</tr>
+</tbody></table>
+
+<h2 id="409-conflict">409 – CONFLICT</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Code</th>
+<th style="text-align: left">Message</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">email-address-in-use</td>
+<td style="text-align: left">The email address <code class="prettyprint">${0}</code> is already in use</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-application</td>
+<td style="text-align: left">Cannot create another instance of application ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-info-track</td>
+<td style="text-align: left">Duplicate info id: ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">bridge-update-conflict</td>
+<td style="text-align: left">The bridge ${0} could not be updated because another update was is progress</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-bridge</td>
+<td style="text-align: left">Cannot create another instance of bridge ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">recording-update-conflict</td>
+<td style="text-align: left">The recording ${0} could not be updated because another update was is progress</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-transcription</td>
+<td style="text-align: left">Cannot create another instance of trancription ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">conflicted-recording-values-request</td>
+<td style="text-align: left">Call recoding maximum duration time cannot be changed while recording is been executed!</td>
+</tr>
+<tr>
+<td style="text-align: left">conflicted-recording-values-request</td>
+<td style="text-align: left">Call recording is been executed already!</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-recording</td>
+<td style="text-align: left">Cannot create another instance of recording ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-user-error</td>
+<td style="text-align: left">Cannot create another instance of user error ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-cron-task</td>
+<td style="text-align: left">Duplicated cron task: ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">conference-member-update-conflict</td>
+<td style="text-align: left">The conference member ${0} could not be updated because another update was is progress</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-pre-pay-transaction</td>
+<td style="text-align: left">Cannot create another instance of pre-pay transaction ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-pre-pay-product-price</td>
+<td style="text-align: left">Cannot create another instance of pre-pay product price ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-pre-pay-account</td>
+<td style="text-align: left">Cannot create another instance of pre-pay account ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">invalid-pre-pay-account-state</td>
+<td style="text-align: left">The update type of account ${0} must be different from the current type</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-message</td>
+<td style="text-align: left">Cannot create another instance of message ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">message-update-conflict</td>
+<td style="text-align: left">The message ${0} could not be updated because another update was is progress</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-billing-address-info</td>
+<td style="text-align: left">The BillingAddressInfo ${0} already exists.</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-conference</td>
+<td style="text-align: left">Cannot create another instance of conference ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">conference-update-conflict</td>
+<td style="text-align: left">The conference ${0} could not be updated because another update was is progress</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-signup-user</td>
+<td style="text-align: left">Sign up user with e-mail address ${0} already exists</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-api-token</td>
+<td style="text-align: left">Duplicate API token: ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">call-duplicated-error</td>
+<td style="text-align: left">Cannot create another instance of call ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">call-duplicate-gather-error</td>
+<td style="text-align: left">DTMF digits are already being gathered for call ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">call-update-conflict</td>
+<td style="text-align: left">The call ${0} could not be updated because another update was is progress</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-fraud-number</td>
+<td style="text-align: left">Notification number to be verified already exists ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-user-notification</td>
+<td style="text-align: left">Cannot create another instance of user notification ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-lnp-port-in</td>
+<td style="text-align: left">Duplicate LNP port request: ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-service-provider-endpoint-pattern</td>
+<td style="text-align: left">Cannot create another instance of service provider endpoint pattern ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-gateway</td>
+<td style="text-align: left">Cannot create another instance of gateway ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-service-provider</td>
+<td style="text-align: left">Cannot create another instance of service provider ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-number</td>
+<td style="text-align: left">Cannot create another instance of number resource ${0} for number ${1}</td>
+</tr>
+<tr>
+<td style="text-align: left">duplicate-call-event</td>
+<td style="text-align: left">Cannot create another instance of call event ${0}</td>
+</tr>
+</tbody></table>
+
+<h2 id="500-payment">500 – PAYMENT</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Code</th>
+<th style="text-align: left">Message</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">pre-pay-refill-missing-payment-info</td>
+<td style="text-align: left">The pre pay account <code class="prettyprint">${0}</code> has not been configured with enough information to perform an automatic refill. You can configure payment information on the web site.</td>
+</tr>
+<tr>
+<td style="text-align: left">pre-pay-refill-amount-too-low</td>
+<td style="text-align: left">The pre pay account <code class="prettyprint">${0}</code> is configured to automatically refill with a payment of ${1} which is below the minimum amount of ${2}. Please configure a refill amount of at least ${2} or disable automatic refill.</td>
+</tr>
+<tr>
+<td style="text-align: left">pre-pay-transaction-type-error</td>
+<td style="text-align: left">Invalid transaction type: ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">pre-pay-transaction-error</td>
+<td style="text-align: left">Cannot create another instance of pre-pay transaction ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">pre-pay-transaction-error</td>
+<td style="text-align: left">The payment transaction ${0} of ${1} failed.</td>
+</tr>
+</tbody></table>
+
+<h2 id="500-backend">500 – BACKEND</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Code</th>
+<th style="text-align: left">Message</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">backend-protocol-support-failure</td>
+<td style="text-align: left">There was a backend error ${0} for conference ${1}</td>
+</tr>
+<tr>
+<td style="text-align: left">salesforce-unavailable</td>
+<td style="text-align: left">Can`t get the account: the account name must not be blank</td>
+</tr>
+<tr>
+<td style="text-align: left">salesforce-unavailable</td>
+<td style="text-align: left">Error creating partner connection</td>
+</tr>
+<tr>
+<td style="text-align: left">salesforce-unavailable</td>
+<td style="text-align: left">More than one record matched for userId ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">salesforce-unavailable</td>
+<td style="text-align: left">The object might have been created but the results were null or empty</td>
+</tr>
+<tr>
+<td style="text-align: left">salesforce-unavailable</td>
+<td style="text-align: left">Salesforce`s error</td>
+</tr>
+</tbody></table>
+
+<h2 id="503-unavailable">503 – UNAVAILABLE</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Code</th>
+<th style="text-align: left">Message</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">gateway-unavailable</td>
+<td style="text-align: left">The gateway ${0} is temporarily unavailable</td>
+</tr>
+<tr>
+<td style="text-align: left">gateway-unavailable</td>
+<td style="text-align: left">The message gateway was temporarily unavailable. Check the state of your message <code class="prettyprint">${0}</code> to determine if it was successfully sent</td>
+</tr>
+<tr>
+<td style="text-align: left">number-allocator-unavailable</td>
+<td style="text-align: left">Cannot connect to the number allocator</td>
+</tr>
+<tr>
+<td style="text-align: left">number-allocator-timeout</td>
+<td style="text-align: left">Number allocator request timeout</td>
+</tr>
+<tr>
+<td style="text-align: left">speak-error</td>
+<td style="text-align: left">Could not retrieve Session ID</td>
+</tr>
+<tr>
+<td style="text-align: left">speak-error</td>
+<td style="text-align: left">Error accessing Voice Forge</td>
+</tr>
+<tr>
+<td style="text-align: left">internal-error</td>
+<td style="text-align: left">An error occurred handling the message</td>
+</tr>
+<tr>
+<td style="text-align: left">media-unavailable</td>
+<td style="text-align: left">Failed to access media ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">media-unavailable</td>
+<td style="text-align: left">Failed to access remote media ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">bridge-update-error</td>
+<td style="text-align: left">Unable to update bridge ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">bridge-create-error</td>
+<td style="text-align: left">Unable to create bridge with ${0} and ${1}</td>
+</tr>
+<tr>
+<td style="text-align: left">message-gateway-unavailable</td>
+<td style="text-align: left">The message gateway was temporarily unavailable. Check the state of your message <code class="prettyprint">${0}</code> to determine if it was successfully sent</td>
+</tr>
+<tr>
+<td style="text-align: left">message-delivery-failed</td>
+<td style="text-align: left">The message from <code class="prettyprint">${0}</code> to <code class="prettyprint">${1}</code> could not be delivered</td>
+</tr>
+<tr>
+<td style="text-align: left">send-dtmf-failure</td>
+<td style="text-align: left">DTMF digits <code class="prettyprint">${0}</code> could not be sent for call ${1}</td>
+</tr>
+<tr>
+<td style="text-align: left">call-unavailable</td>
+<td style="text-align: left">The call ${0} is being initialized and cannot be modified now retry your operation later</td>
+</tr>
+<tr>
+<td style="text-align: left">call-unavailable</td>
+<td style="text-align: left">The conference member ${0} doesn`t have a available call retry your operation later</td>
+</tr>
+<tr>
+<td style="text-align: left">call-creation-failure</td>
+<td style="text-align: left">A call from ${0} to ${1} could not be created</td>
+</tr>
+<tr>
+<td style="text-align: left">audio-update-failure</td>
+<td style="text-align: left">The audio for call ${0} could not be updated</td>
+</tr>
+<tr>
+<td style="text-align: left">call-transfer-error</td>
+<td style="text-align: left">Call ${0} could not be transferred to ${1}</td>
+</tr>
+<tr>
+<td style="text-align: left">lnp-port-in-loa-content-unavailable</td>
+<td style="text-align: left">The LOA content for <code class="prettyprint">${0}</code> is currently unavailable</td>
+</tr>
+<tr>
+<td style="text-align: left">cnam-error</td>
+<td style="text-align: left">Internal error while searching for CNAM from ${0}</td>
+</tr>
+<tr>
+<td style="text-align: left">service-provider-configuration-error</td>
+<td style="text-align: left">Multiple service providers tied for best match on service type ${0} side ${1} endpoint ${2} correct the pattern configuration so only one service provider matches</td>
+</tr>
+<tr>
+<td style="text-align: left">competitor-request-unavailable</td>
+<td style="text-align: left">Cannot connect to competitor competitor web api</td>
+</tr>
+</tbody></table>
 
       </div>
       <div class="dark-box">
