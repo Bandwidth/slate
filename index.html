@@ -125,347 +125,15 @@
 
 <p><a href="https://catapult.inetwork.com/portal/signup" class="api_ab_cta">Sign up for free</a></p>
 
-          <h1 id="sdks-and-client-libraries">SDKS and Client Libraries</h1>
+<h3 id="base-url">Base Url</h3>
 
-          <h2 id="nodejs-library">NodeJS Library</h2>
+<p><code class="prettyprint">https://api.catapult.inetwork.com/v1</code></p>
 
-<p><a href="https://github.com/bandwidthcom/node-bandwidth"><img alt="github" src="images/github_logo.png" /></a></p>
+<h3 id="conventions">Conventions</h3>
 
-<p>The current version is v2, released 5 August, 2016. Version 1.3.3 is available  <a href="https://github.com/bandwidthcom/node-bandwidth/tree/v1.3.3">here</a>.</p>
+<p>Some of the URLs in this documentation contain placeholders for values that your API client program must provide. These placeholders are shown in curly braces, like {this}. When you construct the URL to access these resources, replace those placeholders with the values you want to use.</p>
 
-<h3 id="full-api-reference"><a href="http://bwdemos.com/node-bandwidth/index.html">Full API Reference</a></h3>
-
-<p>The Full API Reference is available either as an interactive site or as a single Markdown file:</p>
-
-<ul>
-<li><a href="http://bwdemos.com/node-bandwidth/index.html">Site</a>.</li>
-<li><a href="https://github.com/bandwidthcom/node-bandwidth/blob/master/docs/api.md">Single MD file</a></li>
-</ul>
-
-<h3 id="installing-the-sdk">Installing the SDK</h3>
-
-<p><code class="prettyprint">node-bandwidth</code> is available on NPM:</p>
-
-<p>npm install &ndash;save node-bandwidth</p>
-
-<h3 id="supported-versions">Supported Versions</h3>
-
-<p><code class="prettyprint">node-bandwidth</code> should work on all versions of node newer than <code class="prettyprint">0.10.*</code>. However, due to the rapid development in the Node and npm environment, we can only provide <em>support</em> on <a href="https://github.com/nodejs/LTS">LTS versions of Node</a></p>
-
-<table><thead>
-<tr>
-<th style="text-align: left">Version</th>
-<th style="text-align: left">Support Level</th>
-</tr>
-</thead><tbody>
-<tr>
-<td style="text-align: left">&lt;0.10.*</td>
-<td style="text-align: left">Unsupported</td>
-</tr>
-<tr>
-<td style="text-align: left">0.10.*</td>
-<td style="text-align: left">Supported</td>
-</tr>
-<tr>
-<td style="text-align: left">0.12.*</td>
-<td style="text-align: left">Supported</td>
-</tr>
-<tr>
-<td style="text-align: left">&gt;=4.0 &lt;4.2</td>
-<td style="text-align: left">Unsupported</td>
-</tr>
-<tr>
-<td style="text-align: left"><strong>&gt;=4.2 &lt;5.* (Node v4 argon LTS)</strong></td>
-<td style="text-align: left"><strong>Recommended</strong></td>
-</tr>
-<tr>
-<td style="text-align: left">5.*</td>
-<td style="text-align: left">Unsupported</td>
-</tr>
-<tr>
-<td style="text-align: left">6.*</td>
-<td style="text-align: left">Unsupported</td>
-</tr>
-</tbody></table>
-
-<h3 id="client-initialization">Client initialization</h3>
-
-<p>All interaction with the API is done through a <code class="prettyprint">client</code> Object. The client constructor takes an Object containing configuration options. The following options are supported:</p>
-
-<table><thead>
-<tr>
-<th style="text-align: left">Field name</th>
-<th style="text-align: left">Description</th>
-<th style="text-align: left">Default value</th>
-<th style="text-align: left">Required</th>
-</tr>
-</thead><tbody>
-<tr>
-<td style="text-align: left"><code class="prettyprint">userId</code></td>
-<td style="text-align: left">Your user ID</td>
-<td style="text-align: left"><code class="prettyprint">undefined</code></td>
-<td style="text-align: left">Yes</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">apiToken</code></td>
-<td style="text-align: left">Your API token</td>
-<td style="text-align: left"><code class="prettyprint">undefined</code></td>
-<td style="text-align: left">Yes</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">apiSecret</code></td>
-<td style="text-align: left">Your API secret</td>
-<td style="text-align: left"><code class="prettyprint">undefined</code></td>
-<td style="text-align: left">Yes</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">baseUrl</code></td>
-<td style="text-align: left">The Bandwidth API URL</td>
-<td style="text-align: left"><code class="prettyprint">https://api.catapult.inetwork.com</code></td>
-<td style="text-align: left">No</td>
-</tr>
-</tbody></table>
-
-<p>To initialize the client object, provide your API credentials which can be found on your account page in <a href="https://catapult.inetwork.com/pages/catapult.jsf">the portal</a>.</p>
-<pre class="highlight javascript"><code><span class="kd">var</span> <span class="nx">Bandwidth</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"node-bandwidth"</span><span class="p">);</span>
-
-<span class="kd">var</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Bandwidth</span><span class="p">({</span>
-    <span class="na">userId</span>    <span class="p">:</span> <span class="s2">"YOUR_USER_ID"</span><span class="p">,</span> <span class="c1">// &lt;-- note, this is not the same as the username you used to login to the portal</span>
-    <span class="na">apiToken</span>  <span class="p">:</span> <span class="s2">"YOUR_API_TOKEN"</span><span class="p">,</span>
-    <span class="na">apiSecret</span> <span class="p">:</span> <span class="s2">"YOUR_API_SECRET"</span>
-<span class="p">});</span>
-</code></pre>
-
-<p>Your <code class="prettyprint">client</code> object is now ready to use the API.</p>
-
-<h3 id="callbacks-or-promises">Callbacks or Promises</h3>
-
-<p>All functions of the client object take an optional Node.js style <code class="prettyprint">(err, result)</code> callback, and also return a Promise. That way if you want to use Promises in your application, you don&rsquo;t have to wrap the SDK with a Promise library. You can simply do things like this:</p>
-
-<h4 id="promise-style">Promise style</h4>
-<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span>
-    <span class="na">from</span> <span class="p">:</span> <span class="s2">"+12345678901"</span><span class="p">,</span> <span class="c1">// This must be a Catapult number on your account</span>
-    <span class="na">to</span>   <span class="p">:</span> <span class="s2">"+12345678902"</span><span class="p">,</span>
-    <span class="na">text</span> <span class="p">:</span> <span class="s2">"Hello world."</span>
-<span class="p">})</span>
-<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Message sent with ID "</span> <span class="o">+</span> <span class="nx">message</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
-<span class="p">})</span>
-<span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
-<span class="p">});</span>
-</code></pre>
-
-<p>If you&rsquo;re not into that kind of thing you can also do things the &ldquo;old fashioned&rdquo; callback way:</p>
-
-<h4 id="callback-style">Callback style</h4>
-<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span>
-    <span class="na">from</span> <span class="p">:</span> <span class="s2">"+12345678901"</span><span class="p">,</span> <span class="c1">// This must be a Catapult number on your account</span>
-    <span class="na">to</span>   <span class="p">:</span> <span class="s2">"+12345678902"</span><span class="p">,</span>
-    <span class="na">text</span> <span class="p">:</span> <span class="s2">"Hello world."</span>
-<span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-        <span class="k">return</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Message sent with ID "</span> <span class="o">+</span> <span class="nx">message</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
-<span class="p">});</span>
-</code></pre>
-
-<h3 id="providing-feedback">Providing feedback</h3>
-
-<p>For current discussions on 2.0 please see the <a href="https://github.com/bandwidthcom/node-bandwidth/labels/2.0">2.0 issues section on GitHub</a>. To start a new topic on 2.0, please open an issue and use the <code class="prettyprint">2.0</code> tag. Your feedback is greatly appreciated!</p>
-
-          <h2 id="c-library">C# Library</h2>
-
-<p>A .Net client library for the <a href="http://bandwidth.com/products/application-platform?utm_medium=social&amp;utm_source=github&amp;utm_campaign=dtolb&amp;utm_content=_">Bandwidth Application Platform</a></p>
-
-<p>The current version is v3.0, released ## August, 2016. Version 2.14 is available  <a href="https://github.com/bandwidthcom/csharp-bandwidth/tree/v2.14">here</a>.</p>
-
-<p><a href="https://github.com/bandwidthcom/csharp-bandwidth/tree/v3-preview"><img alt="github" src="images/github_logo.png" /></a></p>
-
-<p><a href="http://bwdemos.com/csharp-bandwidth/html/R_Project_API.htm">Full API Reference</a></p>
-
-<h3 id="installing-the-sdk">Installing the SDK</h3>
-
-<p><code class="prettyprint">Bandwidth.Net</code> is available on Nuget (Nuget 3.0+ is required):</p>
-
-<p>Install-Package Bandwidth.Net</p>
-
-<h3 id="supported-versions">Supported Versions</h3>
-
-<p><code class="prettyprint">Bandwidth.Net</code> should work on all levels of .Net Framework 4.5+.</p>
-
-<table><thead>
-<tr>
-<th style="text-align: left">Version</th>
-<th style="text-align: left">Support Level</th>
-</tr>
-</thead><tbody>
-<tr>
-<td style="text-align: left">&lt;4.5</td>
-<td style="text-align: left">Unsupported</td>
-</tr>
-<tr>
-<td style="text-align: left">4.5</td>
-<td style="text-align: left">Supported</td>
-</tr>
-<tr>
-<td style="text-align: left">4.6</td>
-<td style="text-align: left">Supported</td>
-</tr>
-<tr>
-<td style="text-align: left">.Net Core (netstandard1.6)</td>
-<td style="text-align: left">Supported</td>
-</tr>
-<tr>
-<td style="text-align: left">PCL (Profile111)</td>
-<td style="text-align: left">Supported</td>
-</tr>
-<tr>
-<td style="text-align: left">Xamarin (IOS, Android, MonoTouch)</td>
-<td style="text-align: left">Supported</td>
-</tr>
-</tbody></table>
-
-<h3 id="client-initialization">Client initialization</h3>
-
-<p>All interaction with the API is done through a class <code class="prettyprint">Client</code>. The <code class="prettyprint">Client</code> constructor takes an next options:</p>
-
-<table><thead>
-<tr>
-<th style="text-align: left">Argument</th>
-<th style="text-align: left">Description</th>
-<th style="text-align: left">Default value</th>
-<th style="text-align: left">Required</th>
-</tr>
-</thead><tbody>
-<tr>
-<td style="text-align: left"><code class="prettyprint">userId</code></td>
-<td style="text-align: left">Your user ID</td>
-<td style="text-align: left">none</td>
-<td style="text-align: left">Yes</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">apiToken</code></td>
-<td style="text-align: left">Your API token</td>
-<td style="text-align: left">none</td>
-<td style="text-align: left">Yes</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">apiSecret</code></td>
-<td style="text-align: left">Your API secret</td>
-<td style="text-align: left">none</td>
-<td style="text-align: left">Yes</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">baseUrl</code></td>
-<td style="text-align: left">The Bandwidth API URL</td>
-<td style="text-align: left"><code class="prettyprint">https://api.catapult.inetwork.com</code></td>
-<td style="text-align: left">No</td>
-</tr>
-</tbody></table>
-
-<p>To initialize the <code class="prettyprint">Client</code> instance, provide your API credentials which can be found on your account page in <a href="https://catapult.inetwork.com/pages/catapult.jsf">the portal</a>.</p>
-<pre class="highlight csharp"><code><span class="k">using</span> <span class="nn">Bandwidth.Net</span><span class="p">;</span>
-
-<span class="n">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Client</span><span class="p">(</span>
-    <span class="s">"YOUR_USER_ID"</span><span class="p">,</span> <span class="c1">// &lt;-- note, this is not the same as the username you used to login to the portal
-</span>    <span class="s">"YOUR_API_TOKEN"</span><span class="p">,</span>
-    <span class="s">"YOUR_API_SECRET"</span>
-<span class="p">);</span>
-</code></pre>
-
-<p>Your <code class="prettyprint">client</code> object is now ready to use the API.</p>
-
-<h4 id="lazy-evalutions">Lazy evalutions</h4>
-
-<p>This library uses lazy evalutions in next cases:
-    - Object creation,
-    - Get list of objects</p>
-
-<h4 id="object-creation">Object Creation</h4>
-
-<p>When you create a bridge, call, message, etc. you will receive instance of <code class="prettyprint">ILazyInstance&lt;&gt;</code> as result. It allow you to get <code class="prettyprint">Id</code> of created object and created object on demand via property <code class="prettyprint">Instance</code>.</p>
-<pre class="highlight csharp"><code><span class="n">var</span> <span class="n">application</span> <span class="p">=</span> <span class="n">await</span> <span class="n">client</span><span class="p">.</span><span class="n">Application</span><span class="p">.</span><span class="nf">CreateAsync</span><span class="p">(</span><span class="k">new</span> <span class="n">CreateApplicationData</span> <span class="p">{</span><span class="n">Name</span> <span class="p">=</span> <span class="s">"MyFirstApp"</span><span class="p">});</span>
-
-<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">application</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span> <span class="c1">//will return Id of created application
-</span>
-<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">application</span><span class="p">.</span><span class="n">Instance</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span> <span class="c1">//will make request to Catapult API to get application data
-</span>
-<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">application</span><span class="p">.</span><span class="n">Instance</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span> <span class="c1">//will use cached application's data
-</span>
-</code></pre>
-
-<h4 id="get-list-of-objects">Get list of objects</h4>
-
-<p>Executing of methods which returns collections of objects will not execute Catapult API request immediately. THis request will be executed only when you try enumerate items of the collection.</p>
-<pre class="highlight csharp"><code><span class="n">var</span> <span class="n">calls</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">Call</span><span class="p">.</span><span class="nf">List</span><span class="p">();</span> <span class="c1">// will not execute any requests to Catapult API here
-</span>
-<span class="k">foreach</span><span class="p">(</span><span class="n">var</span> <span class="n">call</span> <span class="k">in</span> <span class="n">calls</span><span class="p">)</span> <span class="c1">// a request to Catapult API will be executed here
-</span><span class="p">{</span>
-    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">call</span><span class="p">.</span><span class="n">From</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="c1">// or
-</span>
-<span class="n">var</span> <span class="n">list</span> <span class="p">=</span> <span class="n">calls</span><span class="p">.</span><span class="nf">ToList</span><span class="p">();</span> <span class="c1">// a request to Catapult API will be executed here
-</span>
-</code></pre>
-
-<h3 id="send-a-sms">Send a SMS</h3>
-<pre class="highlight csharp"><code><span class="n">var</span> <span class="n">message</span> <span class="p">=</span> <span class="n">await</span> <span class="n">client</span><span class="p">.</span><span class="n">Message</span><span class="p">.</span><span class="nf">SendAsync</span><span class="p">(</span><span class="k">new</span> <span class="n">MessageData</span> <span class="p">{</span>
-    <span class="n">From</span> <span class="p">=</span> <span class="s">"+12345678901"</span><span class="p">,</span> <span class="c1">// This must be a Bandwidth number on your account
-</span>    <span class="n">To</span>   <span class="p">=</span> <span class="s">"+12345678902"</span><span class="p">,</span>
-    <span class="n">Text</span> <span class="p">=</span> <span class="s">"Hello world."</span>
-<span class="p">});</span>
-<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">"Message Id is {message.Id}"</span><span class="p">);</span>
-</code></pre>
-
-<h3 id="make-a-call">Make a call</h3>
-<pre class="highlight csharp"><code><span class="n">var</span> <span class="n">call</span> <span class="p">=</span> <span class="n">await</span> <span class="n">client</span><span class="p">.</span><span class="n">Call</span><span class="p">.</span><span class="nf">CreateAsync</span><span class="p">(</span><span class="k">new</span> <span class="n">CreateCallData</span> <span class="p">{</span>
-    <span class="n">From</span> <span class="p">=</span> <span class="s">"+12345678901"</span><span class="p">,</span> <span class="c1">// This must be a Bandwidth number on your account
-</span>    <span class="n">To</span>   <span class="p">=</span> <span class="s">"+12345678902"</span>
-<span class="p">});</span>
-<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">"Call Id is {call.Id}"</span><span class="p">);</span>
-</code></pre>
-
-<h3 id="providing-feedback">Providing feedback</h3>
-
-<p>For current discussions on 3.0 please see the <a href="https://github.com/bandwidthcom/csharp-bandwidth/labels/3.0">3.0 issues section on GitHub</a>. To start a new topic on 3.0, please open an issue and use the <code class="prettyprint">3.0</code> tag. Your feedback is greatly appreciated!</p>
-
-          <h2 id="python-library">Python Library</h2>
-
-<p><a href="https://github.com/bandwidthcom/python-bandwidth"><img alt="github" src="images/github_logo.png" /></a></p>
-
-<p>Client library for the <a href="http://ap.bandwidth.com/docs/rest-api/">Bandwidth App Platform</a></p>
-
-<h3 id="documentation-and-tutorials">Documentation and Tutorials</h3>
-
-<p><a href="http://bandwidth-sdk.readthedocs.org/en/latest/">Read the Docs</a></p>
-
-<h3 id="installation">Installation</h3>
-
-<p><code class="prettyprint">pip install bandwidth_sdk</code></p>
-
-<h3 id="requirements">Requirements</h3>
-
-<ul>
-<li><a href="http://bandwidth.com/products/application-platform/?utm_medium=social&amp;utm_source=github&amp;utm_campaign=dtolb&amp;utm_content=_">Bandwidth Account</a></li>
-<li><a href="https://www.python.org/downloads/">At least Python 2.7</a></li>
-</ul>
-
-          <h2 id="java-library">Java Library</h2>
-
-<p><a href="https://github.com/bandwidthcom/java-bandwidth"><img alt="github" src="images/github_logo.png" /></a></p>
-
-<h3 id="docs"><a href="http://www.javadoc.io/doc/com.bandwidth.sdk/bandwidth-java-sdk">Docs</a></h3>
-
-<p><a href="https://github.com/bandwidthcom/java-bandwidth-examples">Code Examples</a></p>
-
-<h3 id="bugs-issues">Bugs/Issues</h3>
-
-<p>Please open an issue in this repository and we&rsquo;ll handle it directly. If you have any questions please contact us at openapi@bandwidth.com.</p>
+<p><a href="https://app.getpostman.com/run-collection/7747d00c5a40d09f2894"><img alt="Postman" src="https://run.pstmn.io/button.svg?4e64d02c88d9c6d9043275f34b71c4a5" /></a></p>
 
           <h1 id="account">Account</h1>
 
@@ -8402,6 +8070,348 @@ Early access will begin in Q3. Email signup@bandwidth.com to obtain early access
 <td style="text-align: left">Cannot connect to competitor competitor web api</td>
 </tr>
 </tbody></table>
+
+          <h1 id="sdks-and-client-libraries">SDKS and Client Libraries</h1>
+
+          <h2 id="nodejs-library">NodeJS Library</h2>
+
+<p><a href="https://github.com/bandwidthcom/node-bandwidth"><img alt="github" src="images/github_logo.png" /></a></p>
+
+<p>The current version is v2, released 5 August, 2016. Version 1.3.3 is available  <a href="https://github.com/bandwidthcom/node-bandwidth/tree/v1.3.3">here</a>.</p>
+
+<h3 id="full-api-reference"><a href="http://bwdemos.com/node-bandwidth/index.html">Full API Reference</a></h3>
+
+<p>The Full API Reference is available either as an interactive site or as a single Markdown file:</p>
+
+<ul>
+<li><a href="http://bwdemos.com/node-bandwidth/index.html">Site</a>.</li>
+<li><a href="https://github.com/bandwidthcom/node-bandwidth/blob/master/docs/api.md">Single MD file</a></li>
+</ul>
+
+<h3 id="installing-the-sdk">Installing the SDK</h3>
+
+<p><code class="prettyprint">node-bandwidth</code> is available on NPM:</p>
+
+<p>npm install &ndash;save node-bandwidth</p>
+
+<h3 id="supported-versions">Supported Versions</h3>
+
+<p><code class="prettyprint">node-bandwidth</code> should work on all versions of node newer than <code class="prettyprint">0.10.*</code>. However, due to the rapid development in the Node and npm environment, we can only provide <em>support</em> on <a href="https://github.com/nodejs/LTS">LTS versions of Node</a></p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Version</th>
+<th style="text-align: left">Support Level</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">&lt;0.10.*</td>
+<td style="text-align: left">Unsupported</td>
+</tr>
+<tr>
+<td style="text-align: left">0.10.*</td>
+<td style="text-align: left">Supported</td>
+</tr>
+<tr>
+<td style="text-align: left">0.12.*</td>
+<td style="text-align: left">Supported</td>
+</tr>
+<tr>
+<td style="text-align: left">&gt;=4.0 &lt;4.2</td>
+<td style="text-align: left">Unsupported</td>
+</tr>
+<tr>
+<td style="text-align: left"><strong>&gt;=4.2 &lt;5.* (Node v4 argon LTS)</strong></td>
+<td style="text-align: left"><strong>Recommended</strong></td>
+</tr>
+<tr>
+<td style="text-align: left">5.*</td>
+<td style="text-align: left">Unsupported</td>
+</tr>
+<tr>
+<td style="text-align: left">6.*</td>
+<td style="text-align: left">Unsupported</td>
+</tr>
+</tbody></table>
+
+<h3 id="client-initialization">Client initialization</h3>
+
+<p>All interaction with the API is done through a <code class="prettyprint">client</code> Object. The client constructor takes an Object containing configuration options. The following options are supported:</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Field name</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Default value</th>
+<th style="text-align: left">Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><code class="prettyprint">userId</code></td>
+<td style="text-align: left">Your user ID</td>
+<td style="text-align: left"><code class="prettyprint">undefined</code></td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">apiToken</code></td>
+<td style="text-align: left">Your API token</td>
+<td style="text-align: left"><code class="prettyprint">undefined</code></td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">apiSecret</code></td>
+<td style="text-align: left">Your API secret</td>
+<td style="text-align: left"><code class="prettyprint">undefined</code></td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">baseUrl</code></td>
+<td style="text-align: left">The Bandwidth API URL</td>
+<td style="text-align: left"><code class="prettyprint">https://api.catapult.inetwork.com</code></td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<p>To initialize the client object, provide your API credentials which can be found on your account page in <a href="https://catapult.inetwork.com/pages/catapult.jsf">the portal</a>.</p>
+<pre class="highlight javascript"><code><span class="kd">var</span> <span class="nx">Bandwidth</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"node-bandwidth"</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Bandwidth</span><span class="p">({</span>
+    <span class="na">userId</span>    <span class="p">:</span> <span class="s2">"YOUR_USER_ID"</span><span class="p">,</span> <span class="c1">// &lt;-- note, this is not the same as the username you used to login to the portal</span>
+    <span class="na">apiToken</span>  <span class="p">:</span> <span class="s2">"YOUR_API_TOKEN"</span><span class="p">,</span>
+    <span class="na">apiSecret</span> <span class="p">:</span> <span class="s2">"YOUR_API_SECRET"</span>
+<span class="p">});</span>
+</code></pre>
+
+<p>Your <code class="prettyprint">client</code> object is now ready to use the API.</p>
+
+<h3 id="callbacks-or-promises">Callbacks or Promises</h3>
+
+<p>All functions of the client object take an optional Node.js style <code class="prettyprint">(err, result)</code> callback, and also return a Promise. That way if you want to use Promises in your application, you don&rsquo;t have to wrap the SDK with a Promise library. You can simply do things like this:</p>
+
+<h4 id="promise-style">Promise style</h4>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span>
+    <span class="na">from</span> <span class="p">:</span> <span class="s2">"+12345678901"</span><span class="p">,</span> <span class="c1">// This must be a Catapult number on your account</span>
+    <span class="na">to</span>   <span class="p">:</span> <span class="s2">"+12345678902"</span><span class="p">,</span>
+    <span class="na">text</span> <span class="p">:</span> <span class="s2">"Hello world."</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Message sent with ID "</span> <span class="o">+</span> <span class="nx">message</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+
+<p>If you&rsquo;re not into that kind of thing you can also do things the &ldquo;old fashioned&rdquo; callback way:</p>
+
+<h4 id="callback-style">Callback style</h4>
+<pre class="highlight javascript"><code><span class="nx">client</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span>
+    <span class="na">from</span> <span class="p">:</span> <span class="s2">"+12345678901"</span><span class="p">,</span> <span class="c1">// This must be a Catapult number on your account</span>
+    <span class="na">to</span>   <span class="p">:</span> <span class="s2">"+12345678902"</span><span class="p">,</span>
+    <span class="na">text</span> <span class="p">:</span> <span class="s2">"Hello world."</span>
+<span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Message sent with ID "</span> <span class="o">+</span> <span class="nx">message</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+
+<h3 id="providing-feedback">Providing feedback</h3>
+
+<p>For current discussions on 2.0 please see the <a href="https://github.com/bandwidthcom/node-bandwidth/labels/2.0">2.0 issues section on GitHub</a>. To start a new topic on 2.0, please open an issue and use the <code class="prettyprint">2.0</code> tag. Your feedback is greatly appreciated!</p>
+
+          <h2 id="c-library">C# Library</h2>
+
+<p>A .Net client library for the <a href="http://bandwidth.com/products/application-platform?utm_medium=social&amp;utm_source=github&amp;utm_campaign=dtolb&amp;utm_content=_">Bandwidth Application Platform</a></p>
+
+<p>The current version is v3.0, released ## August, 2016. Version 2.14 is available  <a href="https://github.com/bandwidthcom/csharp-bandwidth/tree/v2.14">here</a>.</p>
+
+<p><a href="https://github.com/bandwidthcom/csharp-bandwidth/tree/v3-preview"><img alt="github" src="images/github_logo.png" /></a></p>
+
+<p><a href="http://bwdemos.com/csharp-bandwidth/html/R_Project_API.htm">Full API Reference</a></p>
+
+<h3 id="installing-the-sdk">Installing the SDK</h3>
+
+<p><code class="prettyprint">Bandwidth.Net</code> is available on Nuget (Nuget 3.0+ is required):</p>
+
+<p>Install-Package Bandwidth.Net</p>
+
+<h3 id="supported-versions">Supported Versions</h3>
+
+<p><code class="prettyprint">Bandwidth.Net</code> should work on all levels of .Net Framework 4.5+.</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Version</th>
+<th style="text-align: left">Support Level</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">&lt;4.5</td>
+<td style="text-align: left">Unsupported</td>
+</tr>
+<tr>
+<td style="text-align: left">4.5</td>
+<td style="text-align: left">Supported</td>
+</tr>
+<tr>
+<td style="text-align: left">4.6</td>
+<td style="text-align: left">Supported</td>
+</tr>
+<tr>
+<td style="text-align: left">.Net Core (netstandard1.6)</td>
+<td style="text-align: left">Supported</td>
+</tr>
+<tr>
+<td style="text-align: left">PCL (Profile111)</td>
+<td style="text-align: left">Supported</td>
+</tr>
+<tr>
+<td style="text-align: left">Xamarin (IOS, Android, MonoTouch)</td>
+<td style="text-align: left">Supported</td>
+</tr>
+</tbody></table>
+
+<h3 id="client-initialization">Client initialization</h3>
+
+<p>All interaction with the API is done through a class <code class="prettyprint">Client</code>. The <code class="prettyprint">Client</code> constructor takes an next options:</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Argument</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Default value</th>
+<th style="text-align: left">Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><code class="prettyprint">userId</code></td>
+<td style="text-align: left">Your user ID</td>
+<td style="text-align: left">none</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">apiToken</code></td>
+<td style="text-align: left">Your API token</td>
+<td style="text-align: left">none</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">apiSecret</code></td>
+<td style="text-align: left">Your API secret</td>
+<td style="text-align: left">none</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">baseUrl</code></td>
+<td style="text-align: left">The Bandwidth API URL</td>
+<td style="text-align: left"><code class="prettyprint">https://api.catapult.inetwork.com</code></td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<p>To initialize the <code class="prettyprint">Client</code> instance, provide your API credentials which can be found on your account page in <a href="https://catapult.inetwork.com/pages/catapult.jsf">the portal</a>.</p>
+<pre class="highlight csharp"><code><span class="k">using</span> <span class="nn">Bandwidth.Net</span><span class="p">;</span>
+
+<span class="n">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Client</span><span class="p">(</span>
+    <span class="s">"YOUR_USER_ID"</span><span class="p">,</span> <span class="c1">// &lt;-- note, this is not the same as the username you used to login to the portal
+</span>    <span class="s">"YOUR_API_TOKEN"</span><span class="p">,</span>
+    <span class="s">"YOUR_API_SECRET"</span>
+<span class="p">);</span>
+</code></pre>
+
+<p>Your <code class="prettyprint">client</code> object is now ready to use the API.</p>
+
+<h4 id="lazy-evalutions">Lazy evalutions</h4>
+
+<p>This library uses lazy evalutions in next cases:
+    - Object creation,
+    - Get list of objects</p>
+
+<h4 id="object-creation">Object Creation</h4>
+
+<p>When you create a bridge, call, message, etc. you will receive instance of <code class="prettyprint">ILazyInstance&lt;&gt;</code> as result. It allow you to get <code class="prettyprint">Id</code> of created object and created object on demand via property <code class="prettyprint">Instance</code>.</p>
+<pre class="highlight csharp"><code><span class="n">var</span> <span class="n">application</span> <span class="p">=</span> <span class="n">await</span> <span class="n">client</span><span class="p">.</span><span class="n">Application</span><span class="p">.</span><span class="nf">CreateAsync</span><span class="p">(</span><span class="k">new</span> <span class="n">CreateApplicationData</span> <span class="p">{</span><span class="n">Name</span> <span class="p">=</span> <span class="s">"MyFirstApp"</span><span class="p">});</span>
+
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">application</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span> <span class="c1">//will return Id of created application
+</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">application</span><span class="p">.</span><span class="n">Instance</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span> <span class="c1">//will make request to Catapult API to get application data
+</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">application</span><span class="p">.</span><span class="n">Instance</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span> <span class="c1">//will use cached application's data
+</span>
+</code></pre>
+
+<h4 id="get-list-of-objects">Get list of objects</h4>
+
+<p>Executing of methods which returns collections of objects will not execute Catapult API request immediately. THis request will be executed only when you try enumerate items of the collection.</p>
+<pre class="highlight csharp"><code><span class="n">var</span> <span class="n">calls</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">Call</span><span class="p">.</span><span class="nf">List</span><span class="p">();</span> <span class="c1">// will not execute any requests to Catapult API here
+</span>
+<span class="k">foreach</span><span class="p">(</span><span class="n">var</span> <span class="n">call</span> <span class="k">in</span> <span class="n">calls</span><span class="p">)</span> <span class="c1">// a request to Catapult API will be executed here
+</span><span class="p">{</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">call</span><span class="p">.</span><span class="n">From</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// or
+</span>
+<span class="n">var</span> <span class="n">list</span> <span class="p">=</span> <span class="n">calls</span><span class="p">.</span><span class="nf">ToList</span><span class="p">();</span> <span class="c1">// a request to Catapult API will be executed here
+</span>
+</code></pre>
+
+<h3 id="send-a-sms">Send a SMS</h3>
+<pre class="highlight csharp"><code><span class="n">var</span> <span class="n">message</span> <span class="p">=</span> <span class="n">await</span> <span class="n">client</span><span class="p">.</span><span class="n">Message</span><span class="p">.</span><span class="nf">SendAsync</span><span class="p">(</span><span class="k">new</span> <span class="n">MessageData</span> <span class="p">{</span>
+    <span class="n">From</span> <span class="p">=</span> <span class="s">"+12345678901"</span><span class="p">,</span> <span class="c1">// This must be a Bandwidth number on your account
+</span>    <span class="n">To</span>   <span class="p">=</span> <span class="s">"+12345678902"</span><span class="p">,</span>
+    <span class="n">Text</span> <span class="p">=</span> <span class="s">"Hello world."</span>
+<span class="p">});</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">"Message Id is {message.Id}"</span><span class="p">);</span>
+</code></pre>
+
+<h3 id="make-a-call">Make a call</h3>
+<pre class="highlight csharp"><code><span class="n">var</span> <span class="n">call</span> <span class="p">=</span> <span class="n">await</span> <span class="n">client</span><span class="p">.</span><span class="n">Call</span><span class="p">.</span><span class="nf">CreateAsync</span><span class="p">(</span><span class="k">new</span> <span class="n">CreateCallData</span> <span class="p">{</span>
+    <span class="n">From</span> <span class="p">=</span> <span class="s">"+12345678901"</span><span class="p">,</span> <span class="c1">// This must be a Bandwidth number on your account
+</span>    <span class="n">To</span>   <span class="p">=</span> <span class="s">"+12345678902"</span>
+<span class="p">});</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">"Call Id is {call.Id}"</span><span class="p">);</span>
+</code></pre>
+
+<h3 id="providing-feedback">Providing feedback</h3>
+
+<p>For current discussions on 3.0 please see the <a href="https://github.com/bandwidthcom/csharp-bandwidth/labels/3.0">3.0 issues section on GitHub</a>. To start a new topic on 3.0, please open an issue and use the <code class="prettyprint">3.0</code> tag. Your feedback is greatly appreciated!</p>
+
+          <h2 id="python-library">Python Library</h2>
+
+<p><a href="https://github.com/bandwidthcom/python-bandwidth"><img alt="github" src="images/github_logo.png" /></a></p>
+
+<p>Client library for the <a href="http://ap.bandwidth.com/docs/rest-api/">Bandwidth App Platform</a></p>
+
+<h3 id="documentation-and-tutorials">Documentation and Tutorials</h3>
+
+<p><a href="http://bandwidth-sdk.readthedocs.org/en/latest/">Read the Docs</a></p>
+
+<h3 id="installation">Installation</h3>
+
+<p><code class="prettyprint">pip install bandwidth_sdk</code></p>
+
+<h3 id="requirements">Requirements</h3>
+
+<ul>
+<li><a href="http://bandwidth.com/products/application-platform/?utm_medium=social&amp;utm_source=github&amp;utm_campaign=dtolb&amp;utm_content=_">Bandwidth Account</a></li>
+<li><a href="https://www.python.org/downloads/">At least Python 2.7</a></li>
+</ul>
+
+          <h2 id="java-library">Java Library</h2>
+
+<p><a href="https://github.com/bandwidthcom/java-bandwidth"><img alt="github" src="images/github_logo.png" /></a></p>
+
+<h3 id="docs"><a href="http://www.javadoc.io/doc/com.bandwidth.sdk/bandwidth-java-sdk">Docs</a></h3>
+
+<p><a href="https://github.com/bandwidthcom/java-bandwidth-examples">Code Examples</a></p>
+
+<h3 id="bugs-issues">Bugs/Issues</h3>
+
+<p>Please open an issue in this repository and we&rsquo;ll handle it directly. If you have any questions please contact us at openapi@bandwidth.com.</p>
 
       </div>
       <div class="dark-box">
