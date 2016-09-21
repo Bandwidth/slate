@@ -135,6 +135,68 @@
 
 <p><a href="https://app.getpostman.com/run-collection/7747d00c5a40d09f2894"><img alt="Postman" src="https://run.pstmn.io/button.svg?4e64d02c88d9c6d9043275f34b71c4a5" /></a></p>
 
+          <h1 id="security">Security</h1>
+
+<p>All communication with Bandwidth APIs are done through secure channels that use HTTP with SSL, HTTPS.</p>
+
+<h2 id="finding-your-api-account-credentials-userid-token-secret">Finding Your API Account Credentials: UserId, Token, Secret</h2>
+
+<p>You can find the API credentials under the Account tab.</p>
+
+<p><img alt="creds" src="images/creds.png" /></p>
+
+<h2 id="basic-authentication-for-rest-services">Basic Authentication for REST Services</h2>
+
+<p>HTTP Basic authentication with your API token and API secret is required for access to Bandwidth API’s web services. To view your API tokens and secrets, log into the web site with your username and password, then view your profile page in the dashboard. Once you know your API token and secret, you’re ready to make web service requests. Basic authentication takes a username and password to send to the server, but don’t use your Bandwidth API web site username and password. Instead, use your API token in place of your username, and your API secret in place of your password. If you have the curl program installed, you can make a test call to the web service from the command-line. Substitute your API token and secret in the this command to view your user’s details. Almost all HTTP client libraries make basic authentication easy to use. Check your library’s documentation for details. If your HTTP library does not do basic authentication for you, consult the HTTP specification for the basic authentication scheme for implementation details. If you have the curl program installed, you can make a test call to the web service from the command-line. Substitute your API token and secret in the this command to view your user’s details.</p>
+
+<h3 id="examples">Examples</h3>
+<pre class="highlight shell"><code>curl -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> https://api.catapult.inetwork.com/v1/users/<span class="o">{</span>user_id<span class="o">}</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="kd">var</span> <span class="nx">Bandwidth</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"node-bandwidth"</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Bandwidth</span><span class="p">({</span>
+    <span class="na">userId</span>    <span class="p">:</span> <span class="s2">"YOUR_USER_ID"</span><span class="p">,</span> <span class="c1">// &lt;-- note, this is not the same as the username you used to login to the portal</span>
+    <span class="na">apiToken</span>  <span class="p">:</span> <span class="s2">"YOUR_API_TOKEN"</span><span class="p">,</span>
+    <span class="na">apiSecret</span> <span class="p">:</span> <span class="s2">"YOUR_API_SECRET"</span>
+<span class="p">});</span>
+
+<span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">){});</span>
+
+<span class="c1">// Callback</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">Account</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">info</span><span class="p">){});</span>
+</code></pre>
+
+<h2 id="permissions">Permissions</h2>
+
+<p>Bandwidth API users are only allowed to read, modify, and delete resources they own. Attempts to access resources owned by other users through the API will result in an HTTP 403 “Forbidden” status.</p>
+
+<h2 id="setting-up-basic-auth-for-callbacks">Setting Up Basic Auth for Callbacks</h2>
+
+<p>You can password protect your web server for Bandwidth Callbacks for example:</p>
+
+<p><code class="prettyprint">https://username:password@yoursecurehost.com/yoursecureapp</code></p>
+
+<p>Modify the callback URL for your application. This can be done through the API (<a href="#applications">see documentation</a>) or through the web portal on the “My Apps” tab. Select the Application you want to modify, and then click the “Edit” button.</p>
+
+<p><img alt="api" src="images/basic-auth.png" /></p>
+
+<p>Scroll down and edit either the “Call URL” or the “Messaging URL” (or both). The URL should be structured as follows:</p>
+
+<p><code class="prettyprint">https://{username}:{password}@yourdomain.com/</code></p>
+
+<p>You must use HTTPS in order to use basic auth with App Platform callbacks, and your callback server should present a valid, trusted certificate. Your username and password should also be <a href="http://www.w3schools.com/tags/ref_urlencode.asp">URL Encoded</a> to prevent special characters from being lost.</p>
+
+<p><img alt="api2" src="images/basic-auth2.png" /></p>
+
+<p>Basic Auth also works for Call and Messaging fallback URLs as well. In addition, you can also use Basic Auth in your callbacks for specific messages and calls that you create. For instance, if you want callback events for a specific outgoing message, when you create the message with a <code class="prettyprint">POST</code> to the API and set the callback URL, you can add credentials to this URL as well. The same requirements (HTTPS, and URL Encoded) apply here as well.</p>
+
+<p>When your application receives a callback from the App Platform, the “Authorization” header will now be set. The “Authorization” header will tell your application what type of authorization is being sent – in this case “Basic” – followed by a <a href="https://en.wikipedia.org/wiki/Base64">Base64 Encoded</a> string containing the username and password, separated by a colon, that you configured in your callback URL.</p>
+
+<p><img alt="api3" src="images/basic-auth3.png" /></p>
+
+<p>Your application can now be written to only accept a request if it contains the expected credentials in the “Authorization” header, because only you will ever know the credentials. When you set the callback URL on the API (or on the web portal) the credentials are encrypted in transit, and they are also encrypted when they are stored in the database. They are also encrypted in transit between your application and the App Platform, so other parties cannot extract your credentials by inspecting your network traffic. This is why it is important to use a valid, trusted certificate on your application server, to ensure the security of your callbacks.</p>
+
           <h1 id="account">Account</h1>
 
 <p>The Account API allows you to retrieve your current balance, transaction list, account type and all elements related to your platform account.</p>
@@ -2239,6 +2301,11 @@ Location: /v1/users/{userId}/calls/{bridgeId}
 <td style="text-align: left">No</td>
 </tr>
 <tr>
+<td style="text-align: left">recordingFileFormat</td>
+<td style="text-align: left">The file format of the recorded call. Supported values are <code class="prettyprint">wav</code> (default) and <code class="prettyprint">mp3</code>.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
 <td style="text-align: left">transcriptionEnabled</td>
 <td style="text-align: left">Whether all the recordings for this call is going to be automatically transcribed.</td>
 <td style="text-align: left">No</td>
@@ -2385,6 +2452,11 @@ The call resource returned in the &ldquo;Location&rdquo; header can be modified 
 <tr>
 <td style="text-align: left">recordingEnabled</td>
 <td style="text-align: left">Indicates if the call should be recorded. Values <code class="prettyprint">true</code> or <code class="prettyprint">false</code>. You can turn recording on/off and have multiple recordings on a single call.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">recordingFileFormat</td>
+<td style="text-align: left">The file format of the recorded call. Supported values are <code class="prettyprint">wav</code> (default) and <code class="prettyprint">mp3</code>.</td>
 <td style="text-align: left">No</td>
 </tr>
 <tr>
