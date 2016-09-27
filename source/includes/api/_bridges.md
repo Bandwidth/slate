@@ -217,6 +217,7 @@ client.Bridge.get('brg-65dhmbasiei',
 		}
 	});
 ```
+
 ```csharp
 var bridge = await client.Bridge.GetAsync("brg-65dhmbasiei");
 ```

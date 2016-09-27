@@ -63,7 +63,12 @@ Uploads a file the normal HTTP way. You may add headers to the request in order 
 ### Example: Upload an MP3 File
 
 ```csharp
-await client.Media.UploadAsync(new UploadMediaData{ MediaName = "file.mp3", Path = "/path/to/file.mp3", ContentType = "audio/mp3"});
+await client.Media.UploadAsync(new UploadMediaData{
+		MediaName = "file.mp3",
+		Path = "/path/to/file.mp3",
+		ContentType = "audio/mp3"
+	}
+);
 ```
 
 ## GET media/{mediaName}

@@ -176,7 +176,11 @@ client.Account.getTransactions(params)
 	});
 ```
 ```csharp
-var transactions = await client.Account.GetTransactions(new AccountTransactionQuery {FromDate = new DateTime(2013, 2, 21, 13, 38, 0, 0, DateTimeKind.Utc)});
+var transactions = await client.Account.GetTransactions(
+  new AccountTransactionQuery {
+    FromDate = new DateTime(2013, 2, 21, 13, 38, 0, 0, DateTimeKind.Utc)
+  }
+);
 ```
 
 > The above command returns JSON structured like this:

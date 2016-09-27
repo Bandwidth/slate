@@ -97,8 +97,16 @@ curl -v -X GET  https://api.catapult.inetwork.com/v1/availableNumbers/local?city
   -u {token}:{secret} \
   -H "Content-type: application/json" \
 ```
+
 ```csharp
-var results = await client.AvailableNumber.SearchLocalAsync(new LocalNumberQuery{ City = "Cary", State = "NC", Pattern = "*2?9*", Quantity = 2});
+var results = await client.AvailableNumber.SearchLocalAsync(
+  new LocalNumberQuery{
+    City = "Cary",
+    State = "NC",
+    Pattern = "*2?9*",
+    Quantity = 2
+  }
+);
 ```
 
 > The above command returns JSON structured like this:
@@ -166,7 +174,8 @@ client.AvailableNumber.serchAndOrder("local", { areaCode : "910", quantity : 2 }
 ```
 
 ```csharp
-var results = await client.AvailableNumber.SearchAndOrderLocalAsync(new LocalNumberQueryForOrder{ AreaCode = "910", Quantity = 2});
+var results = await client.AvailableNumber.SearchAndOrderLocalAsync(
+  new LocalNumberQueryForOrder{ AreaCode = "910", Quantity = 2});
 ```
 
 > The above command returns a `201` response JSON structured like this:
@@ -230,7 +239,9 @@ client.AvailableNumber.search("tollFree", {
 ```
 
 ```csharp
-var results = await client.AvailableNumber.SearchTollFreeAsync(new TollFreeNumberQuery{ Pattern = "*2?9*", Quantity = 2});
+var results = await client.AvailableNumber.SearchTollFreeAsync(
+  new TollFreeNumberQuery{ Pattern = "*2?9*", Quantity = 2}
+);
 ```
 
 > The above command returns JSON structured like this:
@@ -295,7 +306,9 @@ client.AvailableNumber.searchAndOrder("tollFree", {
 
 
 ```csharp
-var results = await client.AvailableNumber.SearchAndOrderTollFreeAsync(new TollFreeNumberQueryForOrder{Quantity = 2});
+var results = await client.AvailableNumber.SearchAndOrderTollFreeAsync(
+  new TollFreeNumberQueryForOrder{Quantity = 2}
+);
 ```
 
 
