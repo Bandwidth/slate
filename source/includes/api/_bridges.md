@@ -63,6 +63,11 @@ client.Bridge.list()
 var bridges = client.Bridge.List();
 ```
 
+```ruby
+bridges = Bridge.list(client)
+```
+
+
 > The above command returns JSON structured like this:
 
 ```json
@@ -139,6 +144,13 @@ var bridge = await client.Bridge.CreateAsync(new CreateBridgeData{
 });
 ```
 
+```ruby
+bridge = Bridge.create(client, {
+	:bridge_audio => true,
+	:call_ids => ["c-qbsx6wsdi", "c-zan4g7prsq"]
+})
+```
+
 > The above command returns HTTP Status structured like this:
 ```
 HTTP/1.1 201 Created
@@ -175,10 +187,17 @@ client.Bridge.create({
 		}
 	});
   ```
+
 ```csharp
 var bridge = await client.Bridge.CreateAsync(new CreateBridgeData{
 	BridgeAudio = true
 });
+```
+
+```ruby
+bridge = Bridge.create(client, {
+	:bridge_audio => true
+})
 ```
 
 > The above command returns HTTP Status structured like this:
@@ -220,6 +239,10 @@ client.Bridge.get('brg-65dhmbasiei',
 
 ```csharp
 var bridge = await client.Bridge.GetAsync("brg-65dhmbasiei");
+```
+
+```ruby
+bridge = Bridge.get(client, "brg-65dhmbasiei")
 ```
 
 > The above command returns JSON structured like this:
@@ -305,6 +328,11 @@ client.Bridge.playAudioFile("bridgeID", "", function (err, res) {});
 await client.Bridge.PlayAudioFileAsync("brg-65dhmbasiei", "http://myurl.com/file.wav");
 ```
 
+```ruby
+bridge.play_audio({:file_url => "http://myurl.com/file.wav"})
+```
+
+
 
 ### Example: Speak a Sentence
 ```shell
@@ -371,6 +399,10 @@ client.Bridge.speakSentence("bridgeID", "", function (err, res) {});
 await client.Bridge.SpeakSentenceAsync("brg-65dhmbasiei", "");
 ```
 
+```ruby
+bridge.play_audio({:sentence => ""})
+```
+
 
 ## GET bridges/{bridgeId}/calls
 
@@ -403,6 +435,10 @@ client.Bridge.getCalls('brg-65dhjrmbasiei',
 
 ```csharp
 var calls = client.Bridge.GetCalls("brg-65dhmbasiei");
+```
+
+```ruby
+calls = bridge.get_calls()
 ```
 
 
