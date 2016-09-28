@@ -79,6 +79,11 @@ client.Conference.create({from: "+1234567890"}, function(err, conference){});
 var conference = await client.Conference.CreateAsync(new CreateConferenceData {From = "+1234567890"});
 ```
 
+
+```ruby
+conference = Conference.create(client,  {:from => "+1234567890"})
+```
+
 > The above command returns HTTP Header structured like this:
 
 ```
@@ -125,6 +130,16 @@ var conference = await client.Conference.CreateAsync(new CreateConferenceData {
 });
 ```
 
+```ruby
+conference = Conference.create(client,  {
+	:from => "+1234567890",
+	:callback_url => "http://my.callback.url",
+	:callback_timeout => 2000,
+	:fallback_url => "http://my.fallback.url"
+})
+```
+
+
 > The above command returns HTTP Header structured like this:
 
 ```
@@ -153,6 +168,11 @@ client.Conference.get("conferenceId", function(err, conference){});
 ```csharp
 var conference = await client.Conference.GetAsync("{conferenceId1}");
 ```
+
+```ruby
+conference = Conference.get(client, "{conferenceId1}")
+```
+
 
 > The above command returns JSON structured like this:
 
@@ -207,6 +227,10 @@ client.Conference.update("conferenceID", {state: "completed"}, function(err){});
 await client.Conference.TerminateAsync("{conferenceId1}");
 ```
 
+```ruby
+conference.complete()
+```
+
 
 ### Example: Prevent all members from speaking
 ```shell
@@ -229,6 +253,10 @@ client.Conference.update("conferenceID", {mute: "true"}, function(err){});
 
 ```csharp
 await client.Conference.MuteAsync("{conferenceId1}", true);
+```
+
+```ruby
+conference.mute()
 ```
 
 
@@ -301,6 +329,15 @@ await client.Conference.PlayAudioAsync("{conferenceId1}", new PlayAudioData {
 });
 ```
 
+```ruby
+conference.play_audio({
+	:sentence => "hola de Bandwidth",
+	:gender => "male",
+	:voice => "Jorge",
+	:locale => "es"
+})
+```
+
 
 ### Example: Play audio in conference
 
@@ -344,6 +381,14 @@ await client.Conference.PlayAudioAsync("{conferenceId1}", new PlayAudioData {
 });
 ```
 
+```ruby
+conference.play_audio({
+	:file_url => "http://myurl.com/file.mp3",
+	:loop_enabled => true
+})
+```
+
+
 ## POST conferences/{conferenceId}/members
 Add members to a conference.
 
@@ -383,6 +428,14 @@ var member = await client.Conference.CreateMemberAsync("{conferenceId1}", new Cr
 	CallId = "callID"
 });
 ```
+
+```ruby
+member = conference.create_member("{conferenceId1}", {
+	:call_id => "callId"
+})
+```
+
+
 > The above command returns HTTP Header structured like this:
 
 ```
@@ -411,6 +464,11 @@ client.Conference.getMembers("conferenceId", function(err, members){});
 ```csharp
 var members = client.Conference.GetMembers("{conferenceId1}");
 ```
+
+```ruby
+members = conference.get_members()
+```
+
 
 > The above command returns JSON structured like this:
 
@@ -483,7 +541,7 @@ client.Conference.updateMember("conferenceID", "memberId", {state: "completed"},
 ```
 
 ```csharp
-var member = await client.Conference.GetMemberAsync("{conferenceId1}", "{memberId1}");
+var member = await client.Conference.UpdateMemberAsync("{conferenceId1}", "{memberId1}", new UpdateMemberData {State = MemberState.Completed});
 ```
 
 
@@ -559,6 +617,9 @@ client.Conference.getMember("conferenceId", "memberId", function(err, member){})
 var member = await client.Conference.GetMemberAsync("{conferenceId1}", "{memberId1}");
 ```
 
+```ruby
+member = conference.get_member("{memberId1}")
+```
 
 > The above command returns JSON structured like this:
 
