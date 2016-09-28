@@ -33,6 +33,11 @@ client.Domain.list()
 var domains = client.Domain.List();
 ```
 
+```ruby
+domains = Domain.list(client)
+```
+
+
 
 > The above command returns JSON structured like this:
 
@@ -92,6 +97,14 @@ var domain = await client.Domain.CreateAsync(new CreateDomainData{
 });
 ```
 
+```ruby
+domain = Domain.create(client, {
+	:name => "mycoolapp",
+	:description => "disruptive app that is going to revolutionize telecom"
+})
+```
+
+
 > The above command returns HTTP Header structured like this:
 
 ```
@@ -117,4 +130,8 @@ client.Domain.delete("{domain-id}")
 
 ```csharp
 await client.Domain.DeleteAsync("{domainId1}");
+```
+
+```ruby
+domain.delete()
 ```

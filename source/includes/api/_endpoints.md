@@ -79,6 +79,10 @@ var endpoints = client.Endpoint.List("{domainId1}");
 var endpoints = client.Endpoint.List("{domainId1}", new EndpointQuery {Size = 1000});
 ```
 
+```ruby
+endpoints = domain.get_endpoints()
+```
+
 > The above command returns JSON structured like this:
 
 ```json
@@ -139,6 +143,18 @@ var endpoint = await client.Endpoint.CreateAsync(new CreateEndpointData {
 });
 ```
 
+```ruby
+endpoint = domain.create_endpoint({
+	:domain_id => "domainId",
+	:name => "jsmith_mobile",
+	:description => "John Smiths mobile client",
+	:application_id => "applicationId",
+	:enabled => false,
+	:credentials => {:password => "123456"}
+})
+```
+
+
 > The above command returns HTTP Header structured like this:
 
 ```
@@ -168,6 +184,11 @@ client.Endpoint.get(domainId, endpointId, function(err, endpoint){});
 ```csharp
 var endpoint = await client.Endpoint.GetAsync("{domainId1}", "{endpointId1}");
 ```
+
+```ruby
+endpoint = domain.get_endpoint("{endpoointId1}")
+```
+
 
 > The above command returns JSON structured like this:
 
@@ -207,6 +228,11 @@ client.Endpoint.delete("domainId", "endpointId", function (err, endpoint) {});
 await client.Endpoint.DeleteAsync("{domainId1}", "{endpointId1}");
 ```
 
+```ruby
+domain.delete_endpoint("{endpointId1}")
+```
+
+
 ## POST domains/{domain-id}/endpoints/{endpoint-id}
 This will update an endpoint.
 
@@ -238,3 +264,5 @@ client.Endpoint.update("domainId", "endpointId", { enabled : true }, function (e
 ```csharp
 await client.Endpoint.UpdateAsync("{domainId1}", "{endpointId1}", new UpdateEndpointData {Enabled = true});
 ```
+
+
