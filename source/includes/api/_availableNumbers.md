@@ -58,7 +58,11 @@ client.AvailableNumber.search("local", { areaCode : "910", quantity : 3 }, funct
 ```
 
 ```csharp
-var results = await client.AvailableNumber.SearchLocalAsync(new LocalNumberQuery{ Area = "910", Quantity = 3});
+var results = await client.AvailableNumber.SearchLocalAsync(new LocalNumberQuery{ AreaCode = "910", Quantity = 3});
+```
+
+```ruby
+results = AvailableNumber.search_local(client, {:area_code => "910", :quantity => 3})
 ```
 
 
@@ -107,6 +111,15 @@ var results = await client.AvailableNumber.SearchLocalAsync(
     Quantity = 2
   }
 );
+```
+
+```ruby
+results = AvailableNumber.search_local(client, {
+  :city => "Cary",
+  :state => "NC",
+  :pattern => "*2?9*",
+  :quantity => 2
+})
 ```
 
 > The above command returns JSON structured like this:
@@ -242,6 +255,13 @@ client.AvailableNumber.search("tollFree", {
 var results = await client.AvailableNumber.SearchTollFreeAsync(
   new TollFreeNumberQuery{ Pattern = "*2?9*", Quantity = 2}
 );
+```
+
+```ruby
+results = AvailableNumber.search_toll_free(client, {
+  :pattern => "*2?9*",
+  :quantity => 2
+})
 ```
 
 > The above command returns JSON structured like this:
