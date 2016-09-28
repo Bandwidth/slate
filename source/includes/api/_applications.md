@@ -53,6 +53,10 @@ client.Application.list()
 var applications = client.Application.List();
 ```
 
+```ruby
+list = Application.list(client)
+```
+
 > The above command returns JSON structured like this:
 
 ```json
@@ -133,6 +137,14 @@ var application = await client.Application.CreateAsync(new CreateApplicationData
 });
 ```
 
+```ruby
+application = Application.create(client, {
+	:name => "SampleApp2",
+	:incoming_call_url => "http://your-server.com/CallCallback",
+	:incoming_message_url => "http://your-server.com/MsgCallback"
+})
+```
+
 ## GET applications/{applicationId}
 
 Gets information about one of your applications. No query parameters are supported.
@@ -166,6 +178,10 @@ client.Application.get('a-zuwwfzzrbea',
 
 ```csharp
 var application = await client.Application.GetAsync("a-zuwwfzzrbea");
+```
+
+```ruby
+application = Application.get(client, "a-zuwwfzzrbea")
 ```
 
 > The above command returns JSON structured like this:
@@ -243,6 +259,11 @@ await client.Application.UpdateAsync("a-zuwwfzzrbea", new UpdateApplicationData{
 });
 ```
 
+```ruby
+app.update({:name => "Rename App2", :auto_answer => false})
+```
+
+
 ## DELETE applications/{applicationId}
 
 Permanently deletes an application.
@@ -276,4 +297,8 @@ client.Application.delete('a-zuwwzrbea',
 
 ```csharp
 await client.Application.DeleteAsync("a-zuwwfzzrbea");
+```
+
+```ruby
+app.delete()
 ```
