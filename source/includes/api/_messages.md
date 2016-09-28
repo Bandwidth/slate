@@ -104,6 +104,11 @@ curl -v -X GET https://api.catapult.inetwork.com/v1/users/{userId}/messages \
 var messages = client.Message.List();
 ```
 
+```ruby
+messages = Message.list(client)
+```
+
+
 > The above command returns JSON structured like this:
 
 ```
@@ -178,6 +183,11 @@ curl -v -X GET https://api.catapult.inetwork.com/v1/users/{userId}/messages?from
 var messages = client.Message.List(new MessageQuery {From = "{fromNumber}"});
 ```
 
+```ruby
+messages = Message.list(client, {:from => "{fromNumber}"})
+```
+
+
 > The above command returns JSON structured like this:
 
 ```json
@@ -225,6 +235,14 @@ var messages = client.Message.List(new MessageQuery {
 	Direction = MessageDirection.Out,
 	ToDateTime = new DateTime(2015, 10, 5, 20, 37, 39, 0, DateTimeKind.Utc)
 });
+```
+
+```ruby
+messages = Message.list(client, {
+	:from => "{fromNumber}",
+	:direction => "out",
+	:to_date_time => "2012-10-05T20:38:11.023Z"
+})
 ```
 
 
@@ -318,6 +336,14 @@ var message = await client.Message.SendAsync(new MessageData {
 });
 ```
 
+```ruby
+message = Message.create(client, {
+	:from => "+19195551212",
+	:to => "+19195551213",
+	:text => "Thank you for susbcribing to Unicorn Enterprises!"
+})
+```
+
 > The above command returns HTTP Header structured like this:
 
 ```
@@ -365,6 +391,15 @@ var message = await client.Message.SendAsync(new MessageData {
 });
 ```
 
+```ruby
+message = Message.create(client, {
+	:from => "+19195551212",
+	:to => "+19195551213",
+	:text => "Thank you for susbcribing to Unicorn Enterprises!",
+	:media => ["https://api.catapult.inetwork.com/v1/users/<user-id>/media/image-1.jpg"],
+	:callback_url => "http://my.callback.url"
+})
+```
 
 > The above command returns HTTP Header structured like this:
 
@@ -413,6 +448,17 @@ var message = await client.Message.SendAsync(new MessageData {
 	CallbackUrl = "http://my.callback.url"
 });
 ```
+
+```ruby
+message = Message.create(client, {
+	:from => "+19195551212",
+	:to => "+19195551213",
+	:text => "Thank you for susbcribing to Unicorn Enterprises!",
+	:media => ["http://your-site.com/image-1.jpg"],
+	:callback_url => "http://my.callback.url"
+})
+```
+
 
 > The above command returns HTTP Header structured like this:
 
@@ -505,6 +551,18 @@ var messages = await client.Message.SendAsync(new[] {
 });
 ```
 
+```ruby
+messages = Message.create(client, [{
+	:from => "+19195551211",
+	:to => "+19195551213",
+	:text => "Thank you for susbcribing to Unicorn Enterprises!"
+}, {
+	:from => "+19195551212",
+	:to => "+19195551214",
+	:text => "Thank you for susbcribing to Unicorn Enterprises!"
+}])
+```
+
 
 ```js
 //returns
@@ -553,6 +611,16 @@ var message = await client.Message.SendAsync(new MessageData {
 });
 ```
 
+```ruby
+message = Message.create(client, {
+	:from => "+19195551212",
+	:to => "+19195551213",
+	:text => "Thank you for susbcribing to Unicorn Enterprises!",
+	:receipt_requested => "all"
+})
+```
+
+
 ### Example: Send a single text message with custom callback timeout of 2 seconds
 
 ```csharp
@@ -563,6 +631,16 @@ var message = await client.Message.SendAsync(new MessageData {
 	CallbackUrl = "http://my.callback.url",
 	CallbackTimeout = 2000
 });
+```
+
+```ruby
+message = Message.create(client, {
+	:from => "+19195551212",
+	:to => "+19195551213",
+	:text => "Thank you for susbcribing to Unicorn Enterprises!",
+	:callback_url => "http://my.callback.url",
+	:callback_timeout => 2000
+})
 ```
 
 ### Example: Send a single text message with custom callback timeout of 2 seconds and a fallback URL
@@ -576,6 +654,17 @@ var message = await client.Message.SendAsync(new MessageData {
 	CallbackTimeout = 2000,
 	FallbackUrl = "http://my.fallback.url"
 });
+```
+
+```ruby
+message = Message.create(client, {
+	:from => "+19195551212",
+	:to => "+19195551213",
+	:text => "Thank you for susbcribing to Unicorn Enterprises!",
+	:callback_url => "http://my.callback.url",
+	:callback_timeout => 2000,
+	:fallback_url => "http://my.fallback.url"
+})
 ```
 
 
@@ -608,4 +697,8 @@ client.Message.get("{messageId}", function (err, message) {
 
 ```csharp
 var message = await client.Message.GetAsync("{messageId}");
+```
+
+```ruby
+message = Message.get(client, "{messageId1}")
 ```

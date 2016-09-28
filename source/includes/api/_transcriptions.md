@@ -48,6 +48,11 @@ client.Recording.createTranscription(recordingId, function(err, transcription){}
 var transcription = await client.Transcription.CreateAsync("{recordingId}");
 ```
 
+```ruby
+transcription = recording.create_transacription()
+```
+
+
 > The above command returns HTTP Header structured like this:
 
 ```
@@ -77,6 +82,10 @@ client.Recording.getTranscription(recordingId, transcriptionId, function(err, tr
 
 ```csharp
 var transcriptions = client.Transcription.List();
+```
+
+```ruby
+transcriptions = recording.get_transacriptions()
 ```
 
 
@@ -116,6 +125,11 @@ client.Recording.getTranscriptions(recordingId, function(err, transcriptions){})
 ```csharp
 var transcription = await client.Transcription.GetAsync("{recordingId}", "{transcriptionId}");
 ```
+
+```ruby
+transcription = recording.get_transacription("{transcriptionId}")
+```
+
 
 > The above command returns JSON structured like this:
 

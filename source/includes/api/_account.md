@@ -72,6 +72,10 @@ client.Account.get(function(err, info){});
 var account = await client.Account.GetAsync();
 ```
 
+```ruby
+account = Bandwidth::Account.get(client)
+```
+
 > The above command returns JSON structured like this:
 
 ```
@@ -120,6 +124,10 @@ client.Account.getTransactions()
 
 ```csharp
 var transactions = client.Account.GetTransactions();
+```
+
+```ruby
+transactions = Account.get_transactions(client)
 ```
 
 
@@ -175,6 +183,7 @@ client.Account.getTransactions(params)
 		console.log(response.transactions);
 	});
 ```
+
 ```csharp
 var transactions = await client.Account.GetTransactions(
   new AccountTransactionQuery {
@@ -182,6 +191,11 @@ var transactions = await client.Account.GetTransactions(
   }
 );
 ```
+
+```ruby
+transactions = Account.get_transactions(client, {:from_date => "2013-02-21T13:38:00"})
+```
+
 
 > The above command returns JSON structured like this:
 
@@ -236,6 +250,9 @@ var transactions = client.Account.GetTransactions(new AccountTransactionQuery {
 });
 ```
 
+```ruby
+transactions = Account.get_transactions(client, {:from_date => "2013-02-21T13:38:00", :to_date => "2013-02-21T13:40:00"})
+```
 
 > The above command returns JSON structured like this:
 
@@ -289,6 +306,10 @@ var transactions = client.Account.GetTransactions(new AccountTransactionQuery {
 });
 ```
 
+```ruby
+transactions = Account.get_transactions(client, {:max_item => 1})
+```
+
 > The above command returns JSON structured like this:
 
 ```json
@@ -340,6 +361,9 @@ var transactions = client.Account.GetTransactions(new AccountTransactionQuery {
 });
 ```
 
+```ruby
+transactions = Account.get_transactions(client, {:type => "payment"})
+```
 
 > The above command returns JSON structured like this:
 
