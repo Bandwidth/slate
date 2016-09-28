@@ -56,6 +56,11 @@ client.Recording.list({}, function (err, recordings) {
 var recordings = client.Recording.List();
 ```
 
+```ruby
+recordings = Recording.list(client)
+```
+
+
 > The above command returns JSON structured like this:
 
 ```json
@@ -116,6 +121,10 @@ client.Recording.get("{recordingId}", function (err, recording) {
 
 ```csharp
 var recording = await client.Recording.GetAsync("{recordingId}");
+```
+
+```ruby
+recording = Recording.get(client, "{recordingId}")
 ```
 
 
