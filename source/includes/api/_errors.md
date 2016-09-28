@@ -47,6 +47,11 @@ client.Error.list({size: 1000}, function(err, errorResponse){});
 var errors = client.Error.List(new ErrorQuery{Size = 1000});
 ```
 
+```ruby
+errors = Error.list(client)
+```
+
+
 > The above command returns JSON structured like this:
 
 ```json
@@ -106,6 +111,11 @@ client.Error.get(userErrorId, function(err, errorInfo){});
 ```csharp
 var error = async client.Error.GetAsync("{errorId1}");
 ```
+
+```ruby
+error = Error.get(client, "{errorId1}")
+```
+
 
 > The above command returns JSON structured like this:
 
