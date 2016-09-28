@@ -79,6 +79,11 @@ client.Call.list()
 var calls = client.Call.List();
 ```
 
+```ruby
+calls = Call.list(client)
+```
+
+
 > The above command returns JSON structured like this:
 
 ```json
@@ -133,8 +138,13 @@ client.Call.list({
 });
 
 ```
+
 ```csharp
 var calls = client.Call.List(new CallQuery{From = "+19195551212"});
+```
+
+```ruby
+calls = Call.list(client, {:from => "+19195551212"})
 ```
 
 > The above command returns JSON structured like this:
@@ -220,11 +230,16 @@ client.Call.create({
 	console.log(id);
 })
 ```
+
 ```csharp
 var call = await client.Call.CreateAsync(new CreateCallData{
 	From = "{fromNumber}",
 	To = "{toNumber}"
 });
+```
+
+```ruby
+call = Call.create(client, {:from => "{fromNumber}", :to => "{toNumber}"})
 ```
 
 
@@ -287,6 +302,18 @@ var call = await client.Call.CreateAsync(new CreateCallData{
 });
 ```
 
+```ruby
+call = Call.create(client, {
+	:from => "{fromNumber}",
+	:to => "{sip:someone@somewhere.com}",
+	:sip_headers => {
+		"X-Header-1" => "value1",
+		"X-Header-2" => "value2"
+	}
+})
+```
+
+
 ## GET calls/{callId}
 Gets information about an active or completed call. No query parameters are supported.
 
@@ -309,6 +336,9 @@ client.Call.get("{callId}")
 var call = await client.Call.GetAsync("{callId1}");
 ```
 
+```ruby
+call = Call.get(client, "{callId1}")
+```
 
 > The above command returns JSON structured like this:
 
@@ -430,6 +460,15 @@ await client.Call.PlayAudioAsync("{callId1}", new PlayAudioData
 await client.Call.SpeakSentenceAsync("{callId1}", "Hello From Bandwidth");
 ```
 
+```ruby
+call.play_audio({
+	:sentence => "hola de Bandwidth",
+	:gender => "male",
+	:voice => "Jorge",
+	:locale => "es"
+})
+```
+
 
 ### Example: Interrupt/stop a sentence from speaking.
 ```shell
@@ -453,6 +492,13 @@ client.Call.speakSentence("callId", "", function (err, res) {});
 ```csharp
 await client.Call.SpeakSentenceAsync("{callId1}", "");
 ```
+
+```ruby
+call.play_audio({
+	:sentence => ""
+})
+```
+
 
 ### Example: Speak a Sentence with male gender voice
 ### Example: Speaking a sentence with a given locale, gender and voice.
@@ -479,6 +525,12 @@ client.Call.playAudioFile("callId", "http://myurl.com/file.wav", function (err, 
 await client.Call.PlayAudioFileAsync("{callId1}", "http://myurl.com/file.wav");
 ```
 
+```ruby
+call.play_audio({
+	:file_url => "http://myurl.com/file.wav"
+})
+```
+
 
 ### Example: Stop an Audio File Playing
 ```shell
@@ -501,6 +553,12 @@ client.Call.playAudioFile("callId", "", function (err, res) {});
 
 ```csharp
 await client.Call.PlayAudioFileAsync("{callId1}", "");
+```
+
+```ruby
+call.play_audio({
+	:file_url => ""
+})
 ```
 
 
@@ -533,6 +591,11 @@ client.Call.sendDtmf(callId, "9193334444", function (err) {});
 await client.Call.SendDtmfAsync("{callId1}", new SendDtmfData{DtmfOut = "9193334444"});
 ```
 
+```ruby
+call.set_dtmf("9193334444")
+```
+
+
 ## GET calls/{callId}/events
 Gets the events that occurred during the call. No query parameters are supported.
 
@@ -562,6 +625,10 @@ client.Call.getEvents(callId, function (err, events) {});
 
 ```csharp
 var events = client.Call.GetEvents("{callId1}");
+```
+
+```ruby
+events = call.get_events()
 ```
 
 
@@ -645,6 +712,10 @@ client.Call.getEvent(callId, eventId, function (err, callEvent) {});
 var callEvent = async client.Call.GetEventAsync("{callId1}", "{eventId1}");
 ```
 
+```ruby
+call_event = call.get_event("{eventId1}")
+```
+
 
 > The above command returns JSON structured like this:
 
@@ -677,6 +748,10 @@ client.Call.getRecordings(callId, function (err, list) {});
 
 ```csharp
 var recordings = client.Call.GetRecordings("{callId1}");
+```
+
+```ruby
+recordings = call.get_recordings()
 ```
 
 
@@ -724,6 +799,11 @@ client.Call.getTranscriptions(callId, function (err, list) {});
 ```csharp
 var transcriptions = client.Call.GetTranscriptions("{callId1}");
 ```
+
+```ruby
+transcriptions = call.get_transcriptions()
+```
+
 
 ## POST calls/{callId}/gather
 Collects a series of DTMF digits from a phone call with an optional prompt. This request returns immediately. When gather finishes, an event with the results will be posted to the callback URL.
@@ -791,6 +871,17 @@ var gather = await client.Call.CreateGatherAsync("{callId1}", new CreateGatherDa
 });
 ```
 
+```ruby
+gather = call.create_gather({
+	:max_digits => "5",
+	:terminating_digits => "*",
+	:inter_digit_timeout => "7",
+	:prompt =>  {
+		:sentence => "Please enter your 5 digit code"
+	}
+})
+```
+
 
 ## GET calls/{callId}/gather/{gatherId}
 Get the gather DTMF parameters and results.
@@ -811,6 +902,11 @@ client.Call.getGather("{callId}", "{gatherId}")
 ```csharp
 var gather = await client.Call.GetGatherAsync("{callId1}", "{gatherId1}");
 ```
+
+```ruby
+gather = call.get_gather("{gatherId1}")
+```
+
 
 > The above command returns JSON structured like this:
 
@@ -852,4 +948,8 @@ client.Call.completeGather("{callId}", "{gatherId}")
 
 ```csharp
 await client.Call.UpdateGatherAsync("{callId1}", "{gatherId1}", new UpdateGatherData {State = CallGatherState.Completed});
+```
+
+```ruby
+call.update_gather("{gatherId1}", {:state => "completed"})
 ```
