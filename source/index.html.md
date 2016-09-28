@@ -5,6 +5,7 @@ language_tabs:
   - shell: curl
   - javascript: NodeJS
   - csharp: C#
+  - ruby: Ruby
 
 toc_footers:
   - <a href="https://catapult.inetwork.com/portal/signup" class="api_ab_cta">Sign up for free</a>
@@ -50,6 +51,7 @@ includes:
   - clientLib/clientLib.md
   - clientLib/node.md
   - clientLib/csharp.md
+  - clientLib/ruby.md
   - clientLib/python.md
   - clientLib/java.md
 search: true
