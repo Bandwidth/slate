@@ -67,6 +67,11 @@ var bridges = client.Bridge.List();
 bridges = Bridge.list(client)
 ```
 
+```go
+bridges, _ := client.GetBridges()
+```
+
+
 
 > The above command returns JSON structured like this:
 
@@ -151,6 +156,14 @@ bridge = Bridge.create(client, {
 })
 ```
 
+```go
+bridgeId, _ := client.CreateBridge(&bandwidth.BridgeData{
+	BridgeAudio: true,
+	CallIDs: []string{"c-qbsx6wsdi", "c-zan4g7prsq"}
+})
+```
+
+
 > The above command returns HTTP Status structured like this:
 ```
 HTTP/1.1 201 Created
@@ -169,7 +182,7 @@ curl -v -X POST https://api.catapult.inetwork.com/v1/users/{userId}/bridges/ \
 //Promise
 client.Bridge.create({
 	bridgeAudio: true,
-	callIds: ['c-qbs5kwrsyx6wsdi', 'c-zan4g74pprsq']
+	callIds: ['c-qbs5kwrsyx6wsdi', 'c-zan4g74pprsq'],
 })
 .then(function (response) {
 	console.log(response);
@@ -199,6 +212,13 @@ bridge = Bridge.create(client, {
 	:bridge_audio => true
 })
 ```
+
+```go
+bridgeId, _ := client.CreateBridge(&bandwidth.BridgeData{
+	BridgeAudio: true,
+})
+```
+
 
 > The above command returns HTTP Status structured like this:
 ```
@@ -244,6 +264,11 @@ var bridge = await client.Bridge.GetAsync("brg-65dhmbasiei");
 ```ruby
 bridge = Bridge.get(client, "brg-65dhmbasiei")
 ```
+
+```go
+bridge, _ := client.GetBridge("brg-65dhmbasiei")
+```
+
 
 > The above command returns JSON structured like this:
 
@@ -332,6 +357,9 @@ await client.Bridge.PlayAudioFileAsync("brg-65dhmbasiei", "http://myurl.com/file
 bridge.play_audio({:file_url => "http://myurl.com/file.wav"})
 ```
 
+```go
+client.PlayAudioToBridge("brg-65dhmbasiei", &bandwidth.PlayAudioData{FileURL: "http://myurl.com/file.wav"})
+```
 
 
 ### Example: Speak a Sentence
@@ -376,6 +404,14 @@ client.Bridge.speakSentence("bridgeID", "Hello From Bandwidth", function (err, r
 await client.Bridge.SpeakSentenceAsync("brg-65dhmbasiei", "Hello From Bandwidth");
 ```
 
+```ruby
+bridge.play_audio({:sentence => "Hello From Bandwidth"})
+```
+
+```go
+client.PlayAudioToBridge("brg-65dhmbasiei", &bandwidth.PlayAudioData{Sentence: "Hello From Bandwidth"})
+```
+
 
 ### Example: Stop a Sentence
 ```shell
@@ -401,6 +437,10 @@ await client.Bridge.SpeakSentenceAsync("brg-65dhmbasiei", "");
 
 ```ruby
 bridge.play_audio({:sentence => ""})
+```
+
+```go
+client.PlayAudioToBridge("brg-65dhmbasiei", &bandwidth.PlayAudioData{Sentence: ""})
 ```
 
 
@@ -439,6 +479,10 @@ var calls = client.Bridge.GetCalls("brg-65dhmbasiei");
 
 ```ruby
 calls = bridge.get_calls()
+```
+
+```go
+calls, _ := client.GetBridgeCalls("brg-65dhmbasiei")
 ```
 
 
