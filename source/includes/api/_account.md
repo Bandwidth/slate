@@ -76,6 +76,10 @@ var account = await client.Account.GetAsync();
 account = Bandwidth::Account.get(client)
 ```
 
+```go
+account, _ := client.GetAccount()
+```
+
 > The above command returns JSON structured like this:
 
 ```
@@ -128,6 +132,10 @@ var transactions = client.Account.GetTransactions();
 
 ```ruby
 transactions = Account.get_transactions(client)
+```
+
+```go
+transactions, _ := client.GetAccountTransactions()
 ```
 
 
