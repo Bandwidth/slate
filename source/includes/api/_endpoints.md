@@ -83,6 +83,11 @@ var endpoints = client.Endpoint.List("{domainId1}", new EndpointQuery {Size = 10
 endpoints = domain.get_endpoints()
 ```
 
+```go
+endpoints, _ := client.GetDomainEndpoints("{domainId1}")
+```
+
+
 > The above command returns JSON structured like this:
 
 ```json
@@ -154,6 +159,17 @@ endpoint = domain.create_endpoint({
 })
 ```
 
+```go
+endpoint, _ := client.CreateDomainEndpoints("{domainId1}", &bandwidth.DomainEndpointData{
+	DomainID: "domainId",
+	Name: "jsmith_mobile",
+	Description: "John Smiths mobile client",
+	ApplicationID: "applicationId",
+	Enabled: false,
+	Credentials: &bandwidth.DomainEndpointCredentials{Password: "123456"}
+})
+```
+
 
 > The above command returns HTTP Header structured like this:
 
@@ -187,6 +203,10 @@ var endpoint = await client.Endpoint.GetAsync("{domainId1}", "{endpointId1}");
 
 ```ruby
 endpoint = domain.get_endpoint("{endpoointId1}")
+```
+
+```go
+endpoint, _ := client.GetDomainEndpoints("{domainId1}", "{endpointId1}")
 ```
 
 
@@ -232,6 +252,10 @@ await client.Endpoint.DeleteAsync("{domainId1}", "{endpointId1}");
 domain.delete_endpoint("{endpointId1}")
 ```
 
+```go
+client.DeleteDomainEndpoints("{domainId1}", "{endpointId1}")
+```
+
 
 ## POST domains/{domain-id}/endpoints/{endpoint-id}
 This will update an endpoint.
@@ -266,3 +290,6 @@ await client.Endpoint.UpdateAsync("{domainId1}", "{endpointId1}", new UpdateEndp
 ```
 
 
+```go
+client.UpdateDomainEndpoints("{domainId1}", "{endpointId1}", &bandwdith.DomainEndpointData{Enabled: true})
+```

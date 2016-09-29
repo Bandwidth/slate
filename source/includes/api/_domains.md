@@ -37,6 +37,10 @@ var domains = client.Domain.List();
 domains = Domain.list(client)
 ```
 
+```ruby
+domains, _ := client.GetDomains()
+```
+
 
 
 > The above command returns JSON structured like this:
@@ -104,6 +108,13 @@ domain = Domain.create(client, {
 })
 ```
 
+```go
+domainId, _ := client.CreateDomain(&bandwidth.CreateDomainData{
+	Name: "mycooapp",
+	Description: "disruptive app that is going to revolutionize telecom",
+})
+```
+
 
 > The above command returns HTTP Header structured like this:
 
@@ -134,4 +145,8 @@ await client.Domain.DeleteAsync("{domainId1}");
 
 ```ruby
 domain.delete()
+```
+
+```go
+client.DeleteDomain("{domainId1}")
 ```
