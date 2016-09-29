@@ -57,6 +57,10 @@ var applications = client.Application.List();
 list = Application.list(client)
 ```
 
+```go
+list := client.GetApplications()
+```
+
 > The above command returns JSON structured like this:
 
 ```json
@@ -145,6 +149,15 @@ application = Application.create(client, {
 })
 ```
 
+```go
+applicationId, _ := client.CreateApplication(&bandwidth.ApplicationData {
+	Name: "SomeApp2",
+	IncomingCallUrl: "http://your-server.com/CallCallback",
+	IncomingMessageUrl: "http://your-server.com/MessageCallback",
+})
+```
+
+
 ## GET applications/{applicationId}
 
 Gets information about one of your applications. No query parameters are supported.
@@ -184,14 +197,19 @@ var application = await client.Application.GetAsync("a-zuwwfzzrbea");
 application = Application.get(client, "a-zuwwfzzrbea")
 ```
 
+```go
+application, _ := client.GetApplication("a-zuwwfzzrbea")
+```
+
+
 > The above command returns JSON structured like this:
 
 ```
 {
   "id": "{applicationId}",
   "name": "MyFirstApp",
-  "incomingCallUrl": "http://example.com/calls.php",
-  "incomingMessageUrl": "http://example.com/messages.php",
+  "incomingCallURL": "http://example.com/calls.php",
+  "incomingMessageURL": "http://example.com/messages.php",
   "autoAnswer": true
 }
 ```
@@ -263,6 +281,13 @@ await client.Application.UpdateAsync("a-zuwwfzzrbea", new UpdateApplicationData{
 app.update({:name => "Rename App2", :auto_answer => false})
 ```
 
+```go
+_ := client.UpdateApplication("a-zuwwfzzrbea", &bandwidth.ApplicationData{
+	Name: "Rename App2",
+	AutoAnswer: false,
+})
+```
+
 
 ## DELETE applications/{applicationId}
 
@@ -301,4 +326,8 @@ await client.Application.DeleteAsync("a-zuwwfzzrbea");
 
 ```ruby
 app.delete()
+```
+
+```go
+_ := client.DeleteApplication("a-zuwwfzzrbea")
 ```
