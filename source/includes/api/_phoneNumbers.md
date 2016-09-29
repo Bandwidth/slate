@@ -56,7 +56,7 @@ numbers = PhoneNumber.list(client, {:size => 1000})
 ```
 
 ```go
-numbers, _ := client.GetPhoneNumbers(&bandwidth.GetPhoneNumbersQuery{Size: 1000});
+numbers, _ := client.GetPhoneNumbers(&bandwidth.GetPhoneNumbersQuery{Size: 1000})
 ```
 
 
@@ -135,7 +135,7 @@ number = PhoneNumber.create(client, {:number => "+1234567890"})
 ```
 
 ```go
-number, _ := client.CreatePhoneNumber(&bandwidth.CreatePhoneNumberData{Number: "+1234567890"});
+number, _ := client.CreatePhoneNumber(&bandwidth.CreatePhoneNumberData{Number: "+1234567890"})
 ```
 
 
@@ -182,7 +182,7 @@ number = PhoneNumber.get(client, "+1234567890")
 ```
 
 ```go
-number, _ := client.GetPhoneNumber(numberId);
+number, _ := client.GetPhoneNumber(numberId)
 ```
 
 

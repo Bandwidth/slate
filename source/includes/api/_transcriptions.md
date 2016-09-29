@@ -52,6 +52,10 @@ var transcription = await client.Transcription.CreateAsync("{recordingId}");
 transcription = recording.create_transacription()
 ```
 
+```go
+transcriptionId, _ := client.CreateRecordingTranscription("{recordingId}")
+```
+
 
 > The above command returns HTTP Header structured like this:
 
@@ -86,6 +90,10 @@ var transcriptions = client.Transcription.List();
 
 ```ruby
 transcriptions = recording.get_transacriptions()
+```
+
+```go
+transcriptions, _ := client.GetRecordingTranscriptions("{recordingId}")
 ```
 
 
@@ -128,6 +136,10 @@ var transcription = await client.Transcription.GetAsync("{recordingId}", "{trans
 
 ```ruby
 transcription = recording.get_transacription("{transcriptionId}")
+```
+
+```go
+transcription, _ := client.GetRecordingTranscription("{recordingId}", "{transcriptionId}")
 ```
 
 
