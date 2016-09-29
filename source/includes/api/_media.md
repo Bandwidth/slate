@@ -32,6 +32,10 @@ var list = client.Media.List();
 list = Media.list(client)
 ```
 
+```go
+list, _ := client.GetMediaFiles()
+```
+
 
 > The above command returns JSON structured like this:
 
@@ -79,6 +83,10 @@ await client.Media.UploadAsync(new UploadMediaData{
 Media.upload(client, "file.mp3", File.open("/path/to/file.mp3"), "audio/mp3")
 ```
 
+```go
+client.UploadMediaFile("file.mp3", "/path/to/file.mp3", "audio/mp3")
+```
+
 ## GET media/{mediaName}
 Downloads a media file you previously uploaded.
 
@@ -95,6 +103,10 @@ using(var data = await client.Media.DownloadAsync("file.mp3"))
 content, media_type = Media.download(client, "file.mp3")
 ```
 
+```go
+stream, contentType, _ := client.DownloadMediaFile("file.mp3")
+```
+
 
 ## DELETE media/{mediaName}
 Deletes a media file from Bandwidth API server. Make sure you don't have any application scripts still using the media before you delete. If you accidentally delete a media file, you can immediately upload a new file with the same name.
@@ -107,4 +119,8 @@ await client.Media.DeleteAsync("file.mp3");
 
 ```ruby
 Media.delete(client, "file.mp3")
+```
+
+```go
+client.DeleteMediaFile("file.mp3")
 ```
