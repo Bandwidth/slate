@@ -54,5 +54,7 @@ includes:
   - clientLib/ruby.md
   - clientLib/python.md
   - clientLib/java.md
+  - howto/howto
+  - howto/buytn
 search: true
 ---
