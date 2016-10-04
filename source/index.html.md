@@ -48,13 +48,14 @@ includes:
   - apiCallbacks/speak
   - apiCallbacks/transcription
   - errors
+  - howto/howto
+  - howto/buytn
   - clientLib/clientLib.md
   - clientLib/node.md
   - clientLib/csharp.md
   - clientLib/ruby.md
   - clientLib/python.md
   - clientLib/java.md
-  - howto/howto
-  - howto/buytn
+  
 search: true
 ---

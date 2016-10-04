@@ -8,15 +8,15 @@ There are 3 separate ways to buy a phone number:
 
 Go to the My Numbers tab and click the Get New Numbers link. Fill in the search criteria field and click the Search button.
 
-![step1](images/buytn/step1.png)
+![step1](images/howto/buytn/step1.png)
 
 From the list of numbers that is returned, check the box next to the numbers you want to buy and click the Get Numbers button.
 
-![step2](images/buytn/step2.png)
+![step2](images/howto/buytn/step2.png)
 
 The numbers you selected are now allocated to your account (you’ve purchased them).
 
-![step3](images/buytn/step3.png)
+![step3](images/howto/buytn/step3.png)
 
 ### Search then Order
 ```shell
