@@ -8785,6 +8785,81 @@ Early access will begin in Q3. Email signup@bandwidth.com to obtain early access
 </tr>
 </tbody></table>
 
+          <h1 id="how-to-guides">How-To Guides</h1>
+
+          <h2 id="buy-phone-number">Buy Phone Number</h2>
+
+<p>There are 3 separate ways to buy a phone number:
+1. Login and use the Developer Console UI
+2. <code class="prettyprint">GET</code> on the <a href="#get-availablenumbers-local"><code class="prettyprint">availableNumbers</code></a> resource, followed by a <code class="prettyprint">POST</code> to the <a href="#example-allocate-a-phone-number-to-your-account"><code class="prettyprint">phoneNumbers</code></a> resource
+3. <code class="prettyprint">POST</code> on the <a href="#example-search-and-allocate-for-city-state"><code class="prettyprint">availableNumbers</code></a> resource</p>
+
+<h3 id="developer-console">Developer Console</h3>
+
+<p>Go to the My Numbers tab and click the Get New Numbers link. Fill in the search criteria field and click the Search button.</p>
+
+<p><img alt="step1" src="images/howto/buytn/step1.png" /></p>
+
+<p>From the list of numbers that is returned, check the box next to the numbers you want to buy and click the Get Numbers button.</p>
+
+<p><img alt="step2" src="images/howto/buytn/step2.png" /></p>
+
+<p>The numbers you selected are now allocated to your account (you’ve purchased them).</p>
+
+<p><img alt="step3" src="images/howto/buytn/step3.png" /></p>
+
+<h3 id="search-then-order">Search then Order</h3>
+<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/availableNumbers/local?city<span class="o">=</span>Cary&amp;state<span class="o">=</span>NC&amp;pattern<span class="o">=</span><span class="k">*</span>2%3F9<span class="k">*</span>&amp;quantity<span class="o">=</span>2 <span class="se">\</span>
+  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
+  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
+</code></pre>
+<pre class="highlight javascript"><code><span class="c1">// Search available local phone numbers with area code 910</span>
+
+<span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">AvailableNumber</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="s2">"local"</span><span class="p">,</span> <span class="p">{</span> <span class="na">areaCode</span> <span class="p">:</span> <span class="s2">"910"</span><span class="p">,</span> <span class="na">quantity</span> <span class="p">:</span> <span class="mi">1</span> <span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">numbers</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">client</span><span class="p">.</span><span class="nx">PhoneNumber</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+        <span class="na">number</span><span class="p">:</span> <span class="nx">numbers</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">number</span><span class="p">,</span>
+        <span class="na">name</span><span class="p">:</span> <span class="s2">"My 910 Number"</span><span class="p">,</span>
+        <span class="na">applicationId</span><span class="p">:</span> <span class="s2">"a-1234"</span>
+    <span class="p">});</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">number</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">number</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+<pre class="highlight csharp"><code><span class="n">var</span> <span class="n">results</span> <span class="p">=</span> <span class="n">await</span> <span class="n">client</span><span class="p">.</span><span class="n">AvailableNumber</span><span class="p">.</span><span class="nf">SearchLocalAsync</span><span class="p">(</span><span class="k">new</span> <span class="n">LocalNumberQuery</span><span class="p">{</span> <span class="n">AreaCode</span> <span class="p">=</span> <span class="s">"910"</span><span class="p">,</span> <span class="n">Quantity</span> <span class="p">=</span> <span class="m">1</span><span class="p">});</span>
+<span class="n">var</span> <span class="n">number</span> <span class="p">=</span> <span class="n">await</span> <span class="n">client</span><span class="p">.</span><span class="n">PhoneNumber</span><span class="p">.</span><span class="nf">CreateAsync</span><span class="p">(</span><span class="k">new</span> <span class="n">CreatePhoneNumberData</span> <span class="p">{</span>
+    <span class="n">Number</span> <span class="p">=</span> <span class="n">results</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">number</span><span class="p">,</span>
+    <span class="n">Name</span> <span class="p">=</span> <span class="s">"My 910 Number"</span><span class="p">,</span>
+    <span class="n">ApplicationId</span> <span class="p">=</span> <span class="s">"a-1234"</span>
+<span class="p">});</span>
+</code></pre>
+<pre class="highlight ruby"><code><span class="n">results</span> <span class="o">=</span> <span class="no">AvailableNumber</span><span class="p">.</span><span class="nf">search_local</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="p">{</span><span class="ss">:area_code</span> <span class="o">=&gt;</span> <span class="s2">"910"</span><span class="p">,</span> <span class="ss">:quantity</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">})</span>
+<span class="nb">puts</span><span class="p">(</span><span class="s2">"Found numbers: </span><span class="si">#{</span><span class="p">(</span><span class="n">numbers</span><span class="p">.</span><span class="nf">map</span> <span class="p">{</span><span class="o">|</span><span class="n">n</span><span class="o">|</span> <span class="n">n</span><span class="p">[</span><span class="ss">:number</span><span class="p">]</span><span class="si">}</span><span class="s2">).join(', ')}"</span><span class="p">)</span>
+<span class="n">number</span> <span class="o">=</span> <span class="no">PhoneNumber</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="p">{</span><span class="ss">:number</span> <span class="o">=&gt;</span> <span class="n">numbers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="ss">:number</span><span class="p">]})</span>
+<span class="nb">puts</span><span class="p">(</span><span class="s2">"Now you are owner of number </span><span class="si">#{</span><span class="n">number</span><span class="p">.</span><span class="nf">number</span><span class="si">}</span><span class="s2"> (id </span><span class="si">#{</span><span class="n">number</span><span class="p">.</span><span class="nf">id</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+</code></pre>
+
+<h3 id="search-and-order">Search and Order</h3>
+<pre class="highlight javascript"><code><span class="c1">// Search 2 available local phone numbers with area code 910 and order them</span>
+
+<span class="c1">// Promise</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">AvailableNumber</span><span class="p">.</span><span class="nx">searchAndOrder</span><span class="p">(</span><span class="s2">"local"</span><span class="p">,</span> <span class="p">{</span> <span class="na">areaCode</span> <span class="p">:</span> <span class="s2">"910"</span><span class="p">,</span> <span class="na">quantity</span> <span class="p">:</span> <span class="mi">2</span> <span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">numbers</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">numbers</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">number</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">number</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+    <span class="p">})</span>
+<span class="p">});</span>
+</code></pre>
+<pre class="highlight csharp"><code><span class="n">var</span> <span class="n">results</span> <span class="p">=</span> <span class="n">await</span> <span class="n">client</span><span class="p">.</span><span class="n">AvailableNumber</span><span class="p">.</span><span class="nf">SearchAndOrderLocalAsync</span><span class="p">(</span>
+  <span class="k">new</span> <span class="n">LocalNumberQueryForOrder</span><span class="p">{</span> <span class="n">AreaCode</span> <span class="p">=</span> <span class="s">"910"</span><span class="p">,</span> <span class="n">Quantity</span> <span class="p">=</span> <span class="m">2</span><span class="p">});</span>
+</code></pre>
+<pre class="highlight ruby"><code><span class="c1">##</span>
+<span class="c1"># coming soon</span>
+<span class="c1">##</span>
+</code></pre>
+
           <h1 id="sdks-and-client-libraries">SDKS and Client Libraries</h1>
 
           <h2 id="nodejs-library">NodeJS Library</h2>
@@ -9236,81 +9311,6 @@ Early access will begin in Q3. Email signup@bandwidth.com to obtain early access
 <h3 id="bugs-issues">Bugs/Issues</h3>
 
 <p>Please open an issue in this repository and we&rsquo;ll handle it directly. If you have any questions please contact us at openapi@bandwidth.com.</p>
-
-          <h1 id="how-to-guides">How-To Guides</h1>
-
-          <h2 id="buy-phone-number">Buy Phone Number</h2>
-
-<p>There are 3 separate ways to buy a phone number:
-1. Login and use the Developer Console UI
-2. <code class="prettyprint">GET</code> on the <a href="#get-availablenumbers-local"><code class="prettyprint">availableNumbers</code></a> resource, followed by a <code class="prettyprint">POST</code> to the <a href="#example-allocate-a-phone-number-to-your-account"><code class="prettyprint">phoneNumbers</code></a> resource
-3. <code class="prettyprint">POST</code> on the <a href="#example-search-and-allocate-for-city-state"><code class="prettyprint">availableNumbers</code></a> resource</p>
-
-<h3 id="developer-console">Developer Console</h3>
-
-<p>Go to the My Numbers tab and click the Get New Numbers link. Fill in the search criteria field and click the Search button.</p>
-
-<p><img alt="step1" src="images/images/buytn/step1.png" /></p>
-
-<p>From the list of numbers that is returned, check the box next to the numbers you want to buy and click the Get Numbers button.</p>
-
-<p><img alt="step2" src="images/images/buytn/step2.png" /></p>
-
-<p>The numbers you selected are now allocated to your account (you’ve purchased them).</p>
-
-<p><img alt="step3" src="images/images/buytn/step3.png" /></p>
-
-<h3 id="search-then-order">Search then Order</h3>
-<pre class="highlight shell"><code>curl -v -X GET  https://api.catapult.inetwork.com/v1/availableNumbers/local?city<span class="o">=</span>Cary&amp;state<span class="o">=</span>NC&amp;pattern<span class="o">=</span><span class="k">*</span>2%3F9<span class="k">*</span>&amp;quantity<span class="o">=</span>2 <span class="se">\</span>
-  -u <span class="o">{</span>token<span class="o">}</span>:<span class="o">{</span>secret<span class="o">}</span> <span class="se">\</span>
-  -H <span class="s2">"Content-type: application/json"</span> <span class="se">\</span>
-</code></pre>
-<pre class="highlight javascript"><code><span class="c1">// Search available local phone numbers with area code 910</span>
-
-<span class="c1">// Promise</span>
-<span class="nx">client</span><span class="p">.</span><span class="nx">AvailableNumber</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="s2">"local"</span><span class="p">,</span> <span class="p">{</span> <span class="na">areaCode</span> <span class="p">:</span> <span class="s2">"910"</span><span class="p">,</span> <span class="na">quantity</span> <span class="p">:</span> <span class="mi">1</span> <span class="p">})</span>
-<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">numbers</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">client</span><span class="p">.</span><span class="nx">PhoneNumber</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
-        <span class="na">number</span><span class="p">:</span> <span class="nx">numbers</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">number</span><span class="p">,</span>
-        <span class="na">name</span><span class="p">:</span> <span class="s2">"My 910 Number"</span><span class="p">,</span>
-        <span class="na">applicationId</span><span class="p">:</span> <span class="s2">"a-1234"</span>
-    <span class="p">});</span>
-<span class="p">})</span>
-<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">number</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">number</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
-<span class="p">});</span>
-</code></pre>
-<pre class="highlight csharp"><code><span class="n">var</span> <span class="n">results</span> <span class="p">=</span> <span class="n">await</span> <span class="n">client</span><span class="p">.</span><span class="n">AvailableNumber</span><span class="p">.</span><span class="nf">SearchLocalAsync</span><span class="p">(</span><span class="k">new</span> <span class="n">LocalNumberQuery</span><span class="p">{</span> <span class="n">AreaCode</span> <span class="p">=</span> <span class="s">"910"</span><span class="p">,</span> <span class="n">Quantity</span> <span class="p">=</span> <span class="m">1</span><span class="p">});</span>
-<span class="n">var</span> <span class="n">number</span> <span class="p">=</span> <span class="n">await</span> <span class="n">client</span><span class="p">.</span><span class="n">PhoneNumber</span><span class="p">.</span><span class="nf">CreateAsync</span><span class="p">(</span><span class="k">new</span> <span class="n">CreatePhoneNumberData</span> <span class="p">{</span>
-    <span class="n">Number</span> <span class="p">=</span> <span class="n">results</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">number</span><span class="p">,</span>
-    <span class="n">Name</span> <span class="p">=</span> <span class="s">"My 910 Number"</span><span class="p">,</span>
-    <span class="n">ApplicationId</span> <span class="p">=</span> <span class="s">"a-1234"</span>
-<span class="p">});</span>
-</code></pre>
-<pre class="highlight ruby"><code><span class="n">results</span> <span class="o">=</span> <span class="no">AvailableNumber</span><span class="p">.</span><span class="nf">search_local</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="p">{</span><span class="ss">:area_code</span> <span class="o">=&gt;</span> <span class="s2">"910"</span><span class="p">,</span> <span class="ss">:quantity</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">})</span>
-<span class="nb">puts</span><span class="p">(</span><span class="s2">"Found numbers: </span><span class="si">#{</span><span class="p">(</span><span class="n">numbers</span><span class="p">.</span><span class="nf">map</span> <span class="p">{</span><span class="o">|</span><span class="n">n</span><span class="o">|</span> <span class="n">n</span><span class="p">[</span><span class="ss">:number</span><span class="p">]</span><span class="si">}</span><span class="s2">).join(', ')}"</span><span class="p">)</span>
-<span class="n">number</span> <span class="o">=</span> <span class="no">PhoneNumber</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="p">{</span><span class="ss">:number</span> <span class="o">=&gt;</span> <span class="n">numbers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="ss">:number</span><span class="p">]})</span>
-<span class="nb">puts</span><span class="p">(</span><span class="s2">"Now you are owner of number </span><span class="si">#{</span><span class="n">number</span><span class="p">.</span><span class="nf">number</span><span class="si">}</span><span class="s2"> (id </span><span class="si">#{</span><span class="n">number</span><span class="p">.</span><span class="nf">id</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
-</code></pre>
-
-<h3 id="search-and-order">Search and Order</h3>
-<pre class="highlight javascript"><code><span class="c1">// Search 2 available local phone numbers with area code 910 and order them</span>
-
-<span class="c1">// Promise</span>
-<span class="nx">client</span><span class="p">.</span><span class="nx">AvailableNumber</span><span class="p">.</span><span class="nx">searchAndOrder</span><span class="p">(</span><span class="s2">"local"</span><span class="p">,</span> <span class="p">{</span> <span class="na">areaCode</span> <span class="p">:</span> <span class="s2">"910"</span><span class="p">,</span> <span class="na">quantity</span> <span class="p">:</span> <span class="mi">2</span> <span class="p">})</span>
-<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">numbers</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">numbers</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">number</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">number</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
-    <span class="p">})</span>
-<span class="p">});</span>
-</code></pre>
-<pre class="highlight csharp"><code><span class="n">var</span> <span class="n">results</span> <span class="p">=</span> <span class="n">await</span> <span class="n">client</span><span class="p">.</span><span class="n">AvailableNumber</span><span class="p">.</span><span class="nf">SearchAndOrderLocalAsync</span><span class="p">(</span>
-  <span class="k">new</span> <span class="n">LocalNumberQueryForOrder</span><span class="p">{</span> <span class="n">AreaCode</span> <span class="p">=</span> <span class="s">"910"</span><span class="p">,</span> <span class="n">Quantity</span> <span class="p">=</span> <span class="m">2</span><span class="p">});</span>
-</code></pre>
-<pre class="highlight ruby"><code><span class="c1">##</span>
-<span class="c1"># coming soon</span>
-<span class="c1">##</span>
-</code></pre>
 
       </div>
       <div class="dark-box">
