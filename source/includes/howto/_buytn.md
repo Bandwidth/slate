@@ -76,3 +76,9 @@ client.AvailableNumber.searchAndOrder("local", { areaCode : "910", quantity : 2 
 var results = await client.AvailableNumber.SearchAndOrderLocalAsync(
   new LocalNumberQueryForOrder{ AreaCode = "910", Quantity = 2});
 ```
+
+```ruby
+##
+# coming soon
+##
+```
