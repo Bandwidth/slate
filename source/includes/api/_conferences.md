@@ -541,9 +541,12 @@ client.Conference.updateMember("conferenceID", "memberId", {state: "completed"},
 ```
 
 ```csharp
-var member = await client.Conference.UpdateMemberAsync("{conferenceId1}", "{memberId1}", new UpdateMemberData {State = MemberState.Completed});
+await client.Conference.UpdateMemberAsync("{conferenceId1}", "{memberId1}", new UpdateMemberData {State = MemberState.Completed});
 ```
 
+```ruby
+member.update(:state => 'completed')
+```
 
 ### Example: Keep member from speaking in the conference
 
@@ -569,6 +572,9 @@ client.Conference.updateMember("conferenceID", "memberId", {mute: "true"}, funct
 await client.Conference.MuteMemberAsync("{conferenceId1}", "{memberId1}", true);
 ```
 
+```ruby
+member.update(:mute => true)
+```
 
 ### Example: Keep member from hearing the conference audio
 
@@ -592,6 +598,10 @@ client.Conference.updateMember("conferenceID", "memberId", {hold: "true"}, funct
 
 ```csharp
 await client.Conference.HoldMemberAsync("{conferenceId1}", "{memberId1}", true);
+```
+
+```ruby
+member.update(:hold => true)
 ```
 
 
@@ -709,6 +719,15 @@ await client.Conference.PlayAudioToMemberAsync("{conferenceId1}", "{memberId1}",
 await client.Conference.SpeakSentenceToMemberAsync("{conferenceId1}", "{memberId1}", "Hello From Bandwidth");
 ```
 
+```ruby
+member.play_audio({
+	:sentence => "hola de Bandwidth",
+  	:gender   => "male",
+  	:locale   => "es",
+  	:voice    => "Jorge"
+})
+```
+
 ### Example: Play audio to a conference member
 
 ```shell
@@ -757,4 +776,9 @@ await client.Conference.PlayAudioToMemberAsync("{conferenceId1}", "{memberId1}",
 
 //Speak sentence in a conference
 await client.Conference.PlayAudioFileToMemberAsync("{conferenceId1}", "{memberId1}", "http://myurl.com/file.mp3");
+```
+```ruby
+member.play_audio({
+	:file_url => "http://myurl.com/file.mp3"
+})
 ```

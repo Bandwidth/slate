@@ -266,3 +266,6 @@ await client.Endpoint.UpdateAsync("{domainId1}", "{endpointId1}", new UpdateEndp
 ```
 
 
+```ruby
+domain.update_endpoint("{endpointId1}", {:enabled => true})
+```
