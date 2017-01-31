@@ -61,6 +61,8 @@ client.Bridge.list()
 
 ```csharp
 var bridges = client.Bridge.List();
+console.WriteLine(bridges.First().State);
+// Completed
 ```
 
 ```ruby
@@ -142,6 +144,8 @@ var bridge = await client.Bridge.CreateAsync(new CreateBridgeData{
 	BridgeAudio = true,
 	CallIds = new[]{"c-qbsx6wsdi", "c-zan4g7prsq"}
 });
+console.WriteLine(bridge.Id);
+// bdg-1234
 ```
 
 ```ruby
@@ -192,6 +196,9 @@ client.Bridge.create({
 var bridge = await client.Bridge.CreateAsync(new CreateBridgeData{
 	BridgeAudio = true
 });
+
+console.WriteLine(bridge.Id);
+// bdg-1234
 ```
 
 ```ruby
@@ -239,6 +246,8 @@ client.Bridge.get('brg-65dhmbasiei',
 
 ```csharp
 var bridge = await client.Bridge.GetAsync("brg-65dhmbasiei");
+Console.WriteLine(brisdge.State);
+// Completed
 ```
 
 ```ruby
@@ -435,6 +444,8 @@ client.Bridge.getCalls('brg-65dhjrmbasiei',
 
 ```csharp
 var calls = client.Bridge.GetCalls("brg-65dhmbasiei");
+Console.WriteLine(calls.First().From);
+// +1234567890
 ```
 
 ```ruby

@@ -102,6 +102,9 @@ curl -v -X GET https://api.catapult.inetwork.com/v1/users/{userId}/messages \
 
 ```csharp
 var messages = client.Message.List();
+var message = messages.First();
+Console.WriteLine($"{message.From} -> {message.To}: {message.Message}");
+// +1234567890 -> +1234567891: Hello there
 ```
 
 ```ruby
@@ -181,6 +184,9 @@ curl -v -X GET https://api.catapult.inetwork.com/v1/users/{userId}/messages?from
 
 ```csharp
 var messages = client.Message.List(new MessageQuery {From = "{fromNumber}"});
+var message = messages.First();
+Console.WriteLine($"{message.From} -> {message.To}: {message.Message}");
+// +1234567890 -> +1234567891: Hello there
 ```
 
 ```ruby
@@ -235,6 +241,9 @@ var messages = client.Message.List(new MessageQuery {
 	Direction = MessageDirection.Out,
 	ToDateTime = new DateTime(2015, 10, 5, 20, 37, 39, 0, DateTimeKind.Utc)
 });
+var message = messages.First();
+Console.WriteLine($"{message.From} -> {message.To}: {message.Message}");
+// +1234567890 -> +1234567891: Hello there
 ```
 
 ```ruby
@@ -334,6 +343,8 @@ var message = await client.Message.SendAsync(new MessageData {
 	To = "+19195551213",
 	Text = "Thank you for susbcribing to Unicorn Enterprises!"
 });
+Console.WriteLine(message.Id);
+// {messageId}
 ```
 
 ```ruby
@@ -389,6 +400,8 @@ var message = await client.Message.SendAsync(new MessageData {
 	Media = new[] {"https://api.catapult.inetwork.com/v1/users/<user-id>/media/image-1.jpg"},
 	CallbackUrl = "http://my.callback.url"
 });
+Console.WriteLine(message.Id);
+// {messageId}
 ```
 
 ```ruby
@@ -447,6 +460,8 @@ var message = await client.Message.SendAsync(new MessageData {
 	Media = new[] {"http://your-site.com/image-1.jpg"},
 	CallbackUrl = "http://my.callback.url"
 });
+Console.WriteLine(message.Id);
+// {messageId}
 ```
 
 ```ruby
@@ -549,6 +564,8 @@ var messages = await client.Message.SendAsync(new[] {
 		Text = "Thank you for susbcribing to Unicorn Enterprises!"
 	}
 });
+Console.WriteLine(string.Join(messages.Select(m => m.Id), ", "));
+// {messageId1}, {messageId2}
 ```
 
 ```ruby
@@ -609,6 +626,8 @@ var message = await client.Message.SendAsync(new MessageData {
 	Text = "Thank you for susbcribing to Unicorn Enterprises!",
 	ReceiptRequested = MessageReceiptRequested.All
 });
+Console.WriteLine(message.Id);
+// {messageId}
 ```
 
 ```ruby
@@ -654,6 +673,9 @@ var message = await client.Message.SendAsync(new MessageData {
 	CallbackTimeout = 2000,
 	FallbackUrl = "http://my.fallback.url"
 });
+Console.WriteLine(message.Id);
+// {messageId}
+
 ```
 
 ```ruby
@@ -697,6 +719,8 @@ client.Message.get("{messageId}", function (err, message) {
 
 ```csharp
 var message = await client.Message.GetAsync("{messageId}");
+Console.WriteLine(message.Text);
+// Message text
 ```
 
 ```ruby

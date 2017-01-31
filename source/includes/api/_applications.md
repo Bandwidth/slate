@@ -135,6 +135,8 @@ var application = await client.Application.CreateAsync(new CreateApplicationData
 	IncomingCallUrl = "http://your-server.com/CallCallback",
 	IncomingMessageUrl = "http://your-server.com/MsgCallback"
 });
+Console.WriteLine(application.Id);
+// {applicationId}
 ```
 
 ```ruby
@@ -178,6 +180,8 @@ client.Application.get('a-zuwwfzzrbea',
 
 ```csharp
 var application = await client.Application.GetAsync("a-zuwwfzzrbea");
+Console.WriteLine(application.Name);
+// MyFirstApp
 ```
 
 ```ruby

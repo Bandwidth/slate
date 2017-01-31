@@ -27,6 +27,7 @@ client.NumberInfo.get("+1234567890", function(err, info){});
 
 ```csharp
 var info = await client.NumberInfo.GetAsync("+1234567890");
+Console.WriteLine(info.Name);
 ```
 
 ```ruby
