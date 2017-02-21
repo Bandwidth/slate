@@ -108,6 +108,10 @@ var messages = client.Message.List();
 messages = Message.list(client)
 ```
 
+```go
+messages, _ = client.GetMessages()
+```
+
 
 > The above command returns JSON structured like this:
 
@@ -187,6 +191,10 @@ var messages = client.Message.List(new MessageQuery {From = "{fromNumber}"});
 messages = Message.list(client, {:from => "{fromNumber}"})
 ```
 
+```go
+messages, _ = client.GetMessages(&bandwidth.GetMessagesQuery{From: "{fromNumber}"})
+```
+
 
 > The above command returns JSON structured like this:
 
@@ -242,6 +250,14 @@ messages = Message.list(client, {
 	:from => "{fromNumber}",
 	:direction => "out",
 	:to_date_time => "2012-10-05T20:38:11.023Z"
+})
+```
+
+```go
+messages, _ = client.GetMessages(&bandwidth.GetMessagesQuery{
+	From: "{fromNumber}",
+	Direction: "out",
+	ToDateTime: "2012-10-05T20:38:11.023Z",
 })
 ```
 
@@ -344,6 +360,14 @@ message = Message.create(client, {
 })
 ```
 
+```go
+messageId, _ := client.CreateMessage(&bandwidth.CreateMessageData{
+	From: "+19195551212",
+	To: "+19195551213",
+	Text: "Thank you for susbcribing to Unicorn Enterprises!",
+})
+```
+
 > The above command returns HTTP Header structured like this:
 
 ```
@@ -401,6 +425,17 @@ message = Message.create(client, {
 })
 ```
 
+```go
+messageId, _ := client.CreateMessage(&bandwidth.CreateMessageData{
+	From: "+19195551212",
+	To: "+19195551213",
+	Text: "Thank you for susbcribing to Unicorn Enterprises!",
+	Media: []string{"https://api.catapult.inetwork.com/v1/users/<user-id>/media/image-1.jpg"},
+	CallbackURL: "http://my.callback.url",
+})
+```
+
+
 > The above command returns HTTP Header structured like this:
 
 ```
@@ -456,6 +491,16 @@ message = Message.create(client, {
 	:text => "Thank you for susbcribing to Unicorn Enterprises!",
 	:media => ["http://your-site.com/image-1.jpg"],
 	:callback_url => "http://my.callback.url"
+})
+```
+
+```go
+messageId, _ := client.CreateMessage(&bandwidth.CreateMessageData{
+	From: "+19195551212",
+	To: "+19195551213",
+	Text: "Thank you for susbcribing to Unicorn Enterprises!",
+	Media: []string{"http://your-site.com/image-1.jpg"},
+	CallbackURL: "http://my.callback.url",
 })
 ```
 
@@ -563,6 +608,21 @@ messages = Message.create(client, [{
 }])
 ```
 
+```go
+messages, _ := client.CreateMessage([]*bandwidth.CreateMessageData{
+	&bandwidth.CreateMessageData{
+		From: "+19195551211",
+		To: "+19195551213",
+		Text: "Thank you for susbcribing to Unicorn Enterprises!",
+	},
+	&bandwidth.CreateMessageData{
+		From: "+19195551212",
+		To: "+19195551214",
+		Text: "Thank you for susbcribing to Unicorn Enterprises!",
+	},
+})
+```
+
 
 ```js
 //returns
@@ -620,6 +680,15 @@ message = Message.create(client, {
 })
 ```
 
+```go
+messageId, _ := client.CreateMessage(&bandwidth.CreateMessageData{
+	From: "+19195551212",
+	To: "+19195551213",
+	Text: "Thank you for susbcribing to Unicorn Enterprises!",
+	ReceiptRequested: "all",
+})
+```
+
 
 ### Example: Send a single text message with custom callback timeout of 2 seconds
 
@@ -640,6 +709,16 @@ message = Message.create(client, {
 	:text => "Thank you for susbcribing to Unicorn Enterprises!",
 	:callback_url => "http://my.callback.url",
 	:callback_timeout => 2000
+})
+```
+
+```go
+messageId, _ := client.CreateMessage(&bandwidth.CreateMessageData{
+	From: "+19195551212",
+	To: "+19195551213",
+	Text: "Thank you for susbcribing to Unicorn Enterprises!",
+	CallbackURL: "http://my.callback.url",
+	CallbackTimeout: 2000,
 })
 ```
 
@@ -664,6 +743,17 @@ message = Message.create(client, {
 	:callback_url => "http://my.callback.url",
 	:callback_timeout => 2000,
 	:fallback_url => "http://my.fallback.url"
+})
+```
+
+```go
+messageId, _ := client.CreateMessage(&bandwidth.CreateMessageData{
+	From: "+19195551212",
+	To: "+19195551213",
+	Text: "Thank you for susbcribing to Unicorn Enterprises!",
+	CallbackURL: "http://my.callback.url",
+	CallbackTimeout: 2000,
+	FallbackURL: "http://my.fallback.url",
 })
 ```
 
@@ -701,4 +791,8 @@ var message = await client.Message.GetAsync("{messageId}");
 
 ```ruby
 message = Message.get(client, "{messageId1}")
+```
+
+```go
+message, _ := client.GetMessage("{messageId1}")
 ```

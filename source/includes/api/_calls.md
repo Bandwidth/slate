@@ -83,6 +83,11 @@ var calls = client.Call.List();
 calls = Call.list(client)
 ```
 
+```go
+calls, _ := client.GetCalls()
+```
+
+
 
 > The above command returns JSON structured like this:
 
@@ -146,6 +151,11 @@ var calls = client.Call.List(new CallQuery{From = "+19195551212"});
 ```ruby
 calls = Call.list(client, {:from => "+19195551212"})
 ```
+
+```go
+calls, _ := client.GetCalls(&bandwidth.GetCallsQuery{From: "+19195551212"})
+```
+
 
 > The above command returns JSON structured like this:
 
@@ -242,6 +252,10 @@ var call = await client.Call.CreateAsync(new CreateCallData{
 call = Call.create(client, {:from => "{fromNumber}", :to => "{toNumber}"})
 ```
 
+```go
+callId, _ := client.CreateCall(&bandwidth.CreateCallData{From: "{fromNumber}", To: "{toNumber}"})
+```
+
 
 ### Example: Create call and start recording it
 
@@ -313,6 +327,17 @@ call = Call.create(client, {
 })
 ```
 
+```go
+callId, _ := client.CreateCall(&bandwidth.CreateCallData{
+	From: "{fromNumber}",
+	To: "{toNumber}",
+	SipHeaders: map[string]string{
+		"X-Header-1": "value1",
+		"X-Header-2": "value2",
+	}
+})
+```
+
 
 ## GET calls/{callId}
 Gets information about an active or completed call. No query parameters are supported.
@@ -339,6 +364,11 @@ var call = await client.Call.GetAsync("{callId1}");
 ```ruby
 call = Call.get(client, "{callId1}")
 ```
+
+```go
+call, _ := client.GetCall("{callId1}")
+```
+
 
 > The above command returns JSON structured like this:
 
@@ -469,6 +499,16 @@ call.play_audio({
 })
 ```
 
+```go
+client.PlayAudioToCall("{callId1}", &bandwidth.PlayAudioData{
+	Sentence: "hola de Bandwidth",
+	Gender: "male",
+	Voice: "Jorge",
+	Locale: "es",
+})
+```
+
+
 
 ### Example: Interrupt/stop a sentence from speaking.
 ```shell
@@ -498,6 +538,13 @@ call.play_audio({
 	:sentence => ""
 })
 ```
+
+```go
+client.PlayAudioToCall("{callId1}", &bandwidth.PlayAudioData{
+	Sentence: "",
+})
+```
+
 
 
 ### Example: Speak a Sentence with male gender voice
@@ -531,6 +578,13 @@ call.play_audio({
 })
 ```
 
+```go
+client.PlayAudioToCall("{callId1}", &bandwidth.PlayAudioData{
+	FileURL: "http://myurl.com/file.wav",
+})
+```
+
+
 
 ### Example: Stop an Audio File Playing
 ```shell
@@ -558,6 +612,12 @@ await client.Call.PlayAudioFileAsync("{callId1}", "");
 ```ruby
 call.play_audio({
 	:file_url => ""
+})
+```
+
+```go
+client.PlayAudioToCall("{callId1}", &bandwidth.PlayAudioData{
+	FileURL: "",
 })
 ```
 
@@ -595,6 +655,12 @@ await client.Call.SendDtmfAsync("{callId1}", new SendDtmfData{DtmfOut = "9193334
 call.set_dtmf("9193334444")
 ```
 
+```go
+client.SendDTMFToCall("{callId1}", &bandwidth.SendDTMFToCallData{
+	DTMFOut: "9193334444",
+})
+```
+
 
 ## GET calls/{callId}/events
 Gets the events that occurred during the call. No query parameters are supported.
@@ -629,6 +695,10 @@ var events = client.Call.GetEvents("{callId1}");
 
 ```ruby
 events = call.get_events()
+```
+
+```go
+events, _ := client.GetCallEvents("{callId1}")
 ```
 
 
@@ -716,6 +786,10 @@ var callEvent = async client.Call.GetEventAsync("{callId1}", "{eventId1}");
 call_event = call.get_event("{eventId1}")
 ```
 
+```go
+callEvent, _ := client.GetCallEvent("{callId1}", "{eventId1}")
+```
+
 
 > The above command returns JSON structured like this:
 
@@ -752,6 +826,10 @@ var recordings = client.Call.GetRecordings("{callId1}");
 
 ```ruby
 recordings = call.get_recordings()
+```
+
+```go
+recordings, _ := client.GetCallRecordings("{callId1}")
 ```
 
 
@@ -802,6 +880,10 @@ var transcriptions = client.Call.GetTranscriptions("{callId1}");
 
 ```ruby
 transcriptions = call.get_transcriptions()
+```
+
+```go
+transcriptions, _ := client.GetCallTranscriptions("{callId1}")
 ```
 
 
@@ -882,6 +964,18 @@ gather = call.create_gather({
 })
 ```
 
+```go
+gatherId, _ := client.CreateGather("{callId1}", &bandwidth.CreateGatherData{
+	MaxDigits: 5,
+	TerminatingDigits: "*",
+	InterDigitTimeout: 7,
+	Prompt: &bandwidth.GatherPromptData{
+		Sentence: "Please enter your 5 digit code",
+	},
+})
+```
+
+
 
 ## GET calls/{callId}/gather/{gatherId}
 Get the gather DTMF parameters and results.
@@ -906,6 +1000,11 @@ var gather = await client.Call.GetGatherAsync("{callId1}", "{gatherId1}");
 ```ruby
 gather = call.get_gather("{gatherId1}")
 ```
+
+```go
+gather, _ := client.GetGather("{callId1}", "{gatherId1}")
+```
+
 
 
 > The above command returns JSON structured like this:
@@ -952,4 +1051,8 @@ await client.Call.UpdateGatherAsync("{callId1}", "{gatherId1}", new UpdateGather
 
 ```ruby
 call.update_gather("{gatherId1}", {:state => "completed"})
+```
+
+```go
+client.UpdateGather("{callId1}", "{gatherId1}", &bandwidth.UpdateGatherData{State: "completed"})
 ```

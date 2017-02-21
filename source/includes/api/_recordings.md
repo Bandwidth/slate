@@ -60,6 +60,9 @@ var recordings = client.Recording.List();
 recordings = Recording.list(client)
 ```
 
+```go
+recordings, _ := client.GetRecordings()
+```
 
 > The above command returns JSON structured like this:
 
@@ -125,6 +128,10 @@ var recording = await client.Recording.GetAsync("{recordingId}");
 
 ```ruby
 recording = Recording.get(client, "{recordingId}")
+```
+
+```go
+recording, _ := client.GetRecording("{recordingId}")
 ```
 
 

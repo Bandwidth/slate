@@ -84,6 +84,11 @@ var conference = await client.Conference.CreateAsync(new CreateConferenceData {F
 conference = Conference.create(client,  {:from => "+1234567890"})
 ```
 
+```go
+conference, _ := client.CreateConference(&bandwidth.CreateConferenceData{From: "+1234567890"})
+```
+
+
 > The above command returns HTTP Header structured like this:
 
 ```
@@ -139,6 +144,14 @@ conference = Conference.create(client,  {
 })
 ```
 
+```go
+conference, _ := client.CreateConference(&bandwidth.CreateConferenceData{
+	From: "+1234567890",
+	CallbackURL: "http://my.callback.url",
+	CallbackTimeout: 2000,
+	FallbackURL: "http://my.fallback.url",
+})
+```
 
 > The above command returns HTTP Header structured like this:
 
@@ -171,6 +184,10 @@ var conference = await client.Conference.GetAsync("{conferenceId1}");
 
 ```ruby
 conference = Conference.get(client, "{conferenceId1}")
+```
+
+```go
+conference, _ := client.GetConference("{conferenceId1}")
 ```
 
 
@@ -231,6 +248,10 @@ await client.Conference.TerminateAsync("{conferenceId1}");
 conference.complete()
 ```
 
+```go
+conference, _ := client.GetConference("{conferenceId1}")
+```
+
 
 ### Example: Prevent all members from speaking
 ```shell
@@ -257,6 +278,10 @@ await client.Conference.MuteAsync("{conferenceId1}", true);
 
 ```ruby
 conference.mute()
+```
+
+```go
+client.UpdateConference("{conferenceId1}", &bandwidth.UpdateConferenceData{Mute: true})
 ```
 
 
@@ -338,6 +363,15 @@ conference.play_audio({
 })
 ```
 
+```go
+client.PlayAudioToConference("{conferenceId1}", &bandwidth.PlayAudioData{
+	Sentence: "hola de Bandwidth",
+	Gender: "male",
+	Voice: "Jorge",
+	Locale: "es",
+})
+```
+
 
 ### Example: Play audio in conference
 
@@ -388,6 +422,12 @@ conference.play_audio({
 })
 ```
 
+```go
+client.PlayAudioToConference("{conferenceId1}", &bandwidth.PlayAudioData{
+	FileURL: "http://myurl.com/file.mp3",
+	LoopEnabled: true,
+})
+```
 
 ## POST conferences/{conferenceId}/members
 Add members to a conference.
@@ -435,6 +475,12 @@ member = conference.create_member("{conferenceId1}", {
 })
 ```
 
+```go
+memberId, _ := client.CreateConferenceMember("{conferenceId1}", &bandwidth.CreateConferenceMemberData{
+	CallID: "callId",
+})
+```
+
 
 > The above command returns HTTP Header structured like this:
 
@@ -467,6 +513,10 @@ var members = client.Conference.GetMembers("{conferenceId1}");
 
 ```ruby
 members = conference.get_members()
+```
+
+```go
+members, _ := client.GetConferenceMembers("{conferenceId1}")
 ```
 
 
@@ -544,6 +594,10 @@ client.Conference.updateMember("conferenceID", "memberId", {state: "completed"},
 var member = await client.Conference.UpdateMemberAsync("{conferenceId1}", "{memberId1}", new UpdateMemberData {State = MemberState.Completed});
 ```
 
+```go
+client.UpdateConferenceMember("{conferenceId1}", "{memberId1}", &bandwidth.UpdateConferenceMemberData{State: "completed"})
+```
+
 
 ### Example: Keep member from speaking in the conference
 
@@ -569,6 +623,10 @@ client.Conference.updateMember("conferenceID", "memberId", {mute: "true"}, funct
 await client.Conference.MuteMemberAsync("{conferenceId1}", "{memberId1}", true);
 ```
 
+```go
+client.UpdateConferenceMember("{conferenceId1}", "{memberId1}", &bandwidth.UpdateConferenceMemberData{Mute: true})
+```
+
 
 ### Example: Keep member from hearing the conference audio
 
@@ -592,6 +650,10 @@ client.Conference.updateMember("conferenceID", "memberId", {hold: "true"}, funct
 
 ```csharp
 await client.Conference.HoldMemberAsync("{conferenceId1}", "{memberId1}", true);
+```
+
+```go
+client.UpdateConferenceMember("{conferenceId1}", "{memberId1}", &bandwidth.UpdateConferenceMemberData{Hold: true})
 ```
 
 
@@ -620,6 +682,11 @@ var member = await client.Conference.GetMemberAsync("{conferenceId1}", "{memberI
 ```ruby
 member = conference.get_member("{memberId1}")
 ```
+
+```go
+member, _ := client.GetConferenceMember("{conferenceId1}", "{memberId1}")
+```
+
 
 > The above command returns JSON structured like this:
 
@@ -709,6 +776,16 @@ await client.Conference.PlayAudioToMemberAsync("{conferenceId1}", "{memberId1}",
 await client.Conference.SpeakSentenceToMemberAsync("{conferenceId1}", "{memberId1}", "Hello From Bandwidth");
 ```
 
+```go
+client.PlayAudioToConferenceMember("{conferenceId1}", "{memberId1}", &bandwidth.PlayAudioData{
+	Sentence: "hola de Bandwidth",
+	Gender: Genger.Male,
+	Voice: "Jorge",
+	Locale: "es",
+})
+```
+
+
 ### Example: Play audio to a conference member
 
 ```shell
@@ -757,4 +834,11 @@ await client.Conference.PlayAudioToMemberAsync("{conferenceId1}", "{memberId1}",
 
 //Speak sentence in a conference
 await client.Conference.PlayAudioFileToMemberAsync("{conferenceId1}", "{memberId1}", "http://myurl.com/file.mp3");
+```
+
+```go
+client.PlayAudioToConferenceMember("{conferenceId1}", "{memberId1}", &bandwidth.PlayAudioData{
+	FileUrl: "http://myurl.com/file.mp3",
+	LoopEnabled: true,
+})
 ```

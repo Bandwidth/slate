@@ -33,6 +33,9 @@ var info = await client.NumberInfo.GetAsync("+1234567890");
 info = NumberInfo.get(client, "+1234567890")
 ```
 
+```go
+info, _ := client.GetNumberInfo("+1234567980");
+```
 
 > The above command returns JSON structured like this:
 

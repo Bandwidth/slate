@@ -55,6 +55,10 @@ var numbers = client.PhoneNumber.List(new PhoneNumberQuery {Size = 1000});
 numbers = PhoneNumber.list(client, {:size => 1000})
 ```
 
+```go
+numbers, _ := client.GetPhoneNumbers(&bandwidth.GetPhoneNumbersQuery{Size: 1000})
+```
+
 
 > The above command returns JSON structured like this:
 
@@ -130,6 +134,10 @@ var number = await client.PhoneNumber.CreateAsync(new CreatePhoneNumberData {Num
 number = PhoneNumber.create(client, {:number => "+1234567890"})
 ```
 
+```go
+number, _ := client.CreatePhoneNumber(&bandwidth.CreatePhoneNumberData{Number: "+1234567890"})
+```
+
 
 > The above command returns HTTP Header structured like this:
 
@@ -171,6 +179,10 @@ var number = await client.PhoneNumber.GetAsync("+1234567890");
 
 ```ruby
 number = PhoneNumber.get(client, "+1234567890")
+```
+
+```go
+number, _ := client.GetPhoneNumber(numberId)
 ```
 
 
@@ -232,6 +244,10 @@ await client.PhoneNumber.UpdateAsync(numberId, new UpdatePhoneNUmberData {
 phoneNumber.update({:application_id => "{application_id}"})
 ```
 
+```go
+client.UpdatePhoneNumber("{numberId}", &bandwidth.UpdatePhoneNumberData{ApplicationID: "{applicationId}"})
+```
+
 
 ## DELETE phoneNumbers/{numberId}
 Removes a number from your account so you can no longer make or receive calls, or send or receive messages with it. When you remove a number from your account, it will not be available to add back to your account, so be careful.
@@ -256,4 +272,8 @@ await client.PhoneNumber.DeleteAsync(numberId);
 
 ```ruby
 phoneNumber.delete()
+```
+
+```go
+client.DeletePhoneNumber("{numberId}")
 ```

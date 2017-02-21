@@ -51,6 +51,10 @@ var errors = client.Error.List(new ErrorQuery{Size = 1000});
 errors = Error.list(client)
 ```
 
+```go
+errors, _ := client.GetErrors()
+```
+
 
 > The above command returns JSON structured like this:
 
@@ -116,6 +120,9 @@ var error = async client.Error.GetAsync("{errorId1}");
 error = Error.get(client, "{errorId1}")
 ```
 
+```go
+error, _ := client.GetError("{errorId1}")
+```
 
 > The above command returns JSON structured like this:
 
