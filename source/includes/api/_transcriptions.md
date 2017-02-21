@@ -86,6 +86,8 @@ client.Recording.getTranscription(recordingId, transcriptionId, function(err, tr
 
 ```csharp
 var transcriptions = client.Transcription.List();
+Console.WriteLine(transcriptions.First().Text);
+// Hey there, I was calling to talk about plans for this saturday.
 ```
 
 ```ruby
@@ -132,10 +134,12 @@ client.Recording.getTranscriptions(recordingId, function(err, transcriptions){})
 
 ```csharp
 var transcription = await client.Transcription.GetAsync("{recordingId}", "{transcriptionId}");
+Console.WriteLine(transcription.Text);
+// Hey there, I was calling to talk about plans for this saturday.
 ```
 
 ```ruby
-transcription = recording.get_transacription("{transcriptionId}")
+transcription = recording.get_transcription("{transcriptionId}")
 ```
 
 ```go

@@ -26,6 +26,8 @@ then(function (media) {
 
 ```csharp
 var list = client.Media.List();
+Console.WriteLine(list.First().MediaName);
+// {mediaName}
 ```
 
 ```ruby
@@ -96,6 +98,7 @@ Downloads a media file you previously uploaded.
 using(var data = await client.Media.DownloadAsync("file.mp3"))
 {
   var fileContent = await data.ReadAsStreamAsync();
+  // fileContent is stream object
 }
 ```
 

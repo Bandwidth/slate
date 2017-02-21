@@ -77,6 +77,8 @@ client.Conference.create({from: "+1234567890"}, function(err, conference){});
 
 ```csharp
 var conference = await client.Conference.CreateAsync(new CreateConferenceData {From = "+1234567890"});
+Console.WriteLine(conference.Id);
+// {conferenceId}
 ```
 
 
@@ -133,6 +135,8 @@ var conference = await client.Conference.CreateAsync(new CreateConferenceData {
 	CallbackTimeout = 2000,
 	FallbackUrl ="http://my.fallback.url"
 });
+Console.WriteLine(conference.Id);
+// {conferenceId}
 ```
 
 ```ruby
@@ -180,6 +184,9 @@ client.Conference.get("conferenceId", function(err, conference){});
 
 ```csharp
 var conference = await client.Conference.GetAsync("{conferenceId1}");
+Console.WriteLine(conference.State);
+// Created
+
 ```
 
 ```ruby
@@ -467,6 +474,9 @@ client.Conference.createMember("conferenceId", {callId: "callID"}, function(err,
 var member = await client.Conference.CreateMemberAsync("{conferenceId1}", new CreateConferenceMemberData {
 	CallId = "callID"
 });
+Console.WriteLine(member.Id);
+// {memberId}
+
 ```
 
 ```ruby
@@ -509,6 +519,8 @@ client.Conference.getMembers("conferenceId", function(err, members){});
 
 ```csharp
 var members = client.Conference.GetMembers("{conferenceId1}");
+Console.WriteLine(members.First().Id);
+// {memberId}
 ```
 
 ```ruby
@@ -591,7 +603,7 @@ client.Conference.updateMember("conferenceID", "memberId", {state: "completed"},
 ```
 
 ```csharp
-var member = await client.Conference.UpdateMemberAsync("{conferenceId1}", "{memberId1}", new UpdateMemberData {State = MemberState.Completed});
+await client.Conference.UpdateMemberAsync("{conferenceId1}", "{memberId1}", new UpdateMemberData {State = MemberState.Completed});
 ```
 
 ```go
@@ -677,6 +689,8 @@ client.Conference.getMember("conferenceId", "memberId", function(err, member){})
 
 ```csharp
 var member = await client.Conference.GetMemberAsync("{conferenceId1}", "{memberId1}");
+Console.WriteLine(member.State);
+// Completed
 ```
 
 ```ruby

@@ -59,6 +59,8 @@ client.AvailableNumber.search("local", { areaCode : "910", quantity : 3 }, funct
 
 ```csharp
 var results = await client.AvailableNumber.SearchLocalAsync(new LocalNumberQuery{ AreaCode = "910", Quantity = 3});
+Console.WriteLine(results.First().Number);
+// +1234567890
 ```
 
 ```ruby
@@ -111,6 +113,9 @@ var results = await client.AvailableNumber.SearchLocalAsync(
     Quantity = 2
   }
 );
+Console.WriteLine(results.First().Number);
+// +1234567890
+
 ```
 
 ```ruby
@@ -189,6 +194,10 @@ client.AvailableNumber.serchAndOrder("local", { areaCode : "910", quantity : 2 }
 ```csharp
 var results = await client.AvailableNumber.SearchAndOrderLocalAsync(
   new LocalNumberQueryForOrder{ AreaCode = "910", Quantity = 2});
+var first = results.First();
+Console.WriteLine($"{first.Id} - {first.Number}");
+// n-1234 - +9104567890
+
 ```
 
 > The above command returns a `201` response JSON structured like this:
@@ -255,6 +264,11 @@ client.AvailableNumber.search("tollFree", {
 var results = await client.AvailableNumber.SearchTollFreeAsync(
   new TollFreeNumberQuery{ Pattern = "*2?9*", Quantity = 2}
 );
+
+var first = results.First();
+Console.WriteLine($"{first.Id} - {first.Number}");
+// n-1234 - +2094567890
+
 ```
 
 ```ruby
@@ -329,6 +343,10 @@ client.AvailableNumber.searchAndOrder("tollFree", {
 var results = await client.AvailableNumber.SearchAndOrderTollFreeAsync(
   new TollFreeNumberQueryForOrder{Quantity = 2}
 );
+
+var first = results.First();
+Console.WriteLine($"{first.Id} - {first.Number}");
+// n-1234 - +9104567890
 ```
 
 

@@ -49,6 +49,8 @@ client.PhoneNumber.list({size: 1000}, function(err, numbersResponse){});
 
 ```csharp
 var numbers = client.PhoneNumber.List(new PhoneNumberQuery {Size = 1000});
+Console.WriteLine(numbers.First().Number);
+// +1234568790
 ```
 
 ```ruby
@@ -128,6 +130,8 @@ client.PhoneNumber.create({ number : "+1234567890" }, function(err, number){});
 
 ```csharp
 var number = await client.PhoneNumber.CreateAsync(new CreatePhoneNumberData {Number = "+1234567890"});
+Console.WriteLine(number.Id);
+// {numberId}
 ```
 
 ```ruby
@@ -175,6 +179,8 @@ client.PhoneNumber.get("+1234567890", function(err, number){});
 
 ```csharp
 var number = await client.PhoneNumber.GetAsync("+1234567890");
+Console.WriteLine(number.Name);
+// Home phone number
 ```
 
 ```ruby

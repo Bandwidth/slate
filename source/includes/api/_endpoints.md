@@ -74,9 +74,13 @@ client.Endpoint.list("domainId" {size: 1000}, function (err, res) {});
 ```csharp
 // Default size (25)
 var endpoints = client.Endpoint.List("{domainId1}");
+Console.WriteLine(endpoints.First().SipUri);
+// jsmith-mobile@doname.bwapp.bwsipp.io
 
 // Specify number of endpoints
 var endpoints = client.Endpoint.List("{domainId1}", new EndpointQuery {Size = 1000});
+Console.WriteLine(endpoints.First().SipUri);
+// jsmith-mobile@doname.bwapp.bwsipp.io
 ```
 
 ```ruby
@@ -146,6 +150,8 @@ var endpoint = await client.Endpoint.CreateAsync(new CreateEndpointData {
 	Enabled = false,
 	Credentials = new CreateEndpointCredentials {Password = "123456"}
 });
+Console.WriteLine(endpoint.Id);
+// {endpointId}
 ```
 
 ```ruby
@@ -199,6 +205,8 @@ client.Endpoint.get(domainId, endpointId, function(err, endpoint){});
 
 ```csharp
 var endpoint = await client.Endpoint.GetAsync("{domainId1}", "{endpointId1}");
+Console.WriteLine(endpoint.SipUri);
+// jsmith-mobile@doname.bwapp.bwsipp.io
 ```
 
 ```ruby

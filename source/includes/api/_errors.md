@@ -45,6 +45,8 @@ client.Error.list({size: 1000}, function(err, errorResponse){});
 
 ```csharp
 var errors = client.Error.List(new ErrorQuery{Size = 1000});
+Console.WriteLine(errors.First().Message);
+// No application is configured for number +19195556666
 ```
 
 ```ruby
@@ -114,6 +116,8 @@ client.Error.get(userErrorId, function(err, errorInfo){});
 
 ```csharp
 var error = async client.Error.GetAsync("{errorId1}");
+Console.WriteLine(error.Message);
+// error message
 ```
 
 ```ruby

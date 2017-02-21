@@ -70,6 +70,8 @@ client.Account.get(function(err, info){});
 
 ```csharp
 var account = await client.Account.GetAsync();
+Console.WriteLine(account.Balance);
+// 10.00
 ```
 
 ```ruby
@@ -128,6 +130,8 @@ client.Account.getTransactions()
 
 ```csharp
 var transactions = client.Account.GetTransactions();
+Console.WriteLine(transactions.First().Type);
+// Charge
 ```
 
 ```ruby
@@ -198,6 +202,8 @@ var transactions = await client.Account.GetTransactions(
     FromDate = new DateTime(2013, 2, 21, 13, 38, 0, 0, DateTimeKind.Utc)
   }
 );
+Console.WriteLine(transactions.First().Type);
+// Charge
 ```
 
 ```ruby
@@ -256,6 +262,8 @@ var transactions = client.Account.GetTransactions(new AccountTransactionQuery {
   FromDate = new DateTime(2013, 2, 21, 13, 38, 0, 0, DateTimeKind.Utc),
   ToDate = new DateTime(2013, 2, 21, 13, 40, 0, 0, DateTimeKind.Utc)
 });
+Console.WriteLine(transactions.First().Type);
+// Charge
 ```
 
 ```ruby
@@ -312,6 +320,8 @@ client.Account.getTransactions(params)
 var transactions = client.Account.GetTransactions(new AccountTransactionQuery {
   MaxItem = 1
 });
+Console.WriteLine(transactions.First().Type);
+// Charge
 ```
 
 ```ruby
@@ -367,6 +377,8 @@ client.Account.getTransactions(params)
 var transactions = client.Account.GetTransactions(new AccountTransactionQuery {
   Type = AccountTransactionType.Payment
 });
+Console.WriteLine(transactions.First().Type);
+// Charge
 ```
 
 ```ruby

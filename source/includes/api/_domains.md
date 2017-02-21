@@ -31,6 +31,8 @@ client.Domain.list()
 
 ```csharp
 var domains = client.Domain.List();
+Console.WriteLine(domains.First().Name);
+// mycooldomain
 ```
 
 ```ruby
@@ -99,6 +101,8 @@ var domain = await client.Domain.CreateAsync(new CreateDomainData{
 	Name = "mycoolapp",
 	Description = "disruptive app that is going to revolutionize telecom"
 });
+Console.WriteLine(domainId);
+// {domainId}
 ```
 
 ```ruby

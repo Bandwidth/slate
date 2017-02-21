@@ -54,6 +54,8 @@ client.Recording.list({}, function (err, recordings) {
 
 ```csharp
 var recordings = client.Recording.List();
+Console.WriteLine(recordings.First().MediaName);
+// {fileName}
 ```
 
 ```ruby
@@ -124,6 +126,8 @@ client.Recording.get("{recordingId}", function (err, recording) {
 
 ```csharp
 var recording = await client.Recording.GetAsync("{recordingId}");
+Console.WriteLine(recording.MediaName);
+// c-bonay3r4mtwbplurq4nkt7q-1.wav
 ```
 
 ```ruby
